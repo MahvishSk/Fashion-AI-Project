@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+.welcome-page {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);  /* Soft gradient using Primary color (Blush Pink) */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.welcome-content {
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.logo {
+  font-size: 3rem;  /* Medium size, not huge */
+  margin-bottom: 20px;
+  color: #444444;  /* Secondary color (Charcoal) for contrast */
+}
+
+.welcome-text {
+  font-size: 1.2rem;  /* Small but powerful */
+  font-weight: 600;
+  letter-spacing: 2px;  /* Letter-spaced */
+  text-transform: uppercase;
+  color: #2C2C2C;  /* Secondary color (Charcoal) */
+  margin-bottom: 10px;
+}
+
+.app-name {
+  font-size: 3rem;  /* Bigger font, main focus */
+  font-weight: 700;  /* Bold */
+  color: #2C2C2C;  /* Secondary color (Charcoal) for headings */
+  margin-bottom: 10px;
+}
+
+.tagline {
+  font-size: 1rem;  /* Smaller font */
+  font-weight: 600;  /* Lighter weight */
+  color: #4e4848;  /* Darker shade of Charcoal for readability */
+  margin-bottom: 30px;
+}
+
+.welcome-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.welcome-buttons .btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  background: #8c8083;  /* Primary color (Blush Pink) */
+  color: #FFFFFF;  /* Neutral color (White) for text */
+}
+
+.welcome-buttons .btn:hover {
+  background: #5d5355;  /* Slightly darker Blush Pink for hover */
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .welcome-content {
+    padding: 0 10px;
+  }
+  .logo {
+    font-size: 2.5rem;
+  }
+  .app-name {
+    font-size: 2.5rem;
+  }
+  .welcome-buttons {
+    flex-direction: column;
+  }
+}

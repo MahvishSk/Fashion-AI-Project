@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+.login-page {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);  /* Light, simple background */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+
+.app-name {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.tagline {
+  font-size: 1rem;
+  color: #666;
+  font-weight: 300;
+}
+
+.login-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  margin-top: -30px;
+}
+
+.form-title {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.login-form .form-group {
+  margin-bottom: 15px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.form-links {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.form-links a {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: rgb(55, 192, 87);
+}
+
+.btn-primary:hover {
+  background: #37b03b;
+}
+
+.btn-secondary {
+  background: #f8f9fa;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background: #e9ecef;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+.switch-link {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #161717 !important;
+}
+
+.switch-link a {
+  color: #007bff !important;
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 20px;
+  }
+  .logo {
+    font-size: 3rem;
+  }
+  .app-name {
+    font-size: 2rem;
+  }
+}
