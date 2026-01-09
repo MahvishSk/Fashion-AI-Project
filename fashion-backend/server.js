@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+dotenv.config();
+console.log(process.env.OPENAI_API_KEY ? "API KEY LOADED" : "NO KEY");
+
 const express = require("express");
 const cors = require("cors");
 const admin = require("firebase-admin");
