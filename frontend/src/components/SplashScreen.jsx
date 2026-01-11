@@ -1,25 +1,26 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/SplashScreen.css';  // Updated CSS
+import React from 'react';
+import '../styles/SplashScreen.css';
+import logo from "../assets/logo.png";   // adjust path if needed
 
 const SplashScreen = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate('/welcome');  // Auto-redirect after 3 seconds
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [navigate]);
-
   return (
-    <div className="splash-page">
-      <div className="splash-header">
-        <div className="logo">👗</div>  {/* Replace with your logo image */}
-        <h1 className="app-name">Style U</h1>
-        <p className="tagline">Your Personal AI Fashion Assistant</p>
+    <div className="splash-screen">
+      <div className="logo-container">
+        <img src={logo} alt="StyleU Logo" className="logo" />
       </div>
-      <div className="splash-spinner"></div>
+      {[...Array(30)].map((_, i) => (
+        <div
+          key={i}
+          className="particle"
+          style={{
+            left: `${Math.random() * 100}%`,
+            right: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            down: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 5}s`,
+          }}
+        />
+      ))}
     </div>
   );
 };

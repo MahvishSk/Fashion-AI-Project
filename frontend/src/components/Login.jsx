@@ -1,91 +1,86 @@
 import React, { useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import '../styles/Login.css';  // Import updated CSS
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import ForgotPassword from './ForgotPassword';
+import '../styles/Login.css';
 
 const Login = () => {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (role) => {
-    setLoading(true);
-    setError('');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { ...form, role });
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('role', response.data.role);
-      alert('Login successful!');
-      navigate('/dashboard');  // Replace with your dashboard route
+      await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+        navigate('/home');
+      }, 1000);
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
-    } finally {
-      setLoading(false);
+      setError('Invalid credentials');
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <div className="login-page">
-      <div className="login-header">
-        <div className="logo">👗</div>  {/* Replace with your logo image */}
-        <h1 className="app-name">Style U</h1>
-        <p className="tagline">Your Personal AI Fashion Assistant</p>
-      </div>
-      <div className="login-card">
-        <h2 className="form-title">Welcome Back</h2>
-        <form className="login-form">
-          <div className="form-group">
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              className="form-control"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="form-control"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-links">
-            <a href="#" onClick={() => navigate('/forgot-password')}>Forgot Password?</a>
-          </div>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => handleSubmit('user')}
-            disabled={loading}
+    <div>
+      <form onSubmit={handleSubmit} className="login-form">
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="input-field"
+          required
+        />
+        <div className="password-container">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="input-field password-input"
+            required
+          />
+          <span
+            className="eye-icon"
+            onClick={togglePasswordVisibility}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => handleSubmit('admin')}
-            disabled={loading}
-          >
-            Admin Login
-          </button>
-          {error && <p className="error-message">{error}</p>}
-        </form>
-        <p className="switch-link">
-          Don’t have an account? <a href="#" onClick={() => navigate('/signup')}>Sign Up</a>
-        </p>
-      </div>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
+        <button type="submit" className="submit-btn">Login</button>
+        {error && <p className="error">{error}</p>}
+      </form>
+      <p className="forgot-link">
+        <a href="#" onClick={() => setShowForgot(true)}>Forgot Password?</a>
+      </p>
+      {showForgot && <ForgotPassword onClose={() => setShowForgot(false)} />}
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <div className="tick">✓</div>
+            <p>Login Successful</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
