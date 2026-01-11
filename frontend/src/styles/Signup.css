@@ -1,129 +1,144 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
 
-.signup-page {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);  /* Light, simple background */
-  min-height: 100vh;
+:root {
+  --primary-accent: #E88BA3;
+  --main-text: #222222;
+}
+
+.signup-form {
   display: flex;
   flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+}
+
+.input-field {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--primary-accent);
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--main-text);
+  background-color: #FFFFFF;
+  transition: box-shadow 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(232, 139, 163, 0.5);
+}
+
+.submit-btn {
+  padding: 0.75rem;
+  background-color: var(--primary-accent);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+  margin-top: 1rem;
+}
+
+.submit-btn:hover {
+  opacity: 0.9;
+  transform: scale(1);
+  box-shadow: var(--primary-accent);
+}
+
+.error {
+  color: #FF0000;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  z-index: 1000;
 }
 
-.signup-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.logo {
-  font-size: 4rem;
-  margin-bottom: 10px;
-}
-
-.app-name {
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.tagline {
-  font-size: 1rem;
-  color: #666;
-  font-weight: 300;
-}
-
-.signup-card {
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  margin-top: -30px;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  font-size: 1.1rem;
+  color: green;
+  z-index: 999;
 }
 
-.form-title {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  color: #333;
+.tick {
+  font-size: 3rem;
+  color: var(--primary-accent);
+  animation: tick 0.5s ease-out;
 }
 
-.signup-form .form-group {
-  margin-bottom: 15px;
+/* Updated styles for password input container and eye icon */
+.input-container {
+  position: relative; /* Allows absolute positioning of the icon inside the input */
+  margin-bottom: 0.5rem;
 }
 
-.form-row {
-  display: flex;
-  gap: 10px;
+.password-container {
+  position: relative;
+  width: 93%;
+  margin-bottom: 0.5rem;
 }
 
-.form-row .half {
-  flex: 1;
+.password-input {
+  width: 93%;
+  padding: 12px 40px 12px 12px; /* space for eye icon */
+  border-radius: 6px;
+  border: 1px solid #f2a1b3;
 }
 
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-.form-control:focus {
-  border-color: #28a745;
-  outline: none;
-}
-
-.btn-primary {
-  background: #28a745;
-  color: rgb(21, 190, 58);
-  width: 100%;
-  padding: 12px;
+.eye-icon {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  color: #888;
+  font-size: 1.2rem;
+  transition: opacity 0.3s ease;
 }
 
-.btn-primary:hover {
-  background: #218838;
+.eye-icon:hover {
+  opacity: 0.7;
 }
 
-.error-message {
-  color: #dc3545;
-  font-size: 0.9rem;
-  margin-top: 10px;
+.eye-icon:focus {
+  outline: 2px solid #888;
 }
 
-.switch-link {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: rgb(0, 128, 255);
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
-.switch-link a {
-  color: rgb(0, 128, 255) ;
-  text-decoration: none;
+@keyframes tick {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .signup-card {
-    padding: 30px 20px;
+@media (max-width: 768px) {
+  .input-field {
+    padding: 0.625rem;
   }
-  .form-row {
-    flex-direction: column;
-  }
-  .logo {
-    font-size: 3rem;
-  }
-  .app-name {
-    font-size: 2rem;
+  .password-input {
+    padding-right: 2.5rem;
   }
 }

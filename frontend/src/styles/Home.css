@@ -1,0 +1,53 @@
+.home-container {
+  min-height: 100vh;
+  background: #FBE7E5; /* Soft Feminine background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.home-card {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 40px 30px;
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.home-logo {
+  width: 120px;
+  margin-bottom: 15px;
+}
+
+.home-greeting {
+  font-size: 1.6rem;
+  color: #B768A0;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.search-box {
+  margin-bottom: 15px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 25px;
+  border: 1.5px solid #E8B8A3;
+  outline: none;
+  font-size: 1rem;
+}
+
+.search-input:focus {
+  border-color: #D77A90;
+}
+
+.home-subtext {
+  font-size: 0.95rem;
+  color: #777;
+  margin-top: 10px;
+}

@@ -1,59 +1,91 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap');
 
-.splash-page {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+:root {
+  --background: #FBE7E5;
+  --primary-accent: #E88BA3;
+  --headings: #B7688A;
 }
 
-.splash-header {
-  text-align: center;
-  margin-bottom: 30px;
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center;     /* center vertically */
+  height: 100vh;           /* full screen height */
+  background: #FBE7E5;     /* soft feminine background */
 }
 
 .logo {
-  font-size: 4rem;
-  margin-bottom: 10px;
+  width: auto;            /* set desired width */
+  height: auto;            /* maintain aspect ratio */
+  max-width: 50%;          /* optional, for mobile scaling */
+  animation: zoom 2s ease-in-out infinite;
 }
 
-.app-name {
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 5px;
+.particle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(45deg, #fff, var(--primary-accent), #fff);
+  clip-path: polygon(
+    50% 0%, 
+    60% 40%, 
+    100% 50%, 
+    60% 60%, 
+    50% 100%, 
+    40% 60%, 
+    0% 50%, 
+    40% 40%
+  ); /* 4 side star sparkle */
+  animation: sparkle 5s infinite ease-in-out;
+  opacity: 2;
+  filter: drop-shadow(0 0 6px var(--primary-accent));
 }
 
-.tagline {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 300;
+
+@keyframes zoom {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
-.splash-spinner {
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid white;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
+
+@keyframes glow {
+  0%, 100% { filter: brightness(2); }
+  50% { filter: brightness(1.3); }
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-  .logo {
-    font-size: 3rem;
+@keyframes sparkle {
+  0% {
+    transform: scale(0.3) rotate(0deg);
+    opacity: 0.2;
   }
-  .app-name {
-    font-size: 2rem;
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.3) rotate(360deg);
+    opacity: 0.2;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .logo {
+    width: 80px;           /* smaller on tablet/mobile */
   }
 }

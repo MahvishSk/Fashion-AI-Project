@@ -1,142 +1,153 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
 
-.login-page {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);  /* Light, simple background */
-  min-height: 100vh;
+:root {
+  --primary-accent: #E88BA3;
+  --main-text: #222222;
+}
+
+.login-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
-.login-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.logo {
-  font-size: 4rem;
-  margin-bottom: 10px;
-}
-
-.app-name {
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.tagline {
+.input-field {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--primary-accent);
+  border-radius: 6px;
   font-size: 1rem;
-  color: #666;
-  font-weight: 300;
+  color: var(--main-text);
+  background-color: #FFFFFF;
+  transition: box-shadow 0.3s ease;
 }
 
-.login-card {
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  margin-top: -30px;
-}
-
-.form-title {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.login-form .form-group {
-  margin-bottom: 15px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-.form-control:focus {
-  border-color: #007bff;
+.input-field:focus {
   outline: none;
+  box-shadow: 0 0 10px rgba(232, 139, 163, 0.5);
 }
 
-.form-links {
-  text-align: right;
-  margin-bottom: 20px;
-}
-
-.form-links a {
-  color: #007bff;
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-.btn {
-  width: 100%;
-  padding: 12px;
+.submit-btn {
+  padding: 0.75rem;
+  background-color: var(--primary-accent);
+  color: #FFFFFF;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 6px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s;
-  margin-bottom: 10px;
+  transition: box-shadow 0.3s ease;
+  margin-top: 1rem;
+  font-size: 1.3rem;
 }
 
-.btn-primary {
-  background: #007bff;
-  color: rgb(55, 192, 87);
+.submit-btn:hover {
+ opacity: 0.9;
+  transform: scale(1);
+  box-shadow: var(--primary-accent);
 }
 
-.btn-primary:hover {
-  background: #37b03b;
+.error {
+  color: #FF0000;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 }
 
-.btn-secondary {
-  background: #f8f9fa;
-  color: #333;
-  border: 1px solid #ddd;
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  font-size: 1.1rem;
+  color: green;
+  z-index: 999;
 }
 
-.btn-secondary:hover {
-  background: #e9ecef;
+.tick {
+  font-size: 1.5rem;
+  color: var(--primary-accent);
+  animation: tick 0.5s ease-out;
+  display: block;
+  margin: 0 auto;   /* centers horizontally */
+  text-align: center;
 }
 
-.error-message {
-  color: #dc3545;
-  font-size: 0.9rem;
-  margin-top: 10px;
+
+/* Updated styles for password input container and eye icon */
+.input-container {
+  position: relative; /* Allows absolute positioning of the icon inside the input */
+  margin-bottom: 0.5rem;
 }
 
-.switch-link {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: #161717 !important;
+.password-container {
+  position: relative;
+  width: 93%;
+  margin-bottom: 0.5rem;
 }
 
-.switch-link a {
-  color: #007bff !important;
+.password-input {
+  width: 94%;
+  padding: 12px 40px 12px 12px; /* space for eye icon */
+  border-radius: 6px;
+  border: 1px solid #f2a1b3;
+}
+
+.eye-icon {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  font-size: 1.2rem;
+  transition: opacity 0.3s ease;
+}
+
+.eye-icon:hover {
+  opacity: 0.7;
+}
+
+.eye-icon:focus {
+  outline: 2px solid #888;
+}
+
+.forgot-link {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #B768A1;  /* Soft purple-pink */
+}
+
+.forgot-link a {
+  color: #B768A1;
   text-decoration: none;
+  font-weight: 500;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .login-card {
-    padding: 30px 20px;
+.forgot-link a:hover {
+  text-decoration: underline;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes tick {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  .input-field {
+    padding: 0.625rem;
   }
-  .logo {
-    font-size: 3rem;
-  }
-  .app-name {
-    font-size: 2rem;
+  .password-input {
+    padding-right: 2.5rem;
   }
 }
