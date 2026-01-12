@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
 import '../styles/Signup.css';
 
 const Signup = () => {
@@ -48,8 +50,11 @@ const Signup = () => {
         }
         break;
       case 'password':
-        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value)) {
-          newErrors.password = 'Password must contain 8 chars, uppercase, number, symbol';
+        if (
+          !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value)
+        ) {
+          newErrors.password =
+            'Password must contain 8 chars, uppercase, number, symbol';
         } else {
           delete newErrors.password;
         }
@@ -64,12 +69,26 @@ const Signup = () => {
     e.preventDefault();
     if (Object.keys(errors).length === 0) {
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
+
+        const user = userCredential.user;
+
+        await setDoc(doc(db, 'users', user.uid), {
+          uid: user.uid,
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          createdAt: serverTimestamp(),
+        });
+
         setShowPopup(true);
         setTimeout(() => {
           setShowPopup(false);
-           navigate("/home");   // ONLY this
-          //onSuccess({ name: formData.fullName, email: formData.email });
+          navigate('/home');
         }, 1000);
       } catch (error) {
         setErrors({ general: 'Signup failed' });
@@ -94,6 +113,7 @@ const Signup = () => {
           required
         />
         {errors.fullName && <p className="error">{errors.fullName}</p>}
+
         <input
           type="email"
           name="email"
@@ -104,6 +124,7 @@ const Signup = () => {
           required
         />
         {errors.email && <p className="error">{errors.email}</p>}
+
         <input
           type="tel"
           name="phone"
@@ -114,6 +135,7 @@ const Signup = () => {
           required
         />
         {errors.phone && <p className="error">{errors.phone}</p>}
+
         <div className="password-container">
           <input
             type={showPassword ? 'text' : 'password'}
@@ -124,17 +146,24 @@ const Signup = () => {
             className="input-field password-input"
             required
           />
-          <span className="eye-icon"
+          <span
+            className="eye-icon"
             onClick={togglePasswordVisibility}
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </span>
         </div>
+
         {errors.password && <p className="error">{errors.password}</p>}
-        <button type="submit" className="submit-btn">Sign Up</button>
+
+        <button type="submit" className="submit-btn">
+          Sign Up
+        </button>
+
         {errors.general && <p className="error">{errors.general}</p>}
       </form>
+
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup">

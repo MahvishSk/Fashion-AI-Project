@@ -1,10 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+admin.initializeApp();
+
+exports.createUserInFirestore = functions.auth.user().onCreate(async (user) => {
+  const db = admin.firestore();
+
+  await db.collection("users").doc(user.uid).set({
+    uid: user.uid,
+    email: user.email,
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+
+  console.log("User added to Firestore:", user.email);
+});
