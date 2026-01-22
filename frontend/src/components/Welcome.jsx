@@ -11,7 +11,7 @@ const Welcome = () => {
 
   return (
     <div className="welcome-container">
-      <div className="header">
+      <div className="header-wlc">
         <img src={logo} alt="StyleU Logo" className="welcome-logo" />
         <h2 className="main-heading">Welcome to StyleU</h2>
         <p className="sub-text">Your Personal AI Fashion Assistant</p>

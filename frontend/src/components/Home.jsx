@@ -1,27 +1,170 @@
-import React from "react";
-import "../styles/Home.css";
-import logo from "../assets/logo.png"; // put your logo in src/assets
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import logo from "../assets/logo1.png";
+import icon1 from "../assets/dress.png";
+import icon2 from "../assets/trending.png";
+import icon3 from "../assets/saved.png";
+import casualImg from "../assets/casual.jpg";
+import partyImg from "../assets/party.jpg";
+import officeImg from "../assets/office.jpg";
+import traditionalImg from "../assets/traditional.jpg";
+import fashion1 from "../assets/Fashionimg1.jpg";
+import fashion2 from "../assets/Fashionimg2.jpg";
+import fashion3 from "../assets/Fashionimg3.jpg";
+import fashion4 from "../assets/Fashionimg4.jpg";
+import fashion5 from "../assets/Fashionimg5.jpg";
+import fashion6 from "../assets/Fashionimg6.jpg";
+import '../styles/Home.css'; // Import the CSS
 
-const Home = ({ userName = "Beautiful" }) => {
+const Home = () => {
+  const [username, setUsername] = useState("User"); // Placeholder; replace with actual user data
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const navigate = useNavigate();
+
+   useEffect(() => {
+    const savedName = localStorage.getItem("username");
+    if (savedName) setUsername(savedName); // Update username if stored
+  }, []);
+
+  // Hero carousel images (placeholders; replace with your URLs)
+  const heroImages = [
+    fashion1,
+    fashion2,
+    fashion3,
+    fashion4,
+    fashion5,
+    fashion6, 
+   ];
+
+  // Auto-slide every 4-5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
+
   return (
     <div className="home-container">
-      <div className="home-card">
-        <img src={logo} alt="StyleU Logo" className="home-logo" />
+      {/* Top App Bar */}
+      <header className="app-bar">
+        <div className="hamburger">☰</div>
+        <div className="logo-H-container">
+           <img src={logo} alt="StyleU Logo" className="logo-H" />
+          <span className="logo-H-text">StyleU</span>
+       </div>
+        <div className="profile-icon">👤</div>
+      </header>
 
-        <h2 className="home-greeting">Hello, {userName} ✨</h2>
-
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="Search outfits, styles, trends..."
-            className="search-input"
-          />
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-carousel">
+          {heroImages.map((img, index) => (
+            <div key={index} className={`hero-slide ${index === currentSlide ? 'active' : ''}`}>
+              <img src={img} alt={`Fashion ${index + 1}`} />
+            </div>
+          ))}
         </div>
+        <div className="hero-overlay">
+          <div className="hero-content">
+            <h1>Hello, {username}</h1>
+            <h2>Welcome to StyleU</h2>
+            <p>Your Personal AI Fashion Stylist</p>
+            <button className="suggestions-btn" onClick={() => navigate('/chatbot')}>
+              Suggestions
+            </button>
+          </div>
+        </div>
+      </section>
 
-        <p className="home-subtext">
-          Let StyleU help you discover your perfect look today 💕
-        </p>
-      </div>
+      {/* Decorative Divider */}
+      <div className="divider"></div>
+
+      {/* Feature Cards (2x2 Grid) */}
+      <section className="features-section">
+        <div className="features-grid">
+          <div className="feature-card">
+           <img src={icon1} alt="Dress Icon" className="card-icon-img" />
+            <h4>AI Outfit Recommendation</h4>
+            <button onClick={() => navigate('/chatbot')}>Explore</button>
+          </div>
+          
+          <div className="feature-card">
+            <img src={icon2} alt="Trending Icon" className="card-icon-img" />
+            <h4>Trending Fashion</h4>
+            <button onClick={() => navigate('/trends')}>View Trends</button>
+          </div>
+          <div className="feature-card">
+            <img src={icon3} alt="Saved Icon" className="card-icon-img" />
+            <h4>Saved Looks</h4>
+            <button onClick={() => navigate('/saved')}>View Saved</button>
+          </div>
+        </div>
+      </section>
+
+      {/* Tips of the Day */}
+      <section className="tips-section">
+        <div className="tip-card">
+          <h3>Fashion Tip of the Day :</h3>
+          <p>Mix patterns with neutrals for a bold yet balanced look!</p>
+        </div>
+      </section>
+
+      {/* Category Slider */}
+   <div className="category-section">
+  <div className="category-slider">
+
+    <div className="category-card" onClick={() => navigate('/category/casual')}>
+      <img src={casualImg} alt="Casual" />
+      <div className="category-overlay">Casual</div>
+    </div>
+
+    <div className="category-card" onClick={() => navigate('/category/party')}>
+      <img src={partyImg} alt="Party" />
+      <div className="category-overlay">Party Wear</div>
+    </div>
+
+    <div className="category-card" onClick={() => navigate('/category/office')}>
+      <img src={officeImg} alt="Office" />
+      <div className="category-overlay">Office Wear</div>
+    </div>
+
+    <div className="category-card" onClick={() => navigate('/category/traditional')}>
+      <img src={traditionalImg} alt="Traditional" />
+      <div className="category-overlay">Traditional</div>
+    </div>
+  
+  </div>
+</div>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="footer-logo">
+            <h3>StyleU</h3>
+            <p>Your Personal AI Fashion Stylist</p>
+          </div>
+          <div className="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li onClick={() => navigate('/')}>Home</li>
+              <li onClick={() => navigate('/chatbot')}>Chatbot</li>
+              <li onClick={() => navigate('/profile')}>Profile</li>
+              <li onClick={() => navigate('/saved')}>Saved Looks</li>
+            </ul>
+          </div>
+          <div className="footer-support">
+            <h4>Support</h4>
+            <ul>
+              <li>Help</li>
+              <li>Feedback</li>
+            </ul>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>© 2026 StyleU. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
