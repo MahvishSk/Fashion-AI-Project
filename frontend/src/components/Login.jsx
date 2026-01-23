@@ -21,11 +21,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);
-        navigate("/home");
+        const name = userCredential.user.displayName || formData.password.split('@')[0]; // Fallback to email prefix
+        localStorage.setItem('username', name); // Store username
+        navigate('/home'); // Navigate to home
       }, 1000);
     } catch (err) {
       setError("Invalid credentials");

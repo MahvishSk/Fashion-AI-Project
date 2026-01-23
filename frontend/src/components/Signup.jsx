@@ -88,6 +88,7 @@ const Signup = () => {
         setShowPopup(true);
         setTimeout(() => {
           setShowPopup(false);
+          localStorage.setItem('username', formData.fullName); // Store username
           navigate('/home');
         }, 1000);
       } catch (error) {

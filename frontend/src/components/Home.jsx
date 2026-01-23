@@ -17,13 +17,16 @@ import fashion6 from "../assets/Fashionimg6.jpg";
 import '../styles/Home.css'; // Import the CSS
 
 const Home = () => {
-  const [username, setUsername] = useState("User"); // Placeholder; replace with actual user data
-  const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
+  const [username, setUsername] = useState("User"); // Placeholder; replace with actual user data
+  const [currentSlide, setCurrentSlide] = useState(0); 
+
 
    useEffect(() => {
-    const savedName = localStorage.getItem("username");
-    if (savedName) setUsername(savedName); // Update username if stored
+    const storedName = localStorage.getItem("username");
+    if (storedName) {
+      setUsername(storedName);
+    }
   }, []);
 
   // Hero carousel images (placeholders; replace with your URLs)
@@ -76,7 +79,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-
+     
       {/* Decorative Divider */}
       <div className="divider"></div>
 
