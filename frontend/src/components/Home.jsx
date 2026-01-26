@@ -15,29 +15,33 @@ import fashion4 from "../assets/Fashionimg4.jpg";
 import fashion5 from "../assets/Fashionimg5.jpg";
 import fashion6 from "../assets/Fashionimg6.jpg";
 import '../styles/Home.css'; // Import the CSS
+import Popup from './Popup'; // Ensure Popup.jsx exists
 
 const Home = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User"); // Placeholder; replace with actual user data
-  const [currentSlide, setCurrentSlide] = useState(0); 
+  const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Fixed: Use the correct state variables
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-   useEffect(() => {
+  useEffect(() => {
     const storedName = localStorage.getItem("username");
     if (storedName) {
       setUsername(storedName);
     }
   }, []);
 
-  // Hero carousel images (placeholders; replace with your URLs)
+  // Hero carousel images
   const heroImages = [
     fashion1,
     fashion2,
     fashion3,
     fashion4,
     fashion5,
-    fashion6, 
-   ];
+    fashion6,
+  ];
 
   // Auto-slide every 4-5 seconds
   useEffect(() => {
@@ -51,12 +55,14 @@ const Home = () => {
     <div className="home-container">
       {/* Top App Bar */}
       <header className="app-bar">
-        <div className="hamburger">☰</div>
+        {/* Fixed: Use setIsMenuOpen */}
+        <div className="hamburger" onClick={() => setIsMenuOpen(true)}>☰</div>
         <div className="logo-H-container">
-           <img src={logo} alt="StyleU Logo" className="logo-H" />
+          <img src={logo} alt="StyleU Logo" className="logo-H" />
           <span className="logo-H-text">StyleU</span>
-       </div>
-        <div className="profile-icon">👤</div>
+        </div>
+        {/* Fixed: Use setIsProfileOpen */}
+        <div className="profile-icon" onClick={() => setIsProfileOpen(true)}>👤</div>
       </header>
 
       {/* Hero Section */}
@@ -79,7 +85,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-     
+
       {/* Decorative Divider */}
       <div className="divider"></div>
 
@@ -87,11 +93,10 @@ const Home = () => {
       <section className="features-section">
         <div className="features-grid">
           <div className="feature-card">
-           <img src={icon1} alt="Dress Icon" className="card-icon-img" />
+            <img src={icon1} alt="Dress Icon" className="card-icon-img" />
             <h4>AI Outfit Recommendation</h4>
             <button onClick={() => navigate('/chatbot')}>Explore</button>
           </div>
-          
           <div className="feature-card">
             <img src={icon2} alt="Trending Icon" className="card-icon-img" />
             <h4>Trending Fashion</h4>
@@ -114,31 +119,26 @@ const Home = () => {
       </section>
 
       {/* Category Slider */}
-   <div className="category-section">
-  <div className="category-slider">
-
-    <div className="category-card" onClick={() => navigate('/category/casual')}>
-      <img src={casualImg} alt="Casual" />
-      <div className="category-overlay">Casual</div>
-    </div>
-
-    <div className="category-card" onClick={() => navigate('/category/party')}>
-      <img src={partyImg} alt="Party" />
-      <div className="category-overlay">Party Wear</div>
-    </div>
-
-    <div className="category-card" onClick={() => navigate('/category/office')}>
-      <img src={officeImg} alt="Office" />
-      <div className="category-overlay">Office Wear</div>
-    </div>
-
-    <div className="category-card" onClick={() => navigate('/category/traditional')}>
-      <img src={traditionalImg} alt="Traditional" />
-      <div className="category-overlay">Traditional</div>
-    </div>
-  
-  </div>
-</div>
+      <div className="category-section">
+        <div className="category-slider">
+          <div className="category-card" onClick={() => navigate('/category/casual')}>
+            <img src={casualImg} alt="Casual" />
+            <div className="category-overlay">Casual</div>
+          </div>
+          <div className="category-card" onClick={() => navigate('/category/party')}>
+            <img src={partyImg} alt="Party" />
+            <div className="category-overlay">Party Wear</div>
+          </div>
+          <div className="category-card" onClick={() => navigate('/category/office')}>
+            <img src={officeImg} alt="Office" />
+            <div className="category-overlay">Office Wear</div>
+          </div>
+          <div className="category-card" onClick={() => navigate('/category/traditional')}>
+            <img src={traditionalImg} alt="Traditional" />
+            <div className="category-overlay">Traditional</div>
+          </div>
+        </div>
+      </div>
 
       {/* Footer */}
       <footer className="footer">
@@ -168,6 +168,14 @@ const Home = () => {
           <p>© 2026 StyleU. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Fixed: Add the Popup component here with correct props */}
+      <Popup
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        isProfileOpen={isProfileOpen}
+        setIsProfileOpen={setIsProfileOpen}
+      />
     </div>
   );
 };

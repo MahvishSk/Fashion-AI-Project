@@ -1,0 +1,248 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap');
+
+:root {
+  --background: #FBE7E5;
+  --primary-accent: #E88BA3;
+  --secondary-accent: #D7A9A0;
+  --headings: #B7688A;
+  --main-text: #222222;
+  --white: #FFFFFF;
+}
+
+/* Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Left Sliding Menu */
+.popup-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 98.5%;
+  background: var(--white);
+  border-top: 5px solid var(--primary-accent);
+  border-right: 5px solid var(--primary-accent);
+  border-bottom: 5px solid var(--primary-accent);
+  border-left: none;
+  border-radius: 0 15px 15px 0; /* Rounded right corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: slideInLeft 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-header {
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--secondary-accent);
+}
+
+.menu-header h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--headings);
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  color: var(--main-text);
+}
+
+.menu-item:hover {
+  background: var(--primary-accent);
+  color: var(--white);
+}
+
+.menu-item.active {
+  background: var(--secondary-accent);
+  color: var(--white);
+}
+
+.menu-icon {
+  font-size: 1.2rem;
+  margin-right: 1rem;
+}
+
+.menu-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+}
+
+.logout {
+  border-top: 1px solid var(--secondary-accent);
+  color: #dc3545; /* Red for logout */
+}
+
+.logout:hover {
+  background: #dc3545;
+  color: var(--white);
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+/* Right Profile Mini Popup */
+.popup-profile {
+  position: fixed;
+  top: 70px; /* Below app bar */
+  right: 20px;
+  z-index: 1000;
+  animation: fadeInScale 0.3s ease-out;
+}
+
+.profile-p-card {
+  background: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 4px solid var(--primary-accent);
+  text-align: center;
+  height: 300px;
+  width: 300px;
+  display: flex; /* Use flexbox for internal centering */
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  padding: 1rem; /* Add padding for spacing */
+}
+
+.profile-p-title {
+  font-family: 'Playfair Display', serif;
+  color: var(--headings);
+  font-size: 1.6rem;
+  margin-bottom: 1.4rem;
+  font-weight: 700;
+}
+
+.profile-p-photo-container {
+  position: relative;
+  margin-bottom: 0.4rem; /* Space below photo for username */
+}
+
+.profile-p-photo {
+  width: 115px !important; /* Fixed width */
+  height: 115px !important; /* Fixed height */
+  border-radius: 80%; /* Circular */
+  border: 2.5px solid #ccc; /* Grey border */
+  object-fit: cover; /* Ensures uploaded photo fits perfectly without stretch or overflow */
+  max-width: 115px; /* Enforce max size */
+  max-height: 115px; /* Enforce max size */
+}
+
+.camera-p-icon {
+  position: absolute;
+  bottom: 8px; /* Bottom of photo circle */
+  right: 2px; /* Right of photo circle */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px; /* Smaller for fit */
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.camera-p-icon:hover {
+  transform: scale(1.1);
+}
+
+.remove-p-icon {
+  position: absolute;
+  top: 0; /* Top of photo circle */
+  right: 0; /* Right of photo circle */
+  /*background: #dc3545;  Red for remove */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.remove-p-icon:hover {
+  transform: scale(1.1);
+}
+
+.username-p {
+  font-family: 'serif';
+  color: var(--main-text);
+  margin-bottom: 1.5rem; /* Exactly below the photo circle */
+  font-size: 1.3rem;
+}
+
+.view-more-p-btn {
+  background: var(--primary-accent);
+  color: var(--white);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.3s ease, transform 0.3s ease;
+  margin-bottom: 1.7rem; /* Space from username */
+}
+
+.view-more-p-btn:hover {
+  background: var(--secondary-accent);
+  transform: scale(1.05);
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .popup-menu {
+    width: 250px;
+  }
+  .profile-p-card {
+    width: 280px; /* Slightly smaller on mobile */
+    height: 300px;
+  }
+  .profile-p-photo {
+    width: 80px !important;
+    height: 80px !important;
+    max-width: 80px;
+    max-height: 80px;
+  }
+  .camera-p-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+  .remove-p-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,381 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap');
+
+:root {
+  --background: #FBE7E5;
+  --primary-accent: #E88BA3;
+  --secondary-accent: #D7A9A0;
+  --headings: #B7688A;
+  --main-text: #222222;
+  --white: #FFFFFF;
+}
+/* App Bar Styles (added from Home) */
+.app-bar {
+  position: relative;
+  top: -70px;
+  left: 0.5rem;
+  width: 97%;
+  height: 60px;
+  border-radius: 25px;
+  background: rgba(251, 231, 229, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hamburger {
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+.hamburger:hover {
+  transform: scale(1.2);
+}
+
+.logo-H-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  background: transparent !important;
+  box-shadow: none !important;
+  left: 50%;
+  z-index: 20;
+  isolation: isolate;
+  transform: translateX(-50%);
+}
+
+.logo-H {
+  font-size: 2rem;
+  width: 5.5rem;
+  height: 3.7rem;
+  margin-left: -2rem;
+  background: transparent !important;
+  border: none;
+  animation: logoZoomThenSlide 4s ease-in-out forwards;
+  background: transparent !important;
+  object-fit: contain;
+  mix-blend-mode: multiply; /* removes white box feel */
+}
+
+.logo-H-text {
+  position: relative;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--headings);
+  margin-left: -0.9rem;
+  opacity: 0;
+  animation: textReveal 4s ease-out 1.5s forwards;
+  animation-delay: 3s;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
+@keyframes logoZoomThenSlide {
+  0% { transform: scale(0.2) translateX(40px); }
+  60% { transform: scale(1) translateX(70px); } /* wait while zoom */
+  100% { transform: scale(1) translateX(0px); } /* slide left */
+}
+
+@keyframes textReveal {
+  0% { opacity: 0; transform: translateX(10px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* ... (rest of your Profile.css) ... */
+.profile-page {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background);
+  min-height: 100vh;
+  padding-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-header {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.profile-page-title {
+  font-family: 'Playfair Display', serif;
+  color: var(--headings);
+  font-size: 2.2rem;
+  margin: -30px 0 20px; /* Reduced space */
+  font-weight: 700;
+  text-align: center;
+}
+
+.profile-card {
+  background: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.profile-photo-section {
+  margin-bottom: 20px;
+}
+
+.profile-photo-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.profile-photo {
+  width: 115px !important; /* Fixed width */
+  height: 115px !important; /* Fixed height */
+  border-radius: 80%; /* Circular */
+  border: 2.5px solid #ccc; /* Grey border */
+  object-fit: cover; /* Ensures uploaded photo fits perfectly without stretch or overflow */
+  max-width: 115px; /* Enforce max size */
+  max-height: 115px; /* Enforce max size */
+}
+
+.camera-icon {
+  position: absolute;
+  bottom: 0;
+  right: 2px;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.camera-icon:hover {
+  transform: scale(1.1);
+}
+
+.remove-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.remove-icon:hover {
+  transform: scale(1.1);
+}
+
+.username-display {
+  font-family: serif;
+  color: var(--main-text);
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  font-family: 'Playfair Display', serif;
+  color: var(--headings);
+  font-size: 1rem;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: var(--primary-accent);
+  outline: none;
+}
+
+.form-input:disabled {
+  background: #f9f9f9;
+  color: #999;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.save-btn, .edit-btn, .cancel-btn, .logout-btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.save-btn, .edit-btn {
+  background: var(--primary-accent);
+  color: var(--white);
+}
+
+.save-btn:hover, .edit-btn:hover {
+  background: var(--secondary-accent);
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: var(--white);
+}
+
+.cancel-btn:hover {
+  background: #5a6268;
+}
+
+.logout-btn {
+  background: #dc3545;
+  color: var(--white);
+}
+
+.logout-btn:hover {
+  background: #c82333;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 10px;
+  }
+  .profile-card {
+    padding: 20px;
+  }
+  .profile-title {
+    font-size: 1.5rem;
+  }
+  .button-group {
+    flex-direction: column;
+  }
+}
+
+.change-password-btn {
+  background: var(--secondary-accent);
+  color: var(--white);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.change-password-btn:hover {
+  background: var(--primary-accent);
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row .half {
+  flex: 1;
+}
+
+/* ... (Keep existing styles) ... */
+
+/* Change Password Popup */
+.change-password-popup {
+  background: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+.popup-title {
+  font-family: 'Playfair Display', serif;
+  color: var(--headings);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.popup-form {
+  display: flex;
+  flex-direction: column;
+  padding: 17px;
+}
+
+.submit-btn {
+  border: none;
+  border-radius: 24px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.close-btn {
+  background: var(--primary-accent);
+  color: var(--white);
+  border: none;
+  padding: 8px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 15px;
+  transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+  background: var(--secondary-accent);
+}

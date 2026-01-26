@@ -25,7 +25,7 @@ const Login = () => {
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);
-        const name = userCredential.user.displayName || formData.password.split('@')[0]; // Fallback to email prefix
+       const name = userCredential.user.displayName || formData.password.split(/[@#$*&]/)[0]; // Fallback to email prefix
         localStorage.setItem('username', name); // Store username
         navigate('/home'); // Navigate to home
       }, 1000);

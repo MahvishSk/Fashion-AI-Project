@@ -43,18 +43,18 @@ const Signup = () => {
         }
         break;
       case 'phone':
-        if (!/^\d{10}$/.test(value)) {
+        if (!/^\d+$/.test(value)) {
           newErrors.phone = 'Only numbers allowed';
+        } else if (value.length !== 10) {
+          newErrors.phone = 'Phone number must be exactly 10 digits';
         } else {
           delete newErrors.phone;
         }
         break;
       case 'password':
-        if (
-          !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value)
-        ) {
-          newErrors.password =
-            'Password must contain 8 chars, uppercase, number, symbol';
+        // Updated regex: Starts with capital, at least one number, at least one special (@#$&*), min 8 chars
+        if (!/^[A-Z](?=.*[0-9])(?=.*[@#$&*])[A-Za-z0-9@#$&*]{7,}$/.test(value)) {
+          newErrors.password = 'Password must start with a capital letter, contain at least one number (0-9), one special character (@ # $ & *), and be at least 8 characters long.';
         } else {
           delete newErrors.password;
         }
