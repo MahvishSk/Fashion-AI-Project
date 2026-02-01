@@ -15,17 +15,18 @@ import fashion4 from "../assets/Fashionimg4.jpg";
 import fashion5 from "../assets/Fashionimg5.jpg";
 import fashion6 from "../assets/Fashionimg6.jpg";
 import '../styles/Home.css'; // Import the CSS
-import Popup from './Popup'; // Ensure Popup.jsx exists
+import Popup from './Popup'; // Ensure Popup.jsx exists and handles profile popup
 
 const Home = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User"); // Placeholder; replace with actual user data
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Fixed: Use the correct state variables
+  // State for popup management
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
+  // Load username from localStorage on mount
   useEffect(() => {
     const storedName = localStorage.getItem("username");
     if (storedName) {
@@ -33,7 +34,7 @@ const Home = () => {
     }
   }, []);
 
-  // Hero carousel images
+  // Hero carousel images (ensure these assets exist in src/assets/)
   const heroImages = [
     fashion1,
     fashion2,
@@ -55,13 +56,11 @@ const Home = () => {
     <div className="home-container">
       {/* Top App Bar */}
       <header className="app-bar">
-        {/* Fixed: Use setIsMenuOpen */}
         <div className="hamburger" onClick={() => setIsMenuOpen(true)}>☰</div>
         <div className="logo-H-container">
           <img src={logo} alt="StyleU Logo" className="logo-H" />
           <span className="logo-H-text">StyleU</span>
         </div>
-        {/* Fixed: Use setIsProfileOpen */}
         <div className="profile-icon" onClick={() => setIsProfileOpen(true)}>👤</div>
       </header>
 
@@ -169,7 +168,7 @@ const Home = () => {
         </div>
       </footer>
 
-      {/* Fixed: Add the Popup component here with correct props */}
+      {/* Popup Component (handles menu and profile popup) */}
       <Popup
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}

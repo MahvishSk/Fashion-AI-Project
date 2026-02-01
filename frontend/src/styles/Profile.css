@@ -12,7 +12,7 @@
 .app-bar {
   position: relative;
   top: -70px;
-  left: 0.5rem;
+  left: 0.1rem;
   width: 97%;
   height: 60px;
   border-radius: 25px;
@@ -151,13 +151,13 @@
 }
 
 .profile-photo {
-  width: 115px !important; /* Fixed width */
-  height: 115px !important; /* Fixed height */
-  border-radius: 80%; /* Circular */
-  border: 2.5px solid #ccc; /* Grey border */
-  object-fit: cover; /* Ensures uploaded photo fits perfectly without stretch or overflow */
-  max-width: 115px; /* Enforce max size */
-  max-height: 115px; /* Enforce max size */
+  width: 115px !important;
+  height: 115px !important;
+  border-radius: 50%; /* Perfect circle */
+  border: 2.5px solid #ccc;
+  object-fit: cover;
+  max-width: 115px;
+  max-height: 115px;
 }
 
 .camera-icon {

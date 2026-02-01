@@ -246,3 +246,27 @@
     font-size: 10px;
   }
 }
+
+/* Default color for all menu icons */
+.menu-item .menu-icon {
+  color: var(--main-text); /* Default: dark text (from your theme) */
+}
+
+/* Hover color (when mouse over) */
+.menu-item:hover .menu-icon {
+  color: var(--white); /* White on hover */
+}
+
+/* Active color (when selected/current page) */
+.menu-item.active .menu-icon {
+  color: rgb(84, 82, 82) 
+}
+
+/* Logout icon color (special case) */
+.menu-item.logout .menu-icon {
+  color: #dc3545; /* Red for logout */
+}
+
+.menu-item.logout:hover .menu-icon {
+  color: var(--white); /* White on hover for logout */
+}

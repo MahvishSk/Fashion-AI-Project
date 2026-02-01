@@ -29,7 +29,7 @@ const Profile = () => {
   const [passwordErrors, setPasswordErrors] = useState({});
 
   // Default grey placeholder
-  const defaultPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDUiIGN5PSI0NSIgcj0iNDUiIGZpbGw9IiNjYCiLz4KPHBhdGggZD0iTTQ1IDIwQzM3LjI3IDE5Ljc1IDMwLjI1QzM3LjI3IDMwLjI1IDMwLjI1IDMwLjI1IDMwLjI1IDM3LjI1QzMwLjI1IDM3LjI1IDMwLjI1IDQ1IDMwLjI1IDQ1QzMwLjI1IDQ1IDMwLjI1IDUyLjUgMzAuMjUgNTIuNUMzMC4yNSA1Mi41IDMwLjI1IDYwIDMwLjI1IDYwQzMwLjI1IDYwIDM3LjI1IDYwIDM3LjI1IDYwQzM3LjI1IDYwIDQ1IDYwIDQ1IDYwQzQ1IDYwIDUyLjUgNjAgNTIuNSA2MEM1Mi41IDYwIDUyLjUgNTIuNSA1Mi41IDUyLjVDNTIuNSA1Mi41IDUyLjUgNDUgNTIuNSA0NUM1Mi41IDQ1IDUyLjUgMzcuMjUgNTIuNSAzNy4yNUM1Mi41IDM3LjI1IDQ1IDM3LjI1IDQ1IDIwWiIgZmlsbD0iIzk5OSI+PC9wYXRoPgo8L3N2Zz4=';
+  const defaultPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDUiIGN5PSI0NSIgcj0iNDUiIGZpbGw9IiNjY2MiLz4KPHBhdGggZD0iTTQ1IDIwQzM3LjI3IDE5Ljc1IDMwLjI1QzM3LjI3IDMwLjI1IDMwLjI1IDMwLjI1IDMwLjI1IDM3LjI1QzMwLjI1IDM3LjI1IDMwLjI1IDQ1IDMwLjI1IDQ1QzMwLjI1IDQ1IDMwLjI1IDUyLjUgMzAuMjUgNTIuNUMzMC4yNSA1Mi41IDMwLjI1IDYwIDMwLjI1IDYwQzMwLjI1IDYwIDM3LjI1IDYwIDM3LjI1IDYwQzM3LjI1IDYwIDQ1IDYwIDQ1IDYwQzQ1IDYwIDUyLjUgNjAgNTIuNSA2MEM1Mi41IDYwIDUyLjUgNTIuNSA1Mi41IDUyLjVDNTIuNSA1Mi41IDUyLjUgNDUgNTIuNSA0NUM1Mi41IDQ1IDUyLjUgMzcuMjUgNTIuNSAzNy4yNUM1Mi41IDM3LjI1IDQ1IDM3LjI1IDQ1IDIwWiIgZmlsbD0iIzk5OSI+PC9wYXRoPgo8L3N2Zz4=';
 
   // Load user data from Firebase
   useEffect(() => {
@@ -62,6 +62,16 @@ const Profile = () => {
 
     return () => unsubscribe();
   }, [navigate]);
+
+  // Listen for localStorage changes to sync photo across pages
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const updatedImage = localStorage.getItem('profileImage') || defaultPlaceholder;
+      setProfileImage(updatedImage);
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Handle form changes
   const handleChange = (e) => {
@@ -152,11 +162,18 @@ const Profile = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('image/')) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        alert('File size too large. Please choose a smaller image.');
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         const imageData = reader.result;
         setProfileImage(imageData);
-        localStorage.setItem('profileImage', imageData);
+        localStorage.setItem('profileImage', imageData); // Sync
+      };
+      reader.onerror = () => {
+        alert('Failed to upload photo. Try again.');
       };
       reader.readAsDataURL(file);
     } else {
@@ -172,7 +189,7 @@ const Profile = () => {
   // Remove photo
   const removePhoto = () => {
     setProfileImage(defaultPlaceholder);
-    localStorage.removeItem('profileImage');
+    localStorage.removeItem('profileImage'); // Sync
   };
 
   // Logout
@@ -197,7 +214,7 @@ const Profile = () => {
       </header>
 
       {/* Profile Title */}
-      <h1 className="profile-page-title"> My Profile</h1>
+      <h1 className="profile-page-title">My Profile</h1>
 
       {/* Profile Card */}
       <div className="profile-card">
