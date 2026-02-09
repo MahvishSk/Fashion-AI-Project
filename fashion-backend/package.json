@@ -2,7 +2,6 @@
   "name": "fashion-ai-project",
   "version": "1.0.0",
   "description": "Fashion Outfit Recommendation Backend",
-  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -16,7 +15,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "firebase-admin": "^13.6.0",
-    "openai": "^6.15.0"
+    "firebase-admin": "^13.6.1",
+    "openai": "^6.18.0"
   }
 }
