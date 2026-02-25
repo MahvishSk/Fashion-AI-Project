@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo1.png";
 import icon1 from "../assets/dress.png";
 import icon2 from "../assets/trending.png";
@@ -14,19 +14,16 @@ import fashion3 from "../assets/Fashionimg3.jpg";
 import fashion4 from "../assets/Fashionimg4.jpg";
 import fashion5 from "../assets/Fashionimg5.jpg";
 import fashion6 from "../assets/Fashionimg6.jpg";
-import '../styles/Home.css'; // Import the CSS
-import Popup from './Popup'; // Ensure Popup.jsx exists and handles profile popup
+import "../styles/Home.css";
+import Popup from "./Popup";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("User"); // Placeholder; replace with actual user data
+  const [username, setUsername] = useState("User");
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  // State for popup management
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  // Load username from localStorage on mount
   useEffect(() => {
     const storedName = localStorage.getItem("username");
     if (storedName) {
@@ -34,7 +31,6 @@ const Home = () => {
     }
   }, []);
 
-  // Hero carousel images (ensure these assets exist in src/assets/)
   const heroImages = [
     fashion1,
     fashion2,
@@ -44,41 +40,54 @@ const Home = () => {
     fashion6,
   ];
 
-  // Auto-slide every 4-5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroImages.length);
     }, 4500);
     return () => clearInterval(interval);
-  }, [heroImages.length]);
+  }, []);
 
   return (
     <div className="home-container">
       {/* Top App Bar */}
       <header className="app-bar">
-        <div className="hamburger" onClick={() => setIsMenuOpen(true)}>☰</div>
+        <div className="hamburger" onClick={() => setIsMenuOpen(true)}>
+          ☰
+        </div>
+
         <div className="logo-H-container">
           <img src={logo} alt="StyleU Logo" className="logo-H" />
           <span className="logo-H-text">StyleU</span>
         </div>
-        <div className="profile-icon" onClick={() => setIsProfileOpen(true)}>👤</div>
+
+        <div className="profile-icon" onClick={() => setIsProfileOpen(true)}>
+          👤
+        </div>
       </header>
 
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-carousel">
           {heroImages.map((img, index) => (
-            <div key={index} className={`hero-slide ${index === currentSlide ? 'active' : ''}`}>
+            <div
+              key={index}
+              className={`hero-slide ${index === currentSlide ? "active" : ""}`}
+            >
               <img src={img} alt={`Fashion ${index + 1}`} />
             </div>
           ))}
         </div>
+
         <div className="hero-overlay">
           <div className="hero-content">
             <h1>Hello, {username}</h1>
             <h2>Welcome to StyleU</h2>
             <p>Your Personal AI Fashion Stylist</p>
-            <button className="suggestions-btn" onClick={() => navigate('/chatbot')}>
+
+            <button
+              className="suggestions-btn"
+              onClick={() => navigate("/chatbot")}
+            >
               Suggestions
             </button>
           </div>
@@ -88,23 +97,25 @@ const Home = () => {
       {/* Decorative Divider */}
       <div className="divider"></div>
 
-      {/* Feature Cards (2x2 Grid) */}
+      {/* Feature Cards */}
       <section className="features-section">
         <div className="features-grid">
           <div className="feature-card">
             <img src={icon1} alt="Dress Icon" className="card-icon-img" />
             <h4>AI Outfit Recommendation</h4>
-            <button onClick={() => navigate('/chatbot')}>Explore</button>
+            <button onClick={() => navigate("/chatbot")}>Explore</button>
           </div>
+
           <div className="feature-card">
             <img src={icon2} alt="Trending Icon" className="card-icon-img" />
             <h4>Trending Fashion</h4>
-            <button onClick={() => navigate('/trends')}>View Trends</button>
+            <button onClick={() => navigate("/trends")}>View Trends</button>
           </div>
+
           <div className="feature-card">
             <img src={icon3} alt="Saved Icon" className="card-icon-img" />
             <h4>Saved Looks</h4>
-            <button onClick={() => navigate('/saved')}>View Saved</button>
+            <button onClick={() => navigate("/saved")}>View Saved</button>
           </div>
         </div>
       </section>
@@ -120,19 +131,34 @@ const Home = () => {
       {/* Category Slider */}
       <div className="category-section">
         <div className="category-slider">
-          <div className="category-card" onClick={() => navigate('/category/casual')}>
+          <div
+            className="category-card"
+            onClick={() => navigate("/category/casual")}
+          >
             <img src={casualImg} alt="Casual" />
             <div className="category-overlay">Casual</div>
           </div>
-          <div className="category-card" onClick={() => navigate('/category/party')}>
+
+          <div
+            className="category-card"
+            onClick={() => navigate("/category/party")}
+          >
             <img src={partyImg} alt="Party" />
             <div className="category-overlay">Party Wear</div>
           </div>
-          <div className="category-card" onClick={() => navigate('/category/office')}>
+
+          <div
+            className="category-card"
+            onClick={() => navigate("/category/office")}
+          >
             <img src={officeImg} alt="Office" />
             <div className="category-overlay">Office Wear</div>
           </div>
-          <div className="category-card" onClick={() => navigate('/category/traditional')}>
+
+          <div
+            className="category-card"
+            onClick={() => navigate("/category/traditional")}
+          >
             <img src={traditionalImg} alt="Traditional" />
             <div className="category-overlay">Traditional</div>
           </div>
@@ -146,15 +172,17 @@ const Home = () => {
             <h3>StyleU</h3>
             <p>Your Personal AI Fashion Stylist</p>
           </div>
+
           <div className="footer-links">
             <h4>Quick Links</h4>
             <ul>
-              <li onClick={() => navigate('/')}>Home</li>
-              <li onClick={() => navigate('/chatbot')}>Chatbot</li>
-              <li onClick={() => navigate('/profile')}>Profile</li>
-              <li onClick={() => navigate('/saved')}>Saved Looks</li>
+              <li onClick={() => navigate("/")}>Home</li>
+              <li onClick={() => navigate("/chatbot")}>Chatbot</li>
+              <li onClick={() => navigate("/profile")}>Profile</li>
+              <li onClick={() => navigate("/saved")}>Saved Looks</li>
             </ul>
           </div>
+
           <div className="footer-support">
             <h4>Support</h4>
             <ul>
@@ -163,12 +191,13 @@ const Home = () => {
             </ul>
           </div>
         </div>
+
         <div className="footer-bottom">
           <p>© 2026 StyleU. All rights reserved.</p>
         </div>
       </footer>
 
-      {/* Popup Component (handles menu and profile popup) */}
+      {/* Popup */}
       <Popup
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
