@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import "../styles/Chatbot.css";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
       type: "text",
-      content: "Hi! Tell me what outfit you need.",
+      content: "Hi! Ask me for outfit ideas 👗✨",
     },
   ]);
 
   const [input, setInput] = useState("");
+  const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -20,80 +23,95 @@ const Chatbot = () => {
       content: input,
     };
 
-    setMessages([...messages, userMessage]);
+    const botReply = {
+      sender: "bot",
+      type: "text",
+      content: "Generating your fashion suggestion...",
+    };
+
+    setMessages((prev) => [...prev, userMessage, botReply]);
     setInput("");
+
+    // Reset textarea height
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
   };
 
+  // Auto scroll to bottom
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
-    <div style={styles.chatContainer}>
-      <div style={styles.messagesContainer}>
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            style={
-              msg.sender === "user" ? styles.userMessage : styles.botMessage
-            }
-          >
-            {msg.type === "text" && <p>{msg.content}</p>}
-          </div>
-        ))}
+    <div className="app-container">
+      {/* Sidebar */}
+      <div className="sidebar">
+        <div className="logo">StyleU</div>
+
+        <button className="new-chat-btn">+ New Chat</button>
+
+        <input
+          className="search-bar"
+          type="text"
+          placeholder="Search chats..."
+        />
+
+        <div className="chat-history"></div>
+
+        <button className="back-btn"> ← Previous </button>
       </div>
 
-      <div style={styles.inputContainer}>
-        <input
-          type="text"
-          placeholder="Type your message..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          style={styles.input}
-        />
-        <button onClick={handleSend} style={styles.button}>
-          Send
-        </button>
+      {/* Chat Section */}
+      <div className="chat-section">
+
+        <div className="main-title">
+          StyleU – Your Personal AI Fashion Stylish
+        </div>
+
+        <div className="messages-container">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`message ${msg.sender === "user" ? "user" : "bot"}`}
+            >
+              {msg.type === "text" && <p>{msg.content}</p>}
+              {msg.type === "image" && (
+                <img src={msg.content} alt="Generated Outfit" />
+              )}
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Chat Input */}
+        <div className="input-container">
+          <div className="input-wrapper">
+            <textarea
+              ref={textareaRef}
+              rows="1"
+              placeholder="Ask for a college look, party outfit, casual wear..."
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                e.target.style.height = "auto";
+                e.target.style.height = e.target.scrollHeight + "px";
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              className="chat-textarea"
+            />
+            <button onClick={handleSend}>➤</button>
+          </div>
+        </div>
+
       </div>
     </div>
   );
-};
-
-const styles = {
-  chatContainer: {
-    width: "400px",
-    height: "500px",
-    border: "1px solid #ccc",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    backgroundColor: "#fff",
-  },
-  messagesContainer: {
-    padding: "10px",
-    overflowY: "auto",
-    flex: 1,
-  },
-  userMessage: {
-    textAlign: "right",
-    marginBottom: "10px",
-  },
-  botMessage: {
-    textAlign: "left",
-    marginBottom: "10px",
-  },
-  inputContainer: {
-    display: "flex",
-    borderTop: "1px solid #ccc",
-  },
-  input: {
-    flex: 1,
-    padding: "10px",
-    border: "none",
-  },
-  button: {
-    padding: "10px",
-    border: "none",
-    backgroundColor: "#000",
-    color: "#fff",
-    cursor: "pointer",
-  },
 };
 
 export default Chatbot;
