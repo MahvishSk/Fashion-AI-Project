@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/Chatbot.css";
-
+import logo from "../assets/logo1.png";
 const Chatbot = () => {
   const [messages, setMessages] = useState([
     {
@@ -47,7 +47,14 @@ const Chatbot = () => {
     <div className="app-container">
       {/* Sidebar */}
       <div className="sidebar">
-        <div className="logo">StyleU</div>
+        <div className="sidebar-header">
+            <img
+                src={logo}
+                alt="StyleU Logo"
+                className="sidebar-logo"
+                />
+                <h2 className="brand-name">StyleU</h2>
+              </div>
 
         <button className="new-chat-btn">+ New Chat</button>
 
@@ -59,7 +66,7 @@ const Chatbot = () => {
 
         <div className="chat-history"></div>
 
-        <button className="back-btn"> ← Previous </button>
+        <button className="back-btn"> ← Home </button>
       </div>
 
       {/* Chat Section */}

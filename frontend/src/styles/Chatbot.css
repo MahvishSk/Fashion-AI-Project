@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap');
+
 /* ===== GLOBAL RESET ===== */
 * {
   margin: 0;
@@ -8,7 +10,7 @@
 
 html, body {
   height: 100%;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
 /* ===== MAIN LAYOUT ===== */
@@ -16,7 +18,7 @@ html, body {
   display: flex;
   height: 100vh;
   width: 100%;
-  overflow: hidden; /* Extra safety */
+  overflow: hidden;
   background: linear-gradient(135deg, #f8c6d2, #f6bfcc);
 }
 
@@ -31,10 +33,29 @@ html, body {
   padding: 25px 20px;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 30px;
+/* ===== SIDEBAR HEADER ===== */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;              
+  margin-bottom: 35px;
+}
+
+/* Logo size */
+.sidebar-logo {
+  width: 78px;           
+  height: auto;
+  object-fit: contain;
+}
+
+/* StyleU Text */
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 38px;       
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+  color: #4b0018;        
 }
 
 /* Buttons */
@@ -79,7 +100,7 @@ html, body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: hidden; /* Prevent stretch */
+  overflow: hidden;
 }
 
 /* Title */
@@ -98,13 +119,12 @@ html, body {
   flex: 1;
   padding: 30px 80px;
   overflow-y: auto;
-  overflow-x: hidden; /* Critical fix */
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-/* Clean Scrollbar */
 .messages-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -122,9 +142,8 @@ html, body {
   font-size: 15px;
   line-height: 1.6;
   animation: fadeIn 0.3s ease-in-out;
-
-  word-break: break-word;      /* Break long words */
-  overflow-wrap: anywhere;     /* Strong wrapping */
+  word-break: break-word;
+  overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
 
@@ -170,7 +189,6 @@ html, body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Expanding textarea */
 .chat-textarea {
   flex: 1;
   border: none;
@@ -201,7 +219,7 @@ html, body {
   transform: scale(1.08);
 }
 
-/* ===== Animation ===== */
+/* ===== Animations ===== */
 @keyframes fadeIn {
   from { 
     opacity: 0; 
@@ -210,5 +228,16 @@ html, body {
   to { 
     opacity: 1; 
     transform: translateY(0); 
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
