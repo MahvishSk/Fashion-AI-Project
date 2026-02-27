@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, User, Bot, TrendingUp, Bookmark, Search, Settings, LogOut } from 'lucide-react'; // Import Lucide icons
+import { Home, User, Bot, TrendingUp, Bookmark, Search, Settings, LogOut, Camera, X } from 'lucide-react'; // Added Camera and X
 import '../styles/Popup.css'; // Import the CSS
 
 const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) => {
@@ -142,7 +142,7 @@ const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) =
               </li>
             ))}
             <li className="menu-item logout" onClick={handleLogout}>
-             <LogOut className="menu-icon" size={20} /> {/* Professional LogOut icon */}
+              <LogOut className="menu-icon" size={20} /> {/* Professional LogOut icon */}
               <span className="menu-label">Logout</span>
             </li>
           </ul>
@@ -156,8 +156,12 @@ const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) =
             <h3 className="profile-p-title">Profile</h3>
             <div className={`profile-p-photo-container ${profileImage === defaultPlaceholder ? 'no-photo' : ''}`}>
               <img src={profileImage} alt="Profile" className="profile-p-photo" />
-              <div className="camera-p-icon" onClick={triggerFileInput}>📷</div>
-              <div className="remove-p-icon" onClick={removePhoto}>❌</div>
+              <div className="camera-p-icon" onClick={triggerFileInput}>
+                <Camera size={20} /> {/* Lucide Camera icon */}
+              </div>
+              <div className="remove-p-icon" onClick={removePhoto}>
+                <X size={20} /> {/* Lucide X icon for remove */}
+              </div>
             </div>
             <p className="username-p">{username}</p> {/* Displays username */}
             <button className="view-more-p-btn" onClick={() => handleNavigate('/profile')}>

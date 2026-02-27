@@ -20,6 +20,8 @@
   color: var(--main-text);
   background-color: #FFFFFF;
   transition: box-shadow 0.3s ease;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .input-field:focus {
@@ -37,12 +39,12 @@
   cursor: pointer;
   transition: box-shadow 0.3s ease;
   margin-top: 1rem;
+  width: 100%;
+  font-size: 1rem;
 }
 
 .submit-btn:hover {
   opacity: 0.9;
-  transform: scale(1);
-  box-shadow: var(--primary-accent);
 }
 
 .error {
@@ -51,6 +53,7 @@
   margin-bottom: 0.5rem;
 }
 
+/* Popup / Overlay */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -62,6 +65,8 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .popup {
@@ -72,10 +77,14 @@
   background: white;
   padding: 20px 30px;
   border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   font-size: 1.1rem;
   color: green;
   z-index: 999;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .tick {
@@ -84,28 +93,36 @@
   animation: tick 0.5s ease-out;
 }
 
-/* Updated styles for password input container and eye icon */
+/* Password field */
 .input-container {
-  position: relative; /* Allows absolute positioning of the icon inside the input */
+  position: relative;
   margin-bottom: 0.5rem;
 }
 
 .password-container {
   position: relative;
-  width: 93%;
+  width: 100%;
   margin-bottom: 0.5rem;
+  box-sizing: border-box;
 }
 
 .password-input {
-  width: 93%;
-  padding: 12px 40px 12px 12px; /* space for eye icon */
+  width: 100%;
+  padding: 12px 42px 12px 12px;
   border-radius: 6px;
   border: 1px solid #f2a1b3;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.password-input:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(232, 139, 163, 0.5);
 }
 
 .eye-icon {
   position: absolute;
-  right: -10px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -114,31 +131,56 @@
   color: #888;
   font-size: 1.2rem;
   transition: opacity 0.3s ease;
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
 
-.eye-icon:hover {
-  opacity: 0.7;
-}
-
-.eye-icon:focus {
-  outline: 2px solid #888;
-}
+.eye-icon:hover  { opacity: 0.7; }
+.eye-icon:focus  { outline: 2px solid #888; }
 
 @keyframes scaleIn {
   from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  to   { transform: scale(1);   opacity: 1; }
 }
 
 @keyframes tick {
   from { transform: scale(0); }
-  to { transform: scale(1); }
+  to   { transform: scale(1); }
 }
 
-@media (max-width: 768px) {
+/* ── Responsive ── */
+@media (max-width: 767px) {
+  .input-field    { font-size: 0.97rem; }
+  .password-input { font-size: 0.97rem; }
+  .submit-btn     { font-size: 0.97rem; }
+  .popup          { padding: 18px 22px; font-size: 1rem; }
+  .tick           { font-size: 2.5rem; }
+}
+
+@media (max-width: 480px) {
   .input-field {
-    padding: 0.625rem;
+    padding: 0.65rem;
+    font-size: 0.93rem;
   }
+
   .password-input {
-    padding-right: 2.5rem;
+    padding: 10px 40px 10px 10px;
+    font-size: 0.93rem;
   }
+
+  .submit-btn {
+    padding: 0.65rem;
+    font-size: 0.93rem;
+  }
+
+  .error  { font-size: 0.82rem; }
+  .popup  { padding: 15px 18px; font-size: 0.95rem; }
+  .tick   { font-size: 2.2rem; }
+}
+
+@media (max-width: 360px) {
+  .input-field    { padding: 0.6rem; font-size: 0.88rem; }
+  .password-input { padding: 9px 38px 9px 9px; font-size: 0.88rem; }
+  .submit-btn     { padding: 0.6rem; font-size: 0.88rem; }
 }

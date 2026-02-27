@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
+
 import SplashScreen from "./components/SplashScreen";
 import Welcome from "./components/Welcome";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ForgotPassword from "./components/ForgotPassword";
-import Home from "./components/Home";
+import Home from "./components/Home";       // ← real Home component
 import Profile from "./components/Profile";
+<<<<<<< HEAD
 import Chatbot from "./components/Chatbot"; // ✅ ADDED
+=======
+import Settings from "./components/Settings";
+import UserDetail from './components/UserDetail'; // The file we just updated
+>>>>>>> b3d4dea (My local changes)
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -56,9 +62,14 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+<<<<<<< HEAD
 
           {/* ✅ Chatbot Route */}
           <Route path="/chatbot" element={<Chatbot />} />
+=======
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/user-detail" element={<UserDetail />} />
+>>>>>>> b3d4dea (My local changes)
         </Routes>
       )}
     </>

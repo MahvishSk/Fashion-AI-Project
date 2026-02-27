@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo1.png";
+=======
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+>>>>>>> b3d4dea (My local changes)
 import icon1 from "../assets/dress.png";
 import icon2 from "../assets/trending.png";
 import icon3 from "../assets/saved.png";
@@ -14,13 +19,29 @@ import fashion3 from "../assets/Fashionimg3.jpg";
 import fashion4 from "../assets/Fashionimg4.jpg";
 import fashion5 from "../assets/Fashionimg5.jpg";
 import fashion6 from "../assets/Fashionimg6.jpg";
+<<<<<<< HEAD
 import "../styles/Home.css";
 import Popup from "./Popup";
+=======
+import '../styles/Home.css';
+import Header from '../components/Header'; // Import Header
+import Popup from './Popup';
+import { useApp } from './Appcontext';
+
+>>>>>>> b3d4dea (My local changes)
 
 const Home = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User");
   const [currentSlide, setCurrentSlide] = useState(0);
+<<<<<<< HEAD
+=======
+  const { t, language } = useApp();   // ← get translations + current language
+  const h = t.home;                   // shortcut
+  const isHindi = language === 'Hindi';
+  
+  // State for popup management
+>>>>>>> b3d4dea (My local changes)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -31,6 +52,10 @@ const Home = () => {
     }
   }, []);
 
+<<<<<<< HEAD
+=======
+  // Hero carousel images
+>>>>>>> b3d4dea (My local changes)
   const heroImages = [
     fashion1,
     fashion2,
@@ -49,6 +74,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
+<<<<<<< HEAD
       {/* Top App Bar */}
       <header className="app-bar">
         <div className="hamburger" onClick={() => setIsMenuOpen(true)}>
@@ -64,6 +90,15 @@ const Home = () => {
           👤
         </div>
       </header>
+=======
+      {/* Header Component (replaces the old app bar) */}
+      <Header 
+        isMenuOpen={isMenuOpen} 
+        setIsMenuOpen={setIsMenuOpen}
+        isProfileOpen={isProfileOpen}
+        setIsProfileOpen={setIsProfileOpen}
+      />
+>>>>>>> b3d4dea (My local changes)
 
       {/* Hero Section */}
       <section className="hero-section">
@@ -95,7 +130,9 @@ const Home = () => {
       </section>
 
       {/* Decorative Divider */}
-      <div className="divider"></div>
+      <div className="divider">
+        <span class="divider-icon">✦ ✧ ✦</span>
+      </div>
 
       {/* Feature Cards */}
       <section className="features-section">
@@ -197,7 +234,11 @@ const Home = () => {
         </div>
       </footer>
 
+<<<<<<< HEAD
       {/* Popup */}
+=======
+      {/* Popup Component */}
+>>>>>>> b3d4dea (My local changes)
       <Popup
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}

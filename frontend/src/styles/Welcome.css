@@ -8,23 +8,22 @@
   --main-text: #222222;
 }
 
-/* Ensure full viewport, no unnecessary scroll */
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-x:auto;  /* prevent horizontal scroll */
+  overflow-x: auto;
 }
 
 .welcome-container {
   display: flex;
   flex-direction: column;
-  align-items: center;   /* horizontal center */
-  justify-content: center; /* start from top */
-  height: 100vh;
-  padding-top: 0;     /*  adjust this to reduce space above */
-  padding-bottom: 1rem;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem 1rem 1.5rem;
   background: #FBE7E5;
+  box-sizing: border-box;
 }
 
 .header-wlc {
@@ -33,19 +32,20 @@ body, html {
 }
 
 .welcome-logo {
-  width: 140px;          /* normal size */
+  width: 140px;
   height: 100px;
-  margin-bottom: -0.8rem; /* space below logo before text */
-  animation: none;       /* disable zoom on welcome page */
-        /* optional, for mobile scaling */
+  margin-bottom: -0.8rem;
+  animation: none;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .main-heading {
   font-family: "Playfair Display", serif;
   font-size: 2.2rem;
   color: #B7688A;
-  margin: 0.5rem;  
-  letter-spacing: 1px;     /* adds space between letters */ 
+  margin: 0.5rem;
+  letter-spacing: 1px;
 }
 
 .sub-text {
@@ -62,6 +62,7 @@ body, html {
   width: 100%;
   max-width: 400px;
   animation: fadeUp 0.5s ease-out;
+  box-sizing: border-box;
 }
 
 .toggle-tabs {
@@ -79,15 +80,15 @@ body, html {
   background-color: transparent;
   color: var(--primary-accent);
   font-weight: 600;
-  font-size: 1.1rem;   /* Bigger text */
+  font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 2;
-   border: none; 
+  border: none;
 }
 
 .tab.active {
-  color: #ffffff;     /* Keep text visible */
+  color: #ffffff;
 }
 
 .slider {
@@ -95,20 +96,14 @@ body, html {
   top: 0;
   height: 100%;
   width: 50%;
-  background-color: var(--primary-accent); /* Soft feminine pink */
+  background-color: var(--primary-accent);
   border-radius: 30px;
   transition: transform 0.3s ease;
   z-index: 1;
 }
 
-.slider.login {
-  transform: translateX(0%);
-}
-
-.slider.signup {
-  transform: translateX(100%);
-}
-
+.slider.login  { transform: translateX(0%); }
+.slider.signup { transform: translateX(100%); }
 
 .card-title {
   font-family: 'Playfair Display', serif;
@@ -116,16 +111,83 @@ body, html {
   color: var(--headings);
   text-align: center;
   margin-bottom: 1rem;
-  letter-spacing: 1px;     /* adds space between letters */ 
+  letter-spacing: 1px;
 }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 768px) {
+/* ── Responsive ── */
+@media (max-width: 991px) {
+  .main-heading { font-size: 2rem; }
+  .sub-text      { font-size: 1.3rem; }
+  .card          { max-width: 380px; }
+}
+
+@media (max-width: 767px) {
+  .welcome-container {
+    padding: 1.5rem 1rem;
+    justify-content: flex-start;
+    padding-top: 2.5rem;
+  }
+
+  .welcome-logo {
+    width: 110px;
+    height: auto;
+  }
+
+  .main-heading {
+    font-size: 1.75rem;
+    letter-spacing: 0.5px;
+  }
+
+  .sub-text { font-size: 1.1rem; }
+
   .card {
     padding: 1.5rem;
+    max-width: 100%;
+    border-radius: 10px;
   }
+
+  .tab { font-size: 1rem; padding: 0.75rem; }
+
+  .card-title { font-size: 1.4rem; }
+}
+
+@media (max-width: 480px) {
+  .welcome-container { padding-top: 2rem; }
+
+  .welcome-logo {
+    width: 90px;
+    margin-bottom: -0.4rem;
+  }
+
+  .main-heading { font-size: 1.5rem; }
+  .sub-text      { font-size: 1rem; }
+
+  .card {
+    padding: 1.2rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .tab        { font-size: 0.95rem; padding: 0.65rem; }
+  .card-title { font-size: 1.25rem; }
+
+  .header-wlc { margin-bottom: 1.2rem; }
+}
+
+@media (max-width: 360px) {
+  .main-heading { font-size: 1.3rem; }
+  .sub-text      { font-size: 0.9rem; }
+  .welcome-logo  { width: 75px; }
+
+  .card {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .tab        { font-size: 0.88rem; padding: 0.6rem; }
+  .card-title { font-size: 1.1rem; }
 }

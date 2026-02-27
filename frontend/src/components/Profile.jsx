@@ -4,6 +4,7 @@ import { auth, db } from '../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
+import { Camera, X } from 'lucide-react';
 import logo from "../assets/logo1.png";
 import Popup from './Popup';
 import '../styles/Profile.css';
@@ -12,21 +13,31 @@ const Profile = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false); // New state for popup
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [profileImage, setProfileImage] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [passwordErrors, setPasswordErrors] = useState({});
+
+  // ✅ UPDATED: Added new fields to formData
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     phone: '',
+    age: '',
+    gender: '',
+    body_type: '',
+    height: '',
+    weight: '',
+    skin_tone: ''
   });
+
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
+  
   const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [passwordErrors, setPasswordErrors] = useState({});
 
   // Default grey placeholder
   const defaultPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDUiIGN5PSI0NSIgcj0iNDUiIGZpbGw9IiNjY2MiLz4KPHBhdGggZD0iTTQ1IDIwQzM3LjI3IDE5Ljc1IDMwLjI1QzM3LjI3IDMwLjI1IDMwLjI1IDMwLjI1IDMwLjI1IDM3LjI1QzMwLjI1IDM3LjI1IDMwLjI1IDQ1IDMwLjI1IDQ1QzMwLjI1IDQ1IDMwLjI1IDUyLjUgMzAuMjUgNTIuNUMzMC4yNSA1Mi41IDMwLjI1IDYwIDMwLjI1IDYwQzMwLjI1IDYwIDM3LjI1IDYwIDM3LjI1IDYwQzM3LjI1IDYwIDQ1IDYwIDQ1IDYwQzQ1IDYwIDUyLjUgNjAgNTIuNSA2MEM1Mi41IDYwIDUyLjUgNTIuNSA1Mi41IDUyLjVDNTIuNSA1Mi41IDUyLjUgNDUgNTIuNSA0NUM1Mi41IDQ1IDUyLjUgMzcuMjUgNTIuNSAzNy4yNUM1Mi41IDM3LjI1IDQ1IDM3LjI1IDQ1IDIwWiIgZmlsbD0iIzk5OSI+PC9wYXRoPgo8L3N2Zz4=';
@@ -39,15 +50,20 @@ const Profile = () => {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           if (userDoc.exists()) {
             const data = userDoc.data();
+            // ✅ UPDATED: Fetching new fields
             const userData = {
               username: data.fullName || 'User',
               email: data.email || user.email,
               phone: data.phone || '',
+              age: data.age || '',
+              gender: data.gender || '',
+              body_type: data.body_type || '',
+              height: data.height || '',
+              weight: data.weight || '',
+              skin_tone: data.skin_tone || '',
             };
             setFormData(userData);
             localStorage.setItem('username', userData.username);
-            localStorage.setItem('email', userData.email);
-            localStorage.setItem('phone', userData.phone);
           }
           const storedImage = localStorage.getItem('profileImage') || defaultPlaceholder;
           setProfileImage(storedImage);
@@ -63,7 +79,7 @@ const Profile = () => {
     return () => unsubscribe();
   }, [navigate]);
 
-  // Listen for localStorage changes to sync photo across pages
+  // Listen for localStorage changes
   useEffect(() => {
     const handleStorageChange = () => {
       const updatedImage = localStorage.getItem('profileImage') || defaultPlaceholder;
@@ -73,40 +89,31 @@ const Profile = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle password form changes
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setPasswordData({ ...passwordData, [name]: value });
     validatePasswordField(name, value);
   };
 
-  // Validate password fields
   const validatePasswordField = (name, value) => {
     const newErrors = { ...passwordErrors };
     if (name === 'newPassword') {
-      if (value.length < 8) {
-        newErrors.newPassword = 'Password must be at least 8 characters.';
-      } else {
-        delete newErrors.newPassword;
-      }
+      if (value.length < 8) newErrors.newPassword = 'Password must be at least 8 characters.';
+      else delete newErrors.newPassword;
     }
     if (name === 'confirmPassword') {
-      if (value !== passwordData.newPassword) {
-        newErrors.confirmPassword = 'Passwords do not match.';
-      } else {
-        delete newErrors.confirmPassword;
-      }
+      if (value !== passwordData.newPassword) newErrors.confirmPassword = 'Passwords do not match.';
+      else delete newErrors.confirmPassword;
     }
     setPasswordErrors(newErrors);
   };
 
-  // Save profile changes
+  // ✅ UPDATED: Save function includes new fields
   const handleSave = async () => {
     const user = auth.currentUser;
     if (user) {
@@ -115,10 +122,16 @@ const Profile = () => {
           fullName: formData.username,
           email: formData.email,
           phone: formData.phone,
+          // Saving new fields
+          age: formData.age,
+          gender: formData.gender,
+          body_type: formData.body_type,
+          height: formData.height,
+          weight: formData.weight,
+          skin_tone: formData.skin_tone,
         });
+        
         localStorage.setItem('username', formData.username);
-        localStorage.setItem('email', formData.email);
-        localStorage.setItem('phone', formData.phone);
         setIsEditing(false);
         alert('Profile updated successfully!');
       } catch (error) {
@@ -128,7 +141,6 @@ const Profile = () => {
     }
   };
 
-  // Handle change password
   const handleChangePassword = async (e) => {
     e.preventDefault();
     if (Object.keys(passwordErrors).length > 0 || !passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
@@ -158,11 +170,10 @@ const Profile = () => {
     setLoading(false);
   };
 
-  // Handle file upload
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('image/')) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      if (file.size > 5 * 1024 * 1024) {
         alert('File size too large. Please choose a smaller image.');
         return;
       }
@@ -170,10 +181,7 @@ const Profile = () => {
       reader.onload = () => {
         const imageData = reader.result;
         setProfileImage(imageData);
-        localStorage.setItem('profileImage', imageData); // Sync
-      };
-      reader.onerror = () => {
-        alert('Failed to upload photo. Try again.');
+        localStorage.setItem('profileImage', imageData);
       };
       reader.readAsDataURL(file);
     } else {
@@ -181,25 +189,20 @@ const Profile = () => {
     }
   };
 
-  // Trigger file input
-  const triggerFileInput = () => {
-    document.getElementById('profile-file-input').click();
-  };
+  const triggerFileInput = () => document.getElementById('profile-file-input').click();
 
-  // Remove photo
   const removePhoto = () => {
     setProfileImage(defaultPlaceholder);
-    localStorage.removeItem('profileImage'); // Sync
+    localStorage.removeItem('profileImage');
   };
 
-  // Logout
   const handleLogout = () => {
     auth.signOut();
     localStorage.clear();
     navigate('/welcome');
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="loading-screen">Loading...</div>;
 
   return (
     <div className="profile-page">
@@ -213,56 +216,102 @@ const Profile = () => {
         <div className="profile-icon" onClick={() => setIsProfileOpen(true)}>👤</div>
       </header>
 
-      {/* Profile Title */}
       <h1 className="profile-page-title">My Profile</h1>
 
-      {/* Profile Card */}
       <div className="profile-card">
         {/* Profile Photo Section */}
         <div className="profile-photo-section">
           <div className="profile-photo-container">
             <img src={profileImage} alt="Profile" className="profile-photo" />
-            <div className="camera-icon" onClick={triggerFileInput}>📷</div>
-            <div className="remove-icon" onClick={removePhoto}>❌</div>
+            {/* Only show camera/remove icons when editing */}
+            {isEditing && (
+              <>
+                <div className="camera-icon" onClick={triggerFileInput}>
+                  <Camera size={15} color="#fff" strokeWidth={2.5} />
+                </div>
+                <div className="remove-icon" onClick={removePhoto}>
+                  <X size={13} color="#fff" strokeWidth={2.5} />
+                </div>
+              </>
+            )}
           </div>
           <p className="username-display">{formData.username}</p>
         </div>
 
         {/* Form Section */}
         <form className="profile-form" onSubmit={(e) => e.preventDefault()}>
+          
+          {/* Basic Info */}
+          <div className="form-section-title">Basic Information</div>
+          <div className="form-row">
           <div className="form-group">
             <label>Username</label>
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              disabled={!isEditing}
-              className="form-input"
-            />
+            <input type="text" name="username" value={formData.username} onChange={handleChange} disabled={!isEditing} className="form-input" />
+          </div>
+           <div className="form-group">
+            <label>Phone</label>
+            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} disabled={!isEditing} className="form-input" />
+          </div>
           </div>
           <div className="form-group">
             <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              disabled={!isEditing}
-              className="form-input"
-            />
+            <input type="email" name="email" value={formData.email} onChange={handleChange} disabled={!isEditing} className="form-input" />
+          </div>
+         
+          {/* Body Details - NEW SECTION */}
+          <div className="form-section-title">Body Details</div>
+          
+          <div className="form-row">
+            <div className="form-group half">
+              <label>Age</label>
+              <input type="number" name="age" value={formData.age} onChange={handleChange} disabled={!isEditing} className="form-input" placeholder="e.g. 24" />
+            </div>
+            <div className="form-group half">
+              <label>Gender</label>
+              <select name="gender" value={formData.gender} onChange={handleChange} disabled={!isEditing} className="form-input">
+                <option value="">Select</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group half">
+              <label>Height (ft)</label>
+              <input type="text" name="height" value={formData.height} onChange={handleChange} disabled={!isEditing} className="form-input" placeholder="e.g. 5.2" />
+            </div>
+            <div className="form-group half">
+              <label>Weight (kg)</label>
+              <input type="number" name="weight" value={formData.weight} onChange={handleChange} disabled={!isEditing} className="form-input" placeholder="e.g. 60" />
+            </div>
+          </div>
+
+          <div className="form-row">
+          <div className="form-group">
+            <label>Body Type</label>
+            <select name="body_type" value={formData.body_type} onChange={handleChange} disabled={!isEditing} className="form-input">
+              <option value="">Select Body Type</option>
+              <option value="slim">Slim</option>
+              <option value="athletic">Athletic</option>
+              <option value="average">Average</option>
+              <option value="curvy">Curvy</option>
+              <option value="plus_size">Plus Size</option>
+            </select>
           </div>
           <div className="form-group">
-            <label>Phone</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              disabled={!isEditing}
-              className="form-input"
-            />
+            <label>Skin Tone</label>
+            <select name="skin_tone" value={formData.skin_tone} onChange={handleChange} disabled={!isEditing} className="form-input">
+              <option value="">Select Skin Tone</option>
+              <option value="fair">Fair / Light</option>
+              <option value="wheatish">Wheatish / Medium</option>
+              <option value="dusky">Dusky / Dark</option>
+            </select>
           </div>
+          </div>
+
+          {/* Buttons */}
           <div className="button-group">
             {isEditing ? (
               <>
@@ -296,37 +345,16 @@ const Profile = () => {
             <form onSubmit={handleChangePassword} className="popup-form">
               <div className="form-group">
                 <label>Current Password</label>
-                <input
-                  type="password"
-                  name="currentPassword"
-                  value={passwordData.currentPassword}
-                  onChange={handlePasswordChange}
-                  className="form-input"
-                  required
-                />
+                <input type="password" name="currentPassword" value={passwordData.currentPassword} onChange={handlePasswordChange} className="form-input" required />
               </div>
               <div className="form-group">
                 <label>New Password</label>
-                <input
-                  type="password"
-                  name="newPassword"
-                  value={passwordData.newPassword}
-                  onChange={handlePasswordChange}
-                  className="form-input"
-                  required
-                />
+                <input type="password" name="newPassword" value={passwordData.newPassword} onChange={handlePasswordChange} className="form-input" required />
                 {passwordErrors.newPassword && <p className="error">{passwordErrors.newPassword}</p>}
               </div>
               <div className="form-group">
                 <label>Confirm New Password</label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={passwordData.confirmPassword}
-                  onChange={handlePasswordChange}
-                  className="form-input"
-                  required
-                />
+                <input type="password" name="confirmPassword" value={passwordData.confirmPassword} onChange={handlePasswordChange} className="form-input" required />
                 {passwordErrors.confirmPassword && <p className="error">{passwordErrors.confirmPassword}</p>}
               </div>
               <button type="submit" className="submit-btn" disabled={loading}>
@@ -340,21 +368,10 @@ const Profile = () => {
       )}
 
       {/* Hidden file input */}
-      <input
-        type="file"
-        id="profile-file-input"
-        accept="image/*"
-        style={{ display: 'none' }}
-        onChange={handleFileChange}
-      />
+      <input type="file" id="profile-file-input" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
 
       {/* Popup for Menu and Profile */}
-      <Popup
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        isProfileOpen={isProfileOpen}
-        setIsProfileOpen={setIsProfileOpen}
-      />
+      <Popup isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} isProfileOpen={isProfileOpen} setIsProfileOpen={setIsProfileOpen} />
     </div>
   );
 };
