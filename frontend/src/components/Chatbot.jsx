@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/Chatbot.css";
 import logo from "../assets/logo1.png";
+
 const Chatbot = () => {
   const [messages, setMessages] = useState([
     {
@@ -11,10 +12,11 @@ const Chatbot = () => {
   ]);
 
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMessage = {
@@ -23,18 +25,38 @@ const Chatbot = () => {
       content: input,
     };
 
-    const botReply = {
-      sender: "bot",
-      type: "text",
-      content: "Generating your fashion suggestion...",
-    };
-
-    setMessages((prev) => [...prev, userMessage, botReply]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    setLoading(true);
 
-    // Reset textarea height
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
+    try {
+      const response = await fetch("http://localhost:5000/recommend-outfit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          gender: "female",
+          bodyType: "curvy",
+          skinTone: "fair",
+          occasion: input,
+        }),
+      });
+
+      const data = await response.json();
+
+      const imageMessage = {
+        sender: "bot",
+        type: "image",
+        imageUrl: data.outfit.imageUrl,
+        stylingTips: data.outfit.stylingTips,
+      };
+
+      setMessages((prev) => [...prev, imageMessage]);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error:", error);
+      setLoading(false);
     }
   };
 
@@ -48,13 +70,9 @@ const Chatbot = () => {
       {/* Sidebar */}
       <div className="sidebar">
         <div className="sidebar-header">
-            <img
-                src={logo}
-                alt="StyleU Logo"
-                className="sidebar-logo"
-                />
-                <h2 className="brand-name">StyleU</h2>
-              </div>
+          <img src={logo} alt="StyleU Logo" className="sidebar-logo" />
+          <h2 className="brand-name">StyleU</h2>
+        </div>
 
         <button className="new-chat-btn">+ New Chat</button>
 
@@ -71,9 +89,8 @@ const Chatbot = () => {
 
       {/* Chat Section */}
       <div className="chat-section">
-
         <div className="main-title">
-          StyleU – Your Personal AI Fashion Stylish
+          StyleU – Your Personal AI Fashion Stylist
         </div>
 
         <div className="messages-container">
@@ -83,11 +100,24 @@ const Chatbot = () => {
               className={`message ${msg.sender === "user" ? "user" : "bot"}`}
             >
               {msg.type === "text" && <p>{msg.content}</p>}
+
               {msg.type === "image" && (
-                <img src={msg.content} alt="Generated Outfit" />
+                <div>
+                  <img src={msg.imageUrl} alt="Outfit" width="250" />
+                  {msg.stylingTips?.map((tip, i) => (
+                    <p key={i}>• {tip}</p>
+                  ))}
+                </div>
               )}
             </div>
           ))}
+
+          {loading && (
+            <div className="message bot">
+              <p>Generating your outfit... Please wait.</p>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
 
@@ -115,7 +145,6 @@ const Chatbot = () => {
             <button onClick={handleSend}>➤</button>
           </div>
         </div>
-
       </div>
     </div>
   );
