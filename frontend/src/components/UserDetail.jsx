@@ -55,13 +55,14 @@ const UserDetail = () => {
 
   return (
     <div className="container">
+       <h2>Complete Your Profile</h2>
+        <h3 className="subtitle">Help us find the perfect look for you!</h3>
       <div className="card">
-        <h2>Complete Your Profile</h2>
-        <p className="subtitle">Help us find the perfect look for you!</p>
-        
+
         <form onSubmit={handleSubmit} className="profile-form">
           
           {/* New Fields Added */}
+           <div className="form-row">
           <div className="form-group">
             <label>Age</label>
             <input
@@ -83,7 +84,9 @@ const UserDetail = () => {
               <option value="other">Other</option>
             </select>
           </div>
+         </div>
 
+         
           <div className="form-group">
             <label>Body Type</label>
             <select name="body_type" value={formData.body_type} onChange={handleChange} required>
@@ -97,6 +100,7 @@ const UserDetail = () => {
           </div>
 
           {/* Original Fields */}
+          <div className="form-row">
           <div className="form-group">
             <label>Height (in feet)</label>
             <input
@@ -108,7 +112,6 @@ const UserDetail = () => {
               required
             />
           </div>
-
           <div className="form-group">
             <label>Weight (in kg)</label>
             <input
@@ -120,7 +123,7 @@ const UserDetail = () => {
               required
             />
           </div>
-
+          </div>
           <div className="form-group">
             <label>Skin Tone</label>
             <select name="skin_tone" value={formData.skin_tone} onChange={handleChange} required>

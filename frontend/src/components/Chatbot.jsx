@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Chatbot.css";
 import logo from "../assets/logo1.png";
 
 const Chatbot = () => {
+  const navigate = useNavigate();
+  
   const [messages, setMessages] = useState([
     {
       sender: "bot",
       type: "text",
-      content: "Hi! Ask me for outfit ideas 👗✨",
+      content: "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
     },
   ]);
 
@@ -26,10 +29,12 @@ const Chatbot = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentInput = input; // Store input before clearing
     setInput("");
     setLoading(true);
 
     try {
+      // Replace with your actual backend API
       const response = await fetch("http://localhost:5000/recommend-outfit", {
         method: "POST",
         headers: {
@@ -39,23 +44,29 @@ const Chatbot = () => {
           gender: "female",
           bodyType: "curvy",
           skinTone: "fair",
-          occasion: input,
+          occasion: currentInput,
         }),
       });
 
       const data = await response.json();
 
-      const imageMessage = {
+      const botMessage = {
         sender: "bot",
         type: "image",
-        imageUrl: data.outfit.imageUrl,
-        stylingTips: data.outfit.stylingTips,
+        imageUrl: data.outfit?.imageUrl || "https://via.placeholder.com/250",
+        stylingTips: data.outfit?.stylingTips || ["Styling tips unavailable"],
       };
 
-      setMessages((prev) => [...prev, imageMessage]);
-      setLoading(false);
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error:", error);
+      
+      // Error message
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", type: "text", content: "Sorry, I couldn't fetch an outfit right now. Please try again!" },
+      ]);
+    } finally {
       setLoading(false);
     }
   };
@@ -64,6 +75,14 @@ const Chatbot = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Handle Enter key
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
 
   return (
     <div className="app-container">
@@ -74,17 +93,17 @@ const Chatbot = () => {
           <h2 className="brand-name">StyleU</h2>
         </div>
 
-        <button className="new-chat-btn">+ New Chat</button>
+        <button className="new-chat-btn" onClick={() => setMessages([{ sender: "bot", type: "text", content: "Hi! Ask me for outfit ideas 👗✨" }])}>
+          + New Chat
+        </button>
 
-        <input
-          className="search-bar"
-          type="text"
-          placeholder="Search chats..."
-        />
+        <input className="search-bar" type="text" placeholder="Search chats..." />
 
         <div className="chat-history"></div>
 
-        <button className="back-btn"> ← Home </button>
+        <button className="back-btn" onClick={() => navigate("/home")}>
+          ← Back to Home
+        </button>
       </div>
 
       {/* Chat Section */}
@@ -95,17 +114,14 @@ const Chatbot = () => {
 
         <div className="messages-container">
           {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`message ${msg.sender === "user" ? "user" : "bot"}`}
-            >
+            <div key={index} className={`message ${msg.sender === "user" ? "user" : "bot"}`}>
               {msg.type === "text" && <p>{msg.content}</p>}
 
               {msg.type === "image" && (
-                <div>
-                  <img src={msg.imageUrl} alt="Outfit" width="250" />
+                <div className="bot-image-container">
+                  <img src={msg.imageUrl} alt="Outfit" className="bot-image" />
                   {msg.stylingTips?.map((tip, i) => (
-                    <p key={i}>• {tip}</p>
+                    <p key={i} className="styling-tip">• {tip}</p>
                   ))}
                 </div>
               )}
@@ -113,8 +129,8 @@ const Chatbot = () => {
           ))}
 
           {loading && (
-            <div className="message bot">
-              <p>Generating your outfit... Please wait.</p>
+            <div className="message bot loading-message">
+              <p>Generating your outfit... 💃</p>
             </div>
           )}
 
@@ -134,15 +150,12 @@ const Chatbot = () => {
                 e.target.style.height = "auto";
                 e.target.style.height = e.target.scrollHeight + "px";
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
+              onKeyDown={handleKeyDown}
               className="chat-textarea"
             />
-            <button onClick={handleSend}>➤</button>
+            <button onClick={handleSend} disabled={loading}>
+              ➤
+            </button>
           </div>
         </div>
       </div>

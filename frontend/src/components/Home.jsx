@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo1.png";
-=======
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
->>>>>>> b3d4dea (My local changes)
 import icon1 from "../assets/dress.png";
 import icon2 from "../assets/trending.png";
 import icon3 from "../assets/saved.png";
@@ -19,29 +14,21 @@ import fashion3 from "../assets/Fashionimg3.jpg";
 import fashion4 from "../assets/Fashionimg4.jpg";
 import fashion5 from "../assets/Fashionimg5.jpg";
 import fashion6 from "../assets/Fashionimg6.jpg";
-<<<<<<< HEAD
 import "../styles/Home.css";
 import Popup from "./Popup";
-=======
-import '../styles/Home.css';
-import Header from '../components/Header'; // Import Header
-import Popup from './Popup';
+import Header from '../components/Header';
 import { useApp } from './Appcontext';
 
->>>>>>> b3d4dea (My local changes)
 
 const Home = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User");
   const [currentSlide, setCurrentSlide] = useState(0);
-<<<<<<< HEAD
-=======
-  const { t, language } = useApp();   // ← get translations + current language
-  const h = t.home;                   // shortcut
+  const { t, language } = useApp();
+  const h = t.home;
   const isHindi = language === 'Hindi';
   
   // State for popup management
->>>>>>> b3d4dea (My local changes)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -52,10 +39,7 @@ const Home = () => {
     }
   }, []);
 
-<<<<<<< HEAD
-=======
   // Hero carousel images
->>>>>>> b3d4dea (My local changes)
   const heroImages = [
     fashion1,
     fashion2,
@@ -74,31 +58,14 @@ const Home = () => {
 
   return (
     <div className="home-container">
-<<<<<<< HEAD
-      {/* Top App Bar */}
-      <header className="app-bar">
-        <div className="hamburger" onClick={() => setIsMenuOpen(true)}>
-          ☰
-        </div>
-
-        <div className="logo-H-container">
-          <img src={logo} alt="StyleU Logo" className="logo-H" />
-          <span className="logo-H-text">StyleU</span>
-        </div>
-
-        <div className="profile-icon" onClick={() => setIsProfileOpen(true)}>
-          👤
-        </div>
-      </header>
-=======
-      {/* Header Component (replaces the old app bar) */}
+      
+      {/* ✅ ONLY ONE HEADER - Using the Header Component */}
       <Header 
         isMenuOpen={isMenuOpen} 
         setIsMenuOpen={setIsMenuOpen}
         isProfileOpen={isProfileOpen}
         setIsProfileOpen={setIsProfileOpen}
       />
->>>>>>> b3d4dea (My local changes)
 
       {/* Hero Section */}
       <section className="hero-section">
@@ -168,34 +135,22 @@ const Home = () => {
       {/* Category Slider */}
       <div className="category-section">
         <div className="category-slider">
-          <div
-            className="category-card"
-            onClick={() => navigate("/category/casual")}
-          >
+          <div className="category-card" onClick={() => navigate("/category/casual")}>
             <img src={casualImg} alt="Casual" />
             <div className="category-overlay">Casual</div>
           </div>
 
-          <div
-            className="category-card"
-            onClick={() => navigate("/category/party")}
-          >
+          <div className="category-card" onClick={() => navigate("/category/party")}>
             <img src={partyImg} alt="Party" />
             <div className="category-overlay">Party Wear</div>
           </div>
 
-          <div
-            className="category-card"
-            onClick={() => navigate("/category/office")}
-          >
+          <div className="category-card" onClick={() => navigate("/category/office")}>
             <img src={officeImg} alt="Office" />
             <div className="category-overlay">Office Wear</div>
           </div>
 
-          <div
-            className="category-card"
-            onClick={() => navigate("/category/traditional")}
-          >
+          <div className="category-card" onClick={() => navigate("/category/traditional")}>
             <img src={traditionalImg} alt="Traditional" />
             <div className="category-overlay">Traditional</div>
           </div>
@@ -234,11 +189,7 @@ const Home = () => {
         </div>
       </footer>
 
-<<<<<<< HEAD
       {/* Popup */}
-=======
-      {/* Popup Component */}
->>>>>>> b3d4dea (My local changes)
       <Popup
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}

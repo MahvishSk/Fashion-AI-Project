@@ -1,5 +1,5 @@
-/* 1. Import Fonts & Define Variables */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+/* 1. Import Fonts & Variables */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
 
 :root {
   --bg-color: #FBE7E5;
@@ -8,9 +8,6 @@
   --heading-color: #B7688A;
   --text-color: #222222;
   --white: #ffffff;
-  
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'Poppins', sans-serif;
 }
 
 /* 2. Global Reset */
@@ -22,43 +19,46 @@
 
 body {
   background-color: var(--bg-color);
-  font-family: var(--font-body);
-  color: var(--text-color);
-  line-height: 1.6;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 3. Typography */
-h1, h2, h3 {
-  font-family: var(--font-heading);
+  font-family: 'Poppins', sans-serif;
   color: var(--heading-color);
-  margin-bottom: 0.5rem;
+  min-height: 100vh;
+  text-align: center;
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-p { margin-bottom: 1rem; }
-
-/* 4. Layout Helpers */
+/* 3. Container - Centers everything */
 .container {
-  width: 90%;
-  max-width: 500px; /* Keeps forms/cards centered and neat */
+  width: 100%;
+  max-width: 450px;
   margin: 0 auto;
-  padding: 2rem 0;
-  flex: 1; /* Pushes footer down */
+  padding: 2rem 1rem;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
+/* 4. Page Header */
+.page-header h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--heading-color);
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.page-header .subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
 /* 5. Card Component */
 .card {
   background: var(--white);
-  padding: 2rem;
+  padding: 1.8rem;
   border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(183, 104, 138, 0.1);
+  box-shadow: 0 8px 20px rgba(183, 104, 138, 0.15);
   border: 2px solid var(--secondary-accent);
 }
 
@@ -69,7 +69,8 @@ label {
   display: block;
   color: var(--heading-color);
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
 }
 
 input, select {
@@ -77,7 +78,7 @@ input, select {
   padding: 12px;
   border: 2px solid var(--secondary-accent);
   border-radius: 10px;
-  font-family: var(--font-body);
+  font-family: 'Poppins', sans-serif;
   font-size: 1rem;
   background-color: var(--bg-color);
   transition: 0.3s;
@@ -87,34 +88,40 @@ input:focus, select:focus {
   outline: none;
   border-color: var(--primary-accent);
   background-color: var(--white);
-  box-shadow: 0 0 0 4px rgba(232, 139, 163, 0.1);
 }
 
-/* 7. Buttons */
-.btn {
+/* 7. Button */
+.submit-btn {
   width: 100%;
   padding: 14px;
-  background-color: var(--primary-accent);
+  background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
   color: var(--white);
   border: none;
-  border-radius: 10px;
-  font-family: var(--font-body);
+  border-radius: 25px;
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
   font-size: 1.1rem;
   cursor: pointer;
+  margin-top: 1.5rem;
   transition: 0.3s;
-  margin-top: 1rem;
 }
 
-.btn:hover {
-  background-color: var(--heading-color);
+.submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(232, 139, 163, 0.3);
+  box-shadow: 0 5px 15px rgba(232, 139, 163, 0.4);
 }
 
-/* 8. Responsive Adjustments */
-@media (max-width: 600px) {
-  h1 { font-size: 2rem; }
+/* 8. Responsive - Mobile Phones */
+@media (max-width: 480px) {
+  .container {
+    padding: 1.5rem 1rem;
+    justify-content: flex-start;
+    padding-top: 3rem;
+  }
+  
   .card { padding: 1.5rem; }
-  .container { width: 95%; }
+  
+  .page-header h2 { font-size: 1.6rem; }
+  
+  .submit-btn { font-size: 1rem; }
 }
