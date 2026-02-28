@@ -5,17 +5,20 @@ import logo from "../assets/logo1.png";
 
 const Chatbot = () => {
   const navigate = useNavigate();
-  
+
   const [messages, setMessages] = useState([
     {
       sender: "bot",
       type: "text",
-      content: "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
+      content:
+        "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
     },
   ]);
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
 
@@ -29,12 +32,12 @@ const Chatbot = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    const currentInput = input; // Store input before clearing
+
+    const currentInput = input;
     setInput("");
     setLoading(true);
 
     try {
-      // Replace with your actual backend API
       const response = await fetch("http://localhost:5000/recommend-outfit", {
         method: "POST",
         headers: {
@@ -44,39 +47,80 @@ const Chatbot = () => {
           gender: "female",
           bodyType: "curvy",
           skinTone: "fair",
-          occasion: currentInput,
+          occasion: currentInput.trim(),
         }),
       });
 
       const data = await response.json();
+      console.log("Backend Response:", data);
 
-      const botMessage = {
+      if (!data) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: "bot",
+            type: "text",
+            content: "⚠️ Empty response from server.",
+          },
+        ]);
+        return;
+      }
+
+      const imageUrl = data?.outfit?.imageUrl || data?.imageUrl || null;
+
+      const stylingTips = data?.outfit?.stylingTips || data?.stylingTips || [];
+
+      if (!imageUrl) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: "bot",
+            type: "text",
+            content: "⚠️ Image could not be generated. Please try again.",
+          },
+        ]);
+        return;
+      }
+
+      const imageMessage = {
         sender: "bot",
         type: "image",
-        imageUrl: data.outfit?.imageUrl || "https://via.placeholder.com/250",
-        stylingTips: data.outfit?.stylingTips || ["Styling tips unavailable"],
+        imageUrl,
+        source: data.source || "ai-generated",
       };
 
-      setMessages((prev) => [...prev, botMessage]);
+      setMessages((prev) => [...prev, imageMessage]);
+
+      if (stylingTips.length > 0) {
+        const tipsMessage = {
+          sender: "bot",
+          type: "text",
+          content: "✨ Styling Tips:\n\n• " + stylingTips.join("\n• "),
+        };
+
+        setMessages((prev) => [...prev, tipsMessage]);
+      }
     } catch (error) {
       console.error("Error:", error);
-      
-      // Error message
+
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", type: "text", content: "Sorry, I couldn't fetch an outfit right now. Please try again!" },
+        {
+          sender: "bot",
+          type: "text",
+          content:
+            "⚠️ Something went wrong while generating your outfit. Please try again.",
+        },
       ]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Auto scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Handle Enter key
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -93,11 +137,27 @@ const Chatbot = () => {
           <h2 className="brand-name">StyleU</h2>
         </div>
 
-        <button className="new-chat-btn" onClick={() => setMessages([{ sender: "bot", type: "text", content: "Hi! Ask me for outfit ideas 👗✨" }])}>
+        <button
+          className="new-chat-btn"
+          onClick={() =>
+            setMessages([
+              {
+                sender: "bot",
+                type: "text",
+                content:
+                  "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
+              },
+            ])
+          }
+        >
           + New Chat
         </button>
 
-        <input className="search-bar" type="text" placeholder="Search chats..." />
+        <input
+          className="search-bar"
+          type="text"
+          placeholder="Search chats..."
+        />
 
         <div className="chat-history"></div>
 
@@ -114,15 +174,28 @@ const Chatbot = () => {
 
         <div className="messages-container">
           {messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.sender === "user" ? "user" : "bot"}`}>
+            <div
+              key={index}
+              className={`message ${msg.sender === "user" ? "user" : "bot"}`}
+            >
               {msg.type === "text" && <p>{msg.content}</p>}
 
               {msg.type === "image" && (
-                <div className="bot-image-container">
-                  <img src={msg.imageUrl} alt="Outfit" className="bot-image" />
-                  {msg.stylingTips?.map((tip, i) => (
-                    <p key={i} className="styling-tip">• {tip}</p>
-                  ))}
+                <div className="outfit-card">
+                  <div className="outfit-image-wrapper">
+                    <img
+                      src={msg.imageUrl}
+                      alt="Outfit"
+                      className="outfit-image"
+                      onClick={() => setSelectedImage(msg.imageUrl)}
+                      style={{ cursor: "pointer" }}
+                    />
+                    <div className={`source-badge ${msg.source}`}>
+                      {msg.source === "ai-generated"
+                        ? "🔥 AI Generated"
+                        : "⚡ From Database"}
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -137,7 +210,14 @@ const Chatbot = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Chat Input */}
+        {/* Fullscreen Modal */}
+        {selectedImage && (
+          <div className="image-modal" onClick={() => setSelectedImage(null)}>
+            <img src={selectedImage} alt="Full View" />
+          </div>
+        )}
+
+        {/* Input */}
         <div className="input-container">
           <div className="input-wrapper">
             <textarea

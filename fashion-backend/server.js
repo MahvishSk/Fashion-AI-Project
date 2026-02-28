@@ -69,10 +69,29 @@ app.post("/recommend-outfit", async (req, res) => {
 
     // 🔥 IF NOT EXISTS → GENERATE IMAGE
 
-    const prompt = `
-A realistic full-body fashion photograph of a ${gender} model with ${bodyType} body type and ${skinTone} skin tone wearing a stylish ${occasion} outfit.
+const prompt = `
+High-resolution full-body fashion portrait of a ${gender} model with ${bodyType} body type and ${skinTone} skin tone.
 
-Professional fashion photography, natural lighting, sharp focus, high detail fabric texture, clean minimal background, no distortion, no extra limbs.
+Wearing a stylish ${occasion} outfit.
+
+Camera distance: full body framing.
+Head fully visible.
+Feet fully visible.
+Centered composition.
+Standing pose.
+No zoomed crop.
+No cut head.
+No cut feet.
+
+Professional fashion photography.
+Luxury fashion editorial style.
+Soft natural studio lighting.
+Sharp focus.
+High detail fabric texture.
+Clean neutral studio background.
+Realistic.
+No distortion.
+No extra limbs.
 `;
 
     const result = await openai.images.generate({
