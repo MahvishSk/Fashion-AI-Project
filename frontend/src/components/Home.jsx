@@ -17,16 +17,13 @@ import fashion6 from "../assets/Fashionimg6.jpg";
 import "../styles/Home.css";
 import Popup from "./Popup";
 import Header from '../components/Header';
-import { useApp } from './Appcontext';
+import PromoPopup from './PromoPopup'; // Add this import
 
 
 const Home = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User");
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { t, language } = useApp();
-  const h = t.home;
-  const isHindi = language === 'Hindi';
   
   // State for popup management
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,6 +54,9 @@ const Home = () => {
   }, []);
 
   return (
+<div>
+    <PromoPopup />
+
     <div className="home-container">
       
       {/* ✅ ONLY ONE HEADER - Using the Header Component */}
@@ -196,6 +196,7 @@ const Home = () => {
         isProfileOpen={isProfileOpen}
         setIsProfileOpen={setIsProfileOpen}
       />
+    </div>
     </div>
   );
 };

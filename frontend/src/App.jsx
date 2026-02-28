@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import SplashScreen from "./components/SplashScreen";
 import Welcome from "./components/Welcome";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ForgotPassword from "./components/ForgotPassword";
-import Home from "./components/Home";       // ← real Home component
+import Home from "./components/Home";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
-import UserDetail from './components/UserDetail'; // The file we just updated
-import Chatbot from './components/Chatbot'; // ✅ ADDED
+import UserDetail from './components/UserDetail';
+import Chatbot from './components/Chatbot';
+import ProtectedRoute from './components/ProtectedRoute'; // ✅ NEW FILE
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -21,24 +23,27 @@ function App() {
 
     if (token && username) {
       setShowSplash(false);
-      navigate("/home");
+      if (location.pathname === "/" || location.pathname === "/welcome") {
+        navigate("/home");
+      }
       return;
     }
 
-    if (window.location.pathname === "/") {
+    if (location.pathname === "/") {
       const timer = setTimeout(() => {
         setShowSplash(false);
-        navigate("/welcome");
+        navigate("/home");
       }, 3000);
       return () => clearTimeout(timer);
     } else {
       setShowSplash(false);
     }
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 
   const handleLoginSuccess = (userData) => {
     localStorage.setItem("username", userData.username);
     localStorage.setItem("token", userData.token);
+    window.dispatchEvent(new Event('userLoggedIn'));
     navigate("/home");
   };
 
@@ -48,20 +53,53 @@ function App() {
         <SplashScreen />
       ) : (
         <Routes>
-          <Route
-            path="/welcome"
-            element={<Welcome onLoginSuccess={handleLoginSuccess} />}
-          />
+          {/* Public Routes - No login needed */}
+          <Route path="/welcome" element={<Welcome onLoginSuccess={handleLoginSuccess} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          
+          {/* Home - Public but shows popup after 10s */}
           <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/user-detail" element={<UserDetail />} />
+          
+          {/* Chatbot - Guest allowed (shows popup but allows access) */}
+          <Route 
+            path="/chatbot" 
+            element={
+              <ProtectedRoute allowGuest={true}>
+                <Chatbot />
+              </ProtectedRoute>
+            } 
+          />
 
-          {/* ✅ Chatbot Route */}
-          <Route path="/chatbot" element={<Chatbot />} />
+          {/* Protected Routes - Login required */}
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/settings" 
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/user-detail" 
+            element={
+              <ProtectedRoute>
+                <UserDetail />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* Default redirect */}
+          <Route path="/" element={<Home />} />
         </Routes>
       )}
     </>

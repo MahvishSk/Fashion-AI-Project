@@ -27,6 +27,13 @@ const Login = () => {
         setShowPopup(false);
        const name = userCredential.user.displayName || formData.password.split(/[@#$*&]/)[0]; // Fallback to email prefix
         localStorage.setItem('username', name); // Store username
+         // ✅ Store BOTH username AND token
+      localStorage.setItem('username', name);
+      localStorage.setItem('token', userCredential.user.accessToken || 'firebase-token'); // ADD THIS LINE
+      
+      // Dispatch event
+      window.dispatchEvent(new Event('userLoggedIn'));
+      
         navigate('/home'); // Navigate to home
       }, 1000);
     } catch (err) {

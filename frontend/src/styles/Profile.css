@@ -81,8 +81,8 @@
   border-radius: 50%;
   width: 26px; height: 26px;
   display: flex; align-items: center; justify-content: center;
-  background: var(--primary-accent);
-  color: var(--white);
+  background: transparent; /* Changed from var(--primary-accent) to transparent */
+  color: #000; /* Changed from var(--white) to black */
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -94,8 +94,8 @@
   border-radius: 50%;
   width: 22px; height: 22px;
   display: flex; align-items: center; justify-content: center;
-  background: #dc3545;
-  color: var(--white);
+  background: transparent; /* Changed from #dc3545 to transparent */
+  color: #000; /* Changed from var(--white) to black */
   font-size: 12px;
   cursor: pointer;
   transition: transform 0.3s ease;

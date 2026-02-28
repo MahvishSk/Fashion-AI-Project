@@ -350,3 +350,8 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
   .section-title { font-size: 1rem; }
   .dropdown-username { font-size: 0.9rem; }
 }
+
+/* Hidden state for modals */
+.modal-overlay.hidden {
+  display: none !important;
+}

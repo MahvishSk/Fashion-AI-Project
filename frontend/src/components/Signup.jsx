@@ -89,6 +89,9 @@ const Signup = () => {
         setTimeout(() => {
           setShowPopup(false);
           localStorage.setItem('username', formData.fullName); // Store username
+          localStorage.setItem('token', userCredential.user.accessToken || 'firebase-token'); // ADD THIS LINE
+  
+  window.dispatchEvent(new Event('userLoggedIn'));
           navigate('/user-detail'); 
         }, 1000);
       } catch (error) {

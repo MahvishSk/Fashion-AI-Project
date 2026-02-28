@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, User, Bot, TrendingUp, Bookmark, Search, Settings, LogOut, Camera, X } from 'lucide-react'; // Added Camera and X
-import '../styles/Popup.css'; // Import the CSS
+import { Home, User, Bot, TrendingUp, Bookmark, Search, Settings, LogOut } from 'lucide-react';
+import '../styles/Popup.css';
 
 const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("User"); // Load from localStorage
+  const [username, setUsername] = useState("User");
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
@@ -14,21 +14,26 @@ const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) =
     }
   }, []);
 
-  // Default grey placeholder (circular user icon)
+  // Default grey placeholder
   const defaultPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDUiIGN5PSI0NSIgcj0iNDUiIGZpbGw9IiNjY2MiLz4KPHBhdGggZD0iTTQ1IDIwQzM3LjI3IDE5Ljc1IDMwLjI1QzM3LjI3IDMwLjI1IDMwLjI1IDMwLjI1IDMwLjI1IDM3LjI1QzMwLjI1IDM3LjI1IDMwLjI1IDQ1IDMwLjI1IDQ1QzMwLjI1IDQ1IDMwLjI1IDUyLjUgMzAuMjUgNTIuNUMzMC4yNSA1Mi41IDMwLjI1IDYwIDMwLjI1IDYwQzMwLjI1IDYwIDM3LjI1IDYwIDM3LjI1IDYwQzM3LjI1IDYwIDQ1IDYwIDQ1IDYwQzQ1IDYwIDUyLjUgNjAgNTIuNSA2MEM1Mi41IDYwIDUyLjUgNTIuNSA1Mi41IDUyLjVDNTIuNSA1Mi41IDUyLjUgNDUgNTIuNSA0NUM1Mi41IDQ1IDUyLjUgMzcuMjUgNTIuNSAzNy4yNUM1Mi41IDM3LjI1IDQ1IDM3LjI1IDQ1IDIwWiIgZmlsbD0iIzk5OSI+PC9wYXRoPgo8L3N2Zz4=';
-  const [profileImage, setProfileImage] = useState(localStorage.getItem('profileImage') || defaultPlaceholder); // Load from localStorage
+  
+  const [profileImage, setProfileImage] = useState(localStorage.getItem('profileImage') || defaultPlaceholder);
 
-  // Listen for localStorage changes to sync photo across pages
   useEffect(() => {
     const handleStorageChange = () => {
       const updatedImage = localStorage.getItem('profileImage') || defaultPlaceholder;
       setProfileImage(updatedImage);
     };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+     // Listen for both storage changes (other tabs) and custom event (same tab)
+  window.addEventListener('storage', handleStorageChange);
+  window.addEventListener('profileImageUpdated', handleStorageChange);
+  
+  return () => {
+    window.removeEventListener('storage', handleStorageChange);
+    window.removeEventListener('profileImageUpdated', handleStorageChange);
+  };
+}, []);
 
-  // Menu items with Lucide icons (professional look)
   const menuItems = [
     { icon: Home, label: 'Home', path: '/home', key: 'home' },
     { icon: User, label: 'Profile', path: '/profile', key: 'profile' },
@@ -39,7 +44,6 @@ const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) =
     { icon: Settings, label: 'Settings', path: '/settings', key: 'settings' },
   ];
 
-  // Determine active item based on current path
   const getActiveItem = () => {
     const currentPath = window.location.pathname;
     const item = menuItems.find(item => item.path === currentPath);
@@ -47,60 +51,21 @@ const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) =
   };
   const activeItem = getActiveItem();
 
-  // Handle navigation
   const handleNavigate = (path) => {
     navigate(path);
     setIsMenuOpen(false);
     setIsProfileOpen(false);
   };
 
-  // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('username');
-    localStorage.removeItem('profileImage'); // Clear photo on logout
+    localStorage.removeItem('profileImage');
     navigate('/welcome');
     setIsMenuOpen(false);
   };
 
-  // Handle file selection for profile image
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        alert('File size too large. Please choose a smaller image.');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = () => {
-        const imageData = reader.result;
-        setProfileImage(imageData); // Update state
-        localStorage.setItem('profileImage', imageData); // Persist and trigger sync
-        alert('Photo uploaded successfully!');
-      };
-      reader.onerror = () => {
-        alert('Failed to upload photo. Try again.');
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert('Please select a valid image file.');
-    }
-  };
-
-  // Trigger file input on camera icon click
-  const triggerFileInput = () => {
-    document.getElementById('profile-file-input').click();
-  };
-
-  // Remove photo and reset to default (syncs with Profile page)
-  const removePhoto = () => {
-    setProfileImage(defaultPlaceholder);
-    localStorage.removeItem('profileImage'); // Remove and trigger sync
-    alert('Photo removed.');
-  };
-
-  // Close on outside click
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       setIsMenuOpen(false);
@@ -110,15 +75,6 @@ const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) =
 
   return (
     <>
-      {/* Hidden file input for image upload */}
-      <input
-        type="file"
-        id="profile-file-input"
-        accept="image/*"
-        style={{ display: 'none' }}
-        onChange={handleFileChange}
-      />
-
       {/* Overlay for outside click */}
       {(isMenuOpen || isProfileOpen) && (
         <div className="popup-overlay" onClick={handleOverlayClick}></div>
@@ -137,33 +93,30 @@ const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) =
                 className={`menu-item ${activeItem === item.key ? "active" : ""}`}
                 onClick={() => handleNavigate(item.path)}
               >
-                <item.icon className="menu-icon" size={20} /> {/* Render Lucide icon */}
+                <item.icon className="menu-icon" size={20} />
                 <span className="menu-label">{item.label}</span>
               </li>
             ))}
             <li className="menu-item logout" onClick={handleLogout}>
-              <LogOut className="menu-icon" size={20} /> {/* Professional LogOut icon */}
+              <LogOut className="menu-icon" size={20} />
               <span className="menu-label">Logout</span>
             </li>
           </ul>
         </div>
       )}
 
-      {/* Right Profile Mini Popup */}
+      {/* Right Profile Mini Popup - UPDATED */}
       {isProfileOpen && (
         <div className="popup-profile">
           <div className="profile-p-card">
             <h3 className="profile-p-title">Profile</h3>
-            <div className={`profile-p-photo-container ${profileImage === defaultPlaceholder ? 'no-photo' : ''}`}>
+            
+            {/* Just Profile Photo - No Edit Icons */}
+            <div className="profile-p-photo-container">
               <img src={profileImage} alt="Profile" className="profile-p-photo" />
-              <div className="camera-p-icon" onClick={triggerFileInput}>
-                <Camera size={20} /> {/* Lucide Camera icon */}
-              </div>
-              <div className="remove-p-icon" onClick={removePhoto}>
-                <X size={20} /> {/* Lucide X icon for remove */}
-              </div>
             </div>
-            <p className="username-p">{username}</p> {/* Displays username */}
+            
+            <p className="username-p">{username}</p>
             <button className="view-more-p-btn" onClick={() => handleNavigate('/profile')}>
               View More
             </button>

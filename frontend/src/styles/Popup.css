@@ -23,7 +23,7 @@
   position: fixed;
   top: 0; left: 0;
   width: 280px;
-  height: 98.5%;
+  height: 99.8%;
   background: var(--white);
   border-top: 5px solid var(--primary-accent);
   border-right: 5px solid var(--primary-accent);
@@ -131,7 +131,7 @@
   max-height: 115px;
 }
 
-.camera-p-icon {
+/*.camera-p-icon {
   position: absolute;
   bottom: 8px; right: 1px;
   border-radius: 50%;
@@ -154,7 +154,7 @@
   transition: transform 0.3s ease;
 }
 .remove-p-icon:hover { transform: scale(1.1); }
-
+*/
 .username-p {
   font-family: 'serif';
   color: var(--main-text);
