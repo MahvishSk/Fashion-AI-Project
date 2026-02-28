@@ -1,0 +1,140 @@
+/* ═══════════════════════════════════════
+   theme.css — import once in main.jsx
+   ═══════════════════════════════════════ */
+
+/* ── Light (default) ── */
+body.theme-light {
+  --bg:           #FBE7E5;
+  --primary:      #E88BA3;
+  --secondary:    #D7A9A0;
+  --heading:      #B7688A;
+  --text:         #222222;
+  --white:        #FFFFFF;
+  --card-bg:      #fbf9f8;
+  --input-border: #ddd;
+  --shadow:       rgba(183, 104, 138, 0.15);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* ── Dark ── */
+body.theme-dark {
+  --bg:           #1a1a2e;
+  --primary:      #E88BA3;
+  --secondary:    #c47a91;
+  --heading:      #f0a8c0;
+  --text:         #f0e6f0;
+  --white:        #2a2a40;
+  --card-bg:      #252538;
+  --input-border: #44445a;
+  --shadow:       rgba(0, 0, 0, 0.35);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* ═══════════════════════════════════════
+   DARK MODE — all pages
+   ═══════════════════════════════════════ */
+
+/* Page containers */
+body.theme-dark .home-container,
+body.theme-dark .profile-page,
+body.theme-dark .settings-page {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* ── Home: Hero ── */
+body.theme-dark .hero-overlay {
+  background: rgba(26, 26, 46, 0.55);
+}
+body.theme-dark .hero-content h1,
+body.theme-dark .hero-content h2,
+body.theme-dark .hero-content p {
+  color: var(--text);
+}
+
+/* ── Home: Divider ── */
+body.theme-dark .divider::before,
+body.theme-dark .divider::after {
+  background: linear-gradient(to right, transparent, var(--primary), transparent);
+}
+body.theme-dark .divider-icon { color: var(--primary); }
+
+/* ── Home: Feature Cards ── */
+body.theme-dark .feature-card {
+  background: var(--card-bg);
+  border-color: var(--primary);
+  color: var(--text);
+}
+body.theme-dark .feature-card h4 { color: var(--heading); }
+
+/* ── Home: Tip Card ── */
+body.theme-dark .tip-card {
+  background: var(--card-bg);
+  border-color: var(--primary);
+  color: var(--text);
+}
+body.theme-dark .tip-card h3 { color: var(--heading); }
+body.theme-dark .tip-card p  { color: var(--text); }
+
+/* ── Home: Category overlay text ── */
+body.theme-dark .category-overlay { background: rgba(0, 0, 0, 0.6); }
+
+/* ── Home: Footer ── */
+body.theme-dark .footer {
+  background: linear-gradient(135deg, #1a1a2e, #3a2040);
+  color: var(--text);
+}
+body.theme-dark .footer-logo h3 { color: var(--heading); }
+body.theme-dark .footer-content p,
+body.theme-dark .footer-links p,
+body.theme-dark .footer-support p,
+body.theme-dark .footer-bottom p { color: var(--text); }
+
+/* ── Settings Cards / Rows ── */
+body.theme-dark .settings-card     { background: var(--card-bg); }
+body.theme-dark .settings-row      { border-bottom-color: #3a3a50; color: var(--text); }
+body.theme-dark .settings-row:hover { background-color: #2e2e48; }
+body.theme-dark .section-title     { color: var(--heading); }
+body.theme-dark .selected-value    { color: var(--text); }
+body.theme-dark .row-icon          { color: var(--heading); }
+
+/* ── Settings: Dropdown ── */
+body.theme-dark .dropdown-content  { background-color: #2a2a42; }
+body.theme-dark .dropdown-item     { color: var(--text); }
+body.theme-dark .dropdown-item:hover { background-color: var(--primary); color: #fff; }
+body.theme-dark .dropdown-item.active { background-color: var(--secondary); color: #fff; }
+body.theme-dark .dropdown-username { color: var(--text); }
+
+/* ── Modals ── */
+body.theme-dark .modal-content     { background: var(--card-bg); color: var(--text); }
+body.theme-dark .modal-header,
+body.theme-dark .modal-footer      { border-color: #3a3a50; }
+body.theme-dark .modal-body p      { color: var(--text); }
+
+/* ── Inputs & Textareas ── */
+body.theme-dark .form-input,
+body.theme-dark textarea {
+  background: #2e2e48;
+  border-color: var(--input-border);
+  color: var(--text);
+}
+body.theme-dark .form-input:disabled { background: #232338; color: #888; }
+
+/* ── Profile ── */
+body.theme-dark .profile-card,
+body.theme-dark .change-password-popup { background: var(--card-bg); color: var(--text); }
+body.theme-dark .username-display      { color: var(--text); }
+body.theme-dark .form-group label      { color: var(--heading); }
+
+/* ── Popup / Side Menu ── */
+body.theme-dark .popup-menu     { background: var(--card-bg); }
+body.theme-dark .menu-item      { color: var(--text); }
+body.theme-dark .menu-header h2 { color: var(--heading); }
+body.theme-dark .profile-p-card { background: var(--card-bg); }
+body.theme-dark .username-p     { color: var(--text); }
+
+/* ── Toggle switch label text ── */
+body.theme-dark .toggle-switch-container span { color: #aaa; }
+body.theme-dark .toggle-switch-container span.active { color: var(--heading); }

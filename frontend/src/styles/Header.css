@@ -1,0 +1,152 @@
+/* App Bar Styles */
+.app-bar {
+  position: relative;
+  top: -70px;
+  left: 0.4rem;
+  width: 99%;
+  height: 60px;
+  border-radius: 25px;
+  background: rgba(251, 231, 229, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  cursor: default;
+}
+
+.hamburger {
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 0.5rem;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.hamburger:hover { transform: scale(1.2); }
+
+.logo-H-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  background: transparent !important;
+  box-shadow: none !important;
+  left: 50%;
+  z-index: 20;
+  isolation: isolate;
+  transform: translateX(-50%);
+}
+
+.logo-H {
+  font-size: 2rem;
+  width: 5.5rem;
+  height: 3.7rem;
+  margin-left: -2rem;
+  background: transparent !important;
+  border: none;
+  animation: logoZoomThenSlide 4s ease-in-out forwards;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.logo-H-text {
+  position: relative;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--headings);
+  margin-left: -0.9rem;
+  opacity: 0;
+  animation: textReveal 4s ease-out 1.5s forwards;
+  animation-delay: 3s;
+  white-space: nowrap;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.profile-icon:hover { transform: scale(1.1); }
+
+@keyframes logoZoomThenSlide {
+  0%   { transform: scale(0.2) translateX(40px); }
+  60%  { transform: scale(1)   translateX(70px); }
+  100% { transform: scale(1)   translateX(0px);  }
+}
+
+@keyframes textReveal {
+  0%   { opacity: 0; transform: translateX(10px); }
+  100% { opacity: 1; transform: translateX(0);    }
+}
+
+/* ── Responsive ── */
+@media (max-width: 991px) {
+  .app-bar {
+    top: -65px;
+    height: 56px;
+  }
+
+  .logo-H      { width: 4.8rem; height: 3.2rem; }
+  .logo-H-text { font-size: 1.75rem; }
+}
+
+@media (max-width: 767px) {
+  .app-bar {
+    top: -60px;
+    height: 52px;
+    border-radius: 20px;
+    left: 0.3rem;
+    width: 96%;
+  }
+
+  .hamburger { font-size: 1.3rem; padding: 0.4rem; }
+
+  .logo-H      { width: 4rem; height: 2.8rem; margin-left: -1.5rem; }
+  .logo-H-text { font-size: 1.5rem; margin-left: -0.7rem; }
+
+  .profile-icon { width: 36px; height: 36px; }
+}
+
+@media (max-width: 480px) {
+  .app-bar {
+    top: -55px;
+    height: 48px;
+    border-radius: 18px;
+    padding: 0 0.75rem;
+    left: 0.3rem;
+    width: 95.5%;
+  }
+
+  .hamburger { font-size: 1.2rem; padding: 0.35rem; }
+
+  .logo-H      { width: 3.5rem; height: 2.4rem; margin-left: -1.2rem; }
+  .logo-H-text { font-size: 1.3rem; margin-left: -0.6rem; }
+
+  .profile-icon { width: 32px; height: 32px; }
+}
+
+@media (max-width: 360px) {
+  .app-bar {
+    height: 44px;
+    border-radius: 14px;
+    padding: 0 0.6rem;
+  }
+
+  .logo-H      { width: 3rem; height: 2rem; margin-left: -1rem; }
+  .logo-H-text { font-size: 1.15rem; margin-left: -0.5rem; }
+
+  .profile-icon { width: 28px; height: 28px; }
+  .hamburger    { font-size: 1.1rem; }
+}

@@ -89,7 +89,7 @@ const Signup = () => {
         setTimeout(() => {
           setShowPopup(false);
           localStorage.setItem('username', formData.fullName); // Store username
-          navigate('/home');
+          navigate('/user-detail'); 
         }, 1000);
       } catch (error) {
         setErrors({ general: 'Signup failed' });

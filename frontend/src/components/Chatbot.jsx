@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Chatbot.css";
 import logo from "../assets/logo1.png";
 
 const Chatbot = () => {
+  const navigate = useNavigate();
+
   const [messages, setMessages] = useState([
     {
       sender: "bot",
       type: "text",
-      content: "Hi! Ask me for outfit ideas 👗✨",
+      content:
+        "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
     },
   ]);
 
@@ -28,6 +32,8 @@ const Chatbot = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+
+    const currentInput = input;
     setInput("");
     setLoading(true);
 
@@ -41,7 +47,7 @@ const Chatbot = () => {
           gender: "female",
           bodyType: "curvy",
           skinTone: "fair",
-          occasion: input.trim(),
+          occasion: currentInput.trim(),
         }),
       });
 
@@ -111,10 +117,16 @@ const Chatbot = () => {
     }
   };
 
-  // Auto scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
 
   return (
     <div className="app-container">
@@ -125,7 +137,21 @@ const Chatbot = () => {
           <h2 className="brand-name">StyleU</h2>
         </div>
 
-        <button className="new-chat-btn">+ New Chat</button>
+        <button
+          className="new-chat-btn"
+          onClick={() =>
+            setMessages([
+              {
+                sender: "bot",
+                type: "text",
+                content:
+                  "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
+              },
+            ])
+          }
+        >
+          + New Chat
+        </button>
 
         <input
           className="search-bar"
@@ -135,7 +161,9 @@ const Chatbot = () => {
 
         <div className="chat-history"></div>
 
-        <button className="back-btn"> ← Home </button>
+        <button className="back-btn" onClick={() => navigate("/home")}>
+          ← Back to Home
+        </button>
       </div>
 
       {/* Chat Section */}
@@ -174,15 +202,15 @@ const Chatbot = () => {
           ))}
 
           {loading && (
-            <div className="message bot">
-              <p>Generating your outfit... Please wait.</p>
+            <div className="message bot loading-message">
+              <p>Generating your outfit... 💃</p>
             </div>
           )}
 
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Image Fullscreen Modal */}
+        {/* Fullscreen Modal */}
         {selectedImage && (
           <div className="image-modal" onClick={() => setSelectedImage(null)}>
             <img src={selectedImage} alt="Full View" />
@@ -202,15 +230,12 @@ const Chatbot = () => {
                 e.target.style.height = "auto";
                 e.target.style.height = e.target.scrollHeight + "px";
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
+              onKeyDown={handleKeyDown}
               className="chat-textarea"
             />
-            <button onClick={handleSend}>➤</button>
+            <button onClick={handleSend} disabled={loading}>
+              ➤
+            </button>
           </div>
         </div>
       </div>

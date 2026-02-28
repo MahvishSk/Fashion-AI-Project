@@ -16,11 +16,19 @@ import fashion5 from "../assets/Fashionimg5.jpg";
 import fashion6 from "../assets/Fashionimg6.jpg";
 import "../styles/Home.css";
 import Popup from "./Popup";
+import Header from '../components/Header';
+import { useApp } from './Appcontext';
+
 
 const Home = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User");
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { t, language } = useApp();
+  const h = t.home;
+  const isHindi = language === 'Hindi';
+  
+  // State for popup management
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -31,6 +39,7 @@ const Home = () => {
     }
   }, []);
 
+  // Hero carousel images
   const heroImages = [
     fashion1,
     fashion2,
@@ -49,21 +58,14 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      {/* Top App Bar */}
-      <header className="app-bar">
-        <div className="hamburger" onClick={() => setIsMenuOpen(true)}>
-          ☰
-        </div>
-
-        <div className="logo-H-container">
-          <img src={logo} alt="StyleU Logo" className="logo-H" />
-          <span className="logo-H-text">StyleU</span>
-        </div>
-
-        <div className="profile-icon" onClick={() => setIsProfileOpen(true)}>
-          👤
-        </div>
-      </header>
+      
+      {/* ✅ ONLY ONE HEADER - Using the Header Component */}
+      <Header 
+        isMenuOpen={isMenuOpen} 
+        setIsMenuOpen={setIsMenuOpen}
+        isProfileOpen={isProfileOpen}
+        setIsProfileOpen={setIsProfileOpen}
+      />
 
       {/* Hero Section */}
       <section className="hero-section">
@@ -95,7 +97,9 @@ const Home = () => {
       </section>
 
       {/* Decorative Divider */}
-      <div className="divider"></div>
+      <div className="divider">
+        <span class="divider-icon">✦ ✧ ✦</span>
+      </div>
 
       {/* Feature Cards */}
       <section className="features-section">
@@ -131,34 +135,22 @@ const Home = () => {
       {/* Category Slider */}
       <div className="category-section">
         <div className="category-slider">
-          <div
-            className="category-card"
-            onClick={() => navigate("/category/casual")}
-          >
+          <div className="category-card" onClick={() => navigate("/category/casual")}>
             <img src={casualImg} alt="Casual" />
             <div className="category-overlay">Casual</div>
           </div>
 
-          <div
-            className="category-card"
-            onClick={() => navigate("/category/party")}
-          >
+          <div className="category-card" onClick={() => navigate("/category/party")}>
             <img src={partyImg} alt="Party" />
             <div className="category-overlay">Party Wear</div>
           </div>
 
-          <div
-            className="category-card"
-            onClick={() => navigate("/category/office")}
-          >
+          <div className="category-card" onClick={() => navigate("/category/office")}>
             <img src={officeImg} alt="Office" />
             <div className="category-overlay">Office Wear</div>
           </div>
 
-          <div
-            className="category-card"
-            onClick={() => navigate("/category/traditional")}
-          >
+          <div className="category-card" onClick={() => navigate("/category/traditional")}>
             <img src={traditionalImg} alt="Traditional" />
             <div className="category-overlay">Traditional</div>
           </div>
