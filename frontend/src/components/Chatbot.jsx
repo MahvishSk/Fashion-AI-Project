@@ -13,6 +13,8 @@ const Chatbot = () => {
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
 
@@ -39,28 +41,77 @@ const Chatbot = () => {
           gender: "female",
           bodyType: "curvy",
           skinTone: "fair",
-          occasion: input,
+          occasion: input.trim(),
         }),
       });
 
       const data = await response.json();
+      console.log("Backend Response:", data);
+
+      if (!data) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: "bot",
+            type: "text",
+            content: "⚠️ Empty response from server.",
+          },
+        ]);
+        return;
+      }
+
+      const imageUrl = data?.outfit?.imageUrl || data?.imageUrl || null;
+
+      const stylingTips = data?.outfit?.stylingTips || data?.stylingTips || [];
+
+      if (!imageUrl) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: "bot",
+            type: "text",
+            content: "⚠️ Image could not be generated. Please try again.",
+          },
+        ]);
+        return;
+      }
 
       const imageMessage = {
         sender: "bot",
         type: "image",
-        imageUrl: data.outfit.imageUrl,
-        stylingTips: data.outfit.stylingTips,
+        imageUrl,
+        source: data.source || "ai-generated",
       };
 
       setMessages((prev) => [...prev, imageMessage]);
-      setLoading(false);
+
+      if (stylingTips.length > 0) {
+        const tipsMessage = {
+          sender: "bot",
+          type: "text",
+          content: "✨ Styling Tips:\n\n• " + stylingTips.join("\n• "),
+        };
+
+        setMessages((prev) => [...prev, tipsMessage]);
+      }
     } catch (error) {
       console.error("Error:", error);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          type: "text",
+          content:
+            "⚠️ Something went wrong while generating your outfit. Please try again.",
+        },
+      ]);
+    } finally {
       setLoading(false);
     }
   };
 
-  // Auto scroll to bottom
+  // Auto scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -102,11 +153,21 @@ const Chatbot = () => {
               {msg.type === "text" && <p>{msg.content}</p>}
 
               {msg.type === "image" && (
-                <div>
-                  <img src={msg.imageUrl} alt="Outfit" width="250" />
-                  {msg.stylingTips?.map((tip, i) => (
-                    <p key={i}>• {tip}</p>
-                  ))}
+                <div className="outfit-card">
+                  <div className="outfit-image-wrapper">
+                    <img
+                      src={msg.imageUrl}
+                      alt="Outfit"
+                      className="outfit-image"
+                      onClick={() => setSelectedImage(msg.imageUrl)}
+                      style={{ cursor: "pointer" }}
+                    />
+                    <div className={`source-badge ${msg.source}`}>
+                      {msg.source === "ai-generated"
+                        ? "🔥 AI Generated"
+                        : "⚡ From Database"}
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -121,7 +182,14 @@ const Chatbot = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Chat Input */}
+        {/* Image Fullscreen Modal */}
+        {selectedImage && (
+          <div className="image-modal" onClick={() => setSelectedImage(null)}>
+            <img src={selectedImage} alt="Full View" />
+          </div>
+        )}
+
+        {/* Input */}
         <div className="input-container">
           <div className="input-wrapper">
             <textarea
