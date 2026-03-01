@@ -55,31 +55,26 @@ const Chatbot = () => {
       console.log("Backend Response:", data);
 
       if (!data) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            sender: "bot",
-            type: "text",
-            content: "⚠️ Empty response from server.",
-          },
-        ]);
-        return;
+        throw new Error("Empty response");
       }
 
-      const imageUrl = data?.outfit?.imageUrl || data?.imageUrl || null;
+      // 🔥 HANDLE ALL BACKEND STRUCTURES SAFELY
+      let imageUrl = null;
+      let stylingTips = [];
 
-      const stylingTips = data?.outfit?.stylingTips || data?.stylingTips || [];
+      if (data.outfit) {
+        imageUrl = data.outfit.imageUrl;
+        stylingTips = data.outfit.stylingTips || [];
+      } else if (data.outfits && data.outfits.length > 0) {
+        imageUrl = data.outfits[0].imageUrl;
+        stylingTips = data.outfits[0].stylingTips || [];
+      } else if (data.imageUrl) {
+        imageUrl = data.imageUrl;
+        stylingTips = data.stylingTips || [];
+      }
 
       if (!imageUrl) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            sender: "bot",
-            type: "text",
-            content: "⚠️ Image could not be generated. Please try again.",
-          },
-        ]);
-        return;
+        throw new Error("Image URL missing");
       }
 
       const imageMessage = {
@@ -89,17 +84,18 @@ const Chatbot = () => {
         source: data.source || "ai-generated",
       };
 
-      setMessages((prev) => [...prev, imageMessage]);
+      const updatedMessages = [...messages, userMessage, imageMessage];
 
       if (stylingTips.length > 0) {
         const tipsMessage = {
           sender: "bot",
           type: "text",
-          content: "✨ Styling Tips:\n\n• " + stylingTips.join("\n• "),
+          content: "✨ **Styling Tips:**\n\n• " + stylingTips.join("\n• "),
         };
-
-        setMessages((prev) => [...prev, tipsMessage]);
+        updatedMessages.push(tipsMessage);
       }
+
+      setMessages(updatedMessages);
     } catch (error) {
       console.error("Error:", error);
 
@@ -178,7 +174,9 @@ const Chatbot = () => {
               key={index}
               className={`message ${msg.sender === "user" ? "user" : "bot"}`}
             >
-              {msg.type === "text" && <p>{msg.content}</p>}
+              {msg.type === "text" && (
+                <p style={{ whiteSpace: "pre-line" }}>{msg.content}</p>
+              )}
 
               {msg.type === "image" && (
                 <div className="outfit-card">
@@ -210,7 +208,7 @@ const Chatbot = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Fullscreen Modal */}
+        {/* Fullscreen Image Modal */}
         {selectedImage && (
           <div className="image-modal" onClick={() => setSelectedImage(null)}>
             <img src={selectedImage} alt="Full View" />

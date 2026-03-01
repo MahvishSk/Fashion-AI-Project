@@ -16,9 +16,8 @@ import fashion5 from "../assets/Fashionimg5.jpg";
 import fashion6 from "../assets/Fashionimg6.jpg";
 import "../styles/Home.css";
 import Popup from "./Popup";
-import Header from '../components/Header';
-import { useApp } from './Appcontext';
-
+import Header from "../components/Header";
+import { useApp } from "./Appcontext";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -26,8 +25,8 @@ const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { t, language } = useApp();
   const h = t.home;
-  const isHindi = language === 'Hindi';
-  
+  const isHindi = language === "Hindi";
+
   // State for popup management
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -58,10 +57,9 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      
       {/* ✅ ONLY ONE HEADER - Using the Header Component */}
-      <Header 
-        isMenuOpen={isMenuOpen} 
+      <Header
+        isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         isProfileOpen={isProfileOpen}
         setIsProfileOpen={setIsProfileOpen}
@@ -98,7 +96,7 @@ const Home = () => {
 
       {/* Decorative Divider */}
       <div className="divider">
-        <span class="divider-icon">✦ ✧ ✦</span>
+        <span className="divider-icon">✧ ✦ ✧</span>
       </div>
 
       {/* Feature Cards */}
@@ -135,22 +133,34 @@ const Home = () => {
       {/* Category Slider */}
       <div className="category-section">
         <div className="category-slider">
-          <div className="category-card" onClick={() => navigate("/category/casual")}>
+          <div
+            className="category-card"
+            onClick={() => navigate("/category/casual")}
+          >
             <img src={casualImg} alt="Casual" />
             <div className="category-overlay">Casual</div>
           </div>
 
-          <div className="category-card" onClick={() => navigate("/category/party")}>
+          <div
+            className="category-card"
+            onClick={() => navigate("/category/party")}
+          >
             <img src={partyImg} alt="Party" />
             <div className="category-overlay">Party Wear</div>
           </div>
 
-          <div className="category-card" onClick={() => navigate("/category/office")}>
+          <div
+            className="category-card"
+            onClick={() => navigate("/category/office")}
+          >
             <img src={officeImg} alt="Office" />
             <div className="category-overlay">Office Wear</div>
           </div>
 
-          <div className="category-card" onClick={() => navigate("/category/traditional")}>
+          <div
+            className="category-card"
+            onClick={() => navigate("/category/traditional")}
+          >
             <img src={traditionalImg} alt="Traditional" />
             <div className="category-overlay">Traditional</div>
           </div>
