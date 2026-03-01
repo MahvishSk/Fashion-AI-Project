@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import '../styles/UserDetail.css'; // Make sure your CSS file is linked
+import '../styles/UserDetail.css';
 
 const UserDetail = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   
   const [formData, setFormData] = useState({
     age: '',
@@ -16,14 +17,11 @@ const UserDetail = () => {
     skin_tone: '',
   });
 
-  const [loading, setLoading] = useState(false);
-
-  // Handle Input Change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle Form Submit
+  // ✅ CORRECTED handleSubmit FUNCTION
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -32,12 +30,18 @@ const UserDetail = () => {
       const user = auth.currentUser;
       
       if (user) {
-        // Save to Firestore inside 'users' collection using UID
-        await setDoc(doc(db, 'users', user.uid), {
-          ...formData,
-          profileCompleted: true, // Flag to check if profile is done
+        // 1. Get existing user data first
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        const existingData = userDocSnap.exists() ? userDocSnap.data() : {};
+
+        // 2. Merge existing data with new form data
+        await setDoc(userDocRef, {
+          ...existingData,        // Keeps existing basic info (fullName, email, phone)
+          ...formData,           // Adds/updates body details
+          profileCompleted: true, 
           updatedAt: new Date(),
-        }, { merge: true }); // merge: true keeps existing data (like email from signup)
+        });
 
         alert('Profile Saved Successfully!');
         navigate('/home');
@@ -55,14 +59,15 @@ const UserDetail = () => {
 
   return (
     <div className="container">
-       <h2>Complete Your Profile</h2>
-        <h3 className="subtitle">Help us find the perfect look for you!</h3>
-      <div className="card">
+      <div className="page-header">
+        <h2>Complete Your Profile</h2>
+        <p className="subtitle">Help us find the perfect look for you!</p>
+      </div>
 
+      <div className="card">
         <form onSubmit={handleSubmit} className="profile-form">
-          
-          {/* New Fields Added */}
-           <div className="form-row">
+
+          <div className="form-row">
           <div className="form-group">
             <label>Age</label>
             <input
@@ -74,7 +79,6 @@ const UserDetail = () => {
               required
             />
           </div>
-
           <div className="form-group">
             <label>Gender</label>
             <select name="gender" value={formData.gender} onChange={handleChange} required>
@@ -84,22 +88,20 @@ const UserDetail = () => {
               <option value="other">Other</option>
             </select>
           </div>
-         </div>
+          </div>
 
-         
           <div className="form-group">
             <label>Body Type</label>
             <select name="body_type" value={formData.body_type} onChange={handleChange} required>
               <option value="">Select Body Type</option>
               <option value="slim">Slim</option>
-              <option value="athletic">Athletic</option>
-              <option value="average">Average</option>
+              <option value="apple">Apple</option>
+              <option value="pear">Pear</option>
               <option value="curvy">Curvy</option>
-              <option value="plus_size">Plus Size</option>
+              <option value="hourglass">Hourglass</option>
             </select>
           </div>
 
-          {/* Original Fields */}
           <div className="form-row">
           <div className="form-group">
             <label>Height (in feet)</label>
@@ -124,6 +126,7 @@ const UserDetail = () => {
             />
           </div>
           </div>
+
           <div className="form-group">
             <label>Skin Tone</label>
             <select name="skin_tone" value={formData.skin_tone} onChange={handleChange} required>

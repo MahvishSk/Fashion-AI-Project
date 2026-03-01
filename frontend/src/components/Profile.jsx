@@ -182,6 +182,8 @@ const Profile = () => {
         const imageData = reader.result;
         setProfileImage(imageData);
         localStorage.setItem('profileImage', imageData);
+         // ✅ ADD THIS LINE - Notify popup to update immediately
+      window.dispatchEvent(new Event('profileImageUpdated'));
       };
       reader.readAsDataURL(file);
     } else {
@@ -194,6 +196,8 @@ const Profile = () => {
   const removePhoto = () => {
     setProfileImage(defaultPlaceholder);
     localStorage.removeItem('profileImage');
+    // ✅ ADD THIS LINE - Notify popup to update immediately
+  window.dispatchEvent(new Event('profileImageUpdated'));
   };
 
   const handleLogout = () => {
@@ -224,16 +228,16 @@ const Profile = () => {
           <div className="profile-photo-container">
             <img src={profileImage} alt="Profile" className="profile-photo" />
             {/* Only show camera/remove icons when editing */}
-            {isEditing && (
-              <>
-                <div className="camera-icon" onClick={triggerFileInput}>
-                  <Camera size={15} color="#fff" strokeWidth={2.5} />
-                </div>
-                <div className="remove-icon" onClick={removePhoto}>
-                  <X size={13} color="#fff" strokeWidth={2.5} />
-                </div>
-              </>
-            )}
+           {isEditing && (
+  <>
+    <div className="camera-icon" onClick={triggerFileInput}>
+      <Camera size={15} color="#000" strokeWidth={2.5} />
+    </div>
+    <div className="remove-icon" onClick={removePhoto}>
+      <X size={13} color="#000" strokeWidth={2.5} />
+    </div>
+  </>
+)}
           </div>
           <p className="username-display">{formData.username}</p>
         </div>
@@ -294,10 +298,10 @@ const Profile = () => {
             <select name="body_type" value={formData.body_type} onChange={handleChange} disabled={!isEditing} className="form-input">
               <option value="">Select Body Type</option>
               <option value="slim">Slim</option>
-              <option value="athletic">Athletic</option>
-              <option value="average">Average</option>
+              <option value="apple">Apple</option>
+              <option value="pear">Pear</option>
               <option value="curvy">Curvy</option>
-              <option value="plus_size">Plus Size</option>
+              <option value="hourglass">Hourglass</option>
             </select>
           </div>
           <div className="form-group">
