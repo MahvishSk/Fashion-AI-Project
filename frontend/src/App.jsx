@@ -24,7 +24,6 @@ function App() {
 
     if (token && username) {
       setShowSplash(false);
-
       if (location.pathname === "/" || location.pathname === "/welcome") {
         navigate("/home");
       }
@@ -34,9 +33,8 @@ function App() {
     if (location.pathname === "/") {
       const timer = setTimeout(() => {
         setShowSplash(false);
-        navigate("/welcome");
+        navigate("/home");
       }, 3000);
-
       return () => clearTimeout(timer);
     } else {
       setShowSplash(false);
@@ -65,7 +63,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* Home - Public */}
+          {/* Home */}
           <Route path="/home" element={<Home />} />
 
           {/* Chatbot - Guest allowed */}
@@ -87,6 +85,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/settings"
             element={
@@ -95,6 +94,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/user-detail"
             element={
@@ -105,10 +105,7 @@ function App() {
           />
 
           {/* Default Route */}
-          <Route
-            path="/"
-            element={<Welcome onLoginSuccess={handleLoginSuccess} />}
-          />
+          <Route path="/" element={<Home />} />
         </Routes>
       )}
     </>

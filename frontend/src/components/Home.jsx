@@ -28,7 +28,6 @@ const Home = () => {
   const [username, setUsername] = useState("User");
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Popup state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -60,7 +59,6 @@ const Home = () => {
       <PromoPopup />
 
       <div className="home-container">
-        {/* Header */}
         <Header
           isMenuOpen={isMenuOpen}
           setIsMenuOpen={setIsMenuOpen}
@@ -99,7 +97,6 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Divider */}
         <div className="divider">
           <span className="divider-icon">✧ ✦ ✧</span>
         </div>
@@ -127,82 +124,12 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Tips Section */}
         <section className="tips-section">
           <div className="tip-card">
             <h3>Fashion Tip of the Day :</h3>
             <p>Mix patterns with neutrals for a bold yet balanced look!</p>
           </div>
         </section>
-
-        {/* Categories */}
-        <div className="category-section">
-          <div className="category-slider">
-            <div
-              className="category-card"
-              onClick={() => navigate("/category/casual")}
-            >
-              <img src={casualImg} alt="Casual" />
-              <div className="category-overlay">Casual</div>
-            </div>
-
-            <div
-              className="category-card"
-              onClick={() => navigate("/category/party")}
-            >
-              <img src={partyImg} alt="Party" />
-              <div className="category-overlay">Party Wear</div>
-            </div>
-
-            <div
-              className="category-card"
-              onClick={() => navigate("/category/office")}
-            >
-              <img src={officeImg} alt="Office" />
-              <div className="category-overlay">Office Wear</div>
-            </div>
-
-            <div
-              className="category-card"
-              onClick={() => navigate("/category/traditional")}
-            >
-              <img src={traditionalImg} alt="Traditional" />
-              <div className="category-overlay">Traditional</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <footer className="footer">
-          <div className="footer-content">
-            <div className="footer-logo">
-              <h3>StyleU</h3>
-              <p>Your Personal AI Fashion Stylist</p>
-            </div>
-
-            <div className="footer-links">
-              <h4>Quick Links</h4>
-              <ul>
-                <li onClick={() => navigate("/")}>Home</li>
-                <li onClick={() => navigate("/chatbot")}>Chatbot</li>
-                <li onClick={() => navigate("/profile")}>Profile</li>
-                <li onClick={() => navigate("/saved")}>Saved Looks</li>
-              </ul>
-            </div>
-
-            <div className="footer-support">
-              <h4>Support</h4>
-              <ul>
-                <li>Help</li>
-                <li>Feedback</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="footer-bottom">
-            <p>© 2026 StyleU. All rights reserved.</p>
-          </div>
-        </footer>
 
         <Popup
           isMenuOpen={isMenuOpen}
