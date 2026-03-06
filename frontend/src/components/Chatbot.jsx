@@ -3,17 +3,20 @@ import { useNavigate } from "react-router-dom";
 import "../styles/Chatbot.css";
 import logo from "../assets/logo1.png";
 
+const MAX_CHATS = 9;
+
+const defaultBotMessage = {
+  sender: "bot",
+  type: "text",
+  content:
+    "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
+};
+
 const Chatbot = () => {
   const navigate = useNavigate();
 
-  const [messages, setMessages] = useState([
-    {
-      sender: "bot",
-      type: "text",
-      content:
-        "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
-    },
-  ]);
+  const [chats, setChats] = useState([]);
+  const [currentChatId, setCurrentChatId] = useState(null);
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,6 +24,101 @@ const Chatbot = () => {
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
+
+  const currentChat = chats.find((chat) => chat.id === currentChatId);
+  const messages = currentChat ? currentChat.messages : [];
+
+  /* GENERATE CHAT TITLE */
+  const generateTitle = (text) => {
+    let title = text.trim();
+
+    title = title.replace(/[^a-zA-Z0-9 ]/g, "");
+
+    if (title.length > 30) {
+      title = title.substring(0, 30);
+    }
+
+    title =
+      title.charAt(0).toUpperCase() +
+      title.slice(1);
+
+    return title;
+  };
+
+  /* LOAD CHATS */
+  useEffect(() => {
+    const saved = localStorage.getItem("styleu_chats");
+
+    if (saved) {
+      const parsed = JSON.parse(saved);
+
+      if (parsed.length > 0) {
+        setChats(parsed);
+        setCurrentChatId(parsed[0].id);
+      } else {
+        createNewChat();
+      }
+    } else {
+      createNewChat();
+    }
+  }, []);
+
+  /* SAVE CHATS */
+  useEffect(() => {
+    if (chats.length > 0) {
+      localStorage.setItem("styleu_chats", JSON.stringify(chats));
+    }
+  }, [chats]);
+
+  /* AUTO SCROLL */
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  /* CREATE NEW CHAT */
+  const createNewChat = () => {
+    const newChat = {
+      id: Date.now().toString(),
+      title: "New Chat",
+      messages: [defaultBotMessage],
+    };
+
+    setChats((prev) => {
+      let updated = [newChat, ...prev];
+
+      if (updated.length > MAX_CHATS) {
+        updated = updated.slice(0, MAX_CHATS);
+      }
+
+      return updated;
+    });
+
+    setCurrentChatId(newChat.id);
+  };
+
+  /* DELETE CHAT */
+  const deleteChat = (chatId) => {
+    const updated = chats.filter((chat) => chat.id !== chatId);
+
+    setChats(updated);
+
+    if (chatId === currentChatId) {
+      if (updated.length > 0) {
+        setCurrentChatId(updated[0].id);
+      } else {
+        createNewChat();
+      }
+    }
+  };
+
+  /* UPDATE MESSAGES */
+  const updateMessages = (newMessages) => {
+    setChats((prev) =>
+      prev.map((chat) =>
+        chat.id === currentChatId ? { ...chat, messages: newMessages } : chat
+      )
+    );
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -31,9 +129,23 @@ const Chatbot = () => {
       content: input,
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    let updatedMessages = [...messages, userMessage];
+
+    /* AUTO CHAT TITLE */
+    if (messages.length === 1) {
+      const title = generateTitle(input);
+
+      setChats((prev) =>
+        prev.map((chat) =>
+          chat.id === currentChatId ? { ...chat, title } : chat
+        )
+      );
+    }
+
+    updateMessages(updatedMessages);
 
     const currentInput = input;
+
     setInput("");
     setLoading(true);
 
@@ -52,13 +164,7 @@ const Chatbot = () => {
       });
 
       const data = await response.json();
-      console.log("Backend Response:", data);
 
-      if (!data) {
-        throw new Error("Empty response");
-      }
-
-      // 🔥 HANDLE ALL BACKEND STRUCTURES SAFELY
       let imageUrl = null;
       let stylingTips = [];
 
@@ -73,9 +179,7 @@ const Chatbot = () => {
         stylingTips = data.stylingTips || [];
       }
 
-      if (!imageUrl) {
-        throw new Error("Image URL missing");
-      }
+      if (!imageUrl) throw new Error("Image missing");
 
       const imageMessage = {
         sender: "bot",
@@ -84,23 +188,22 @@ const Chatbot = () => {
         source: data.source || "ai-generated",
       };
 
-      const updatedMessages = [...messages, userMessage, imageMessage];
+      updatedMessages = [...updatedMessages, imageMessage];
 
       if (stylingTips.length > 0) {
         const tipsMessage = {
           sender: "bot",
           type: "text",
-          content: "✨ **Styling Tips:**\n\n• " + stylingTips.join("\n• "),
+          content: "✨ Styling Tips:\n\n• " + stylingTips.join("\n• "),
         };
+
         updatedMessages.push(tipsMessage);
       }
 
-      setMessages(updatedMessages);
+      updateMessages(updatedMessages);
     } catch (error) {
-      console.error("Error:", error);
-
-      setMessages((prev) => [
-        ...prev,
+      updateMessages([
+        ...updatedMessages,
         {
           sender: "bot",
           type: "text",
@@ -113,10 +216,6 @@ const Chatbot = () => {
     }
   };
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -126,43 +225,45 @@ const Chatbot = () => {
 
   return (
     <div className="app-container">
-      {/* Sidebar */}
+      {/* SIDEBAR */}
       <div className="sidebar">
         <div className="sidebar-header">
           <img src={logo} alt="StyleU Logo" className="sidebar-logo" />
           <h2 className="brand-name">StyleU</h2>
         </div>
 
-        <button
-          className="new-chat-btn"
-          onClick={() =>
-            setMessages([
-              {
-                sender: "bot",
-                type: "text",
-                content:
-                  "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
-              },
-            ])
-          }
-        >
+        <button className="new-chat-btn" onClick={createNewChat}>
           + New Chat
         </button>
 
-        <input
-          className="search-bar"
-          type="text"
-          placeholder="Search chats..."
-        />
+        <div className="chat-history">
+          {chats.map((chat) => (
+            <div
+              key={chat.id}
+              className={`chat-item ${
+                chat.id === currentChatId ? "active" : ""
+              }`}
+            >
+              <span onClick={() => setCurrentChatId(chat.id)}>
+                {chat.title}
+              </span>
 
-        <div className="chat-history"></div>
+              <button
+                className="delete-chat"
+                onClick={() => deleteChat(chat.id)}
+              >
+                🗑
+              </button>
+            </div>
+          ))}
+        </div>
 
         <button className="back-btn" onClick={() => navigate("/home")}>
           ← Back to Home
         </button>
       </div>
 
-      {/* Chat Section */}
+      {/* CHAT AREA */}
       <div className="chat-section">
         <div className="main-title">
           StyleU – Your Personal AI Fashion Stylist
@@ -186,8 +287,8 @@ const Chatbot = () => {
                       alt="Outfit"
                       className="outfit-image"
                       onClick={() => setSelectedImage(msg.imageUrl)}
-                      style={{ cursor: "pointer" }}
                     />
+
                     <div className={`source-badge ${msg.source}`}>
                       {msg.source === "ai-generated"
                         ? "🔥 AI Generated"
@@ -208,14 +309,14 @@ const Chatbot = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Fullscreen Image Modal */}
+        {/* IMAGE MODAL */}
         {selectedImage && (
           <div className="image-modal" onClick={() => setSelectedImage(null)}>
             <img src={selectedImage} alt="Full View" />
           </div>
         )}
 
-        {/* Input */}
+        {/* INPUT */}
         <div className="input-container">
           <div className="input-wrapper">
             <textarea
@@ -231,6 +332,7 @@ const Chatbot = () => {
               onKeyDown={handleKeyDown}
               className="chat-textarea"
             />
+
             <button onClick={handleSend} disabled={loading}>
               ➤
             </button>
