@@ -18,14 +18,11 @@ async function generateImage() {
     const result = await openai.images.generate({
       model: "gpt-image-1-mini",
       prompt: prompt,
-      size: "1024x1024",
+      size: "512x512",
     });
 
     const image_base64 = result.data[0].b64_json;
-    fs.writeFileSync(
-      "test-outfit.png",
-      Buffer.from(image_base64, "base64")
-    );
+    fs.writeFileSync("test-outfit.png", Buffer.from(image_base64, "base64"));
 
     console.log("✅ Image generated: test-outfit.png");
   } catch (error) {
