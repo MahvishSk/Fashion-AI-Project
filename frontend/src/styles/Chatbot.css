@@ -30,6 +30,16 @@ html, body {
   overflow: hidden;
 }
 
+/* LOADING SCREEN */
+.loading-screen {
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-color);
+  font-size: 18px;
+  color: var(--heading-color);
+  font-family: 'Poppins', sans-serif;
+}
+
 /* 5. SIDEBAR */
 .sidebar {
   width: 260px;
@@ -41,14 +51,12 @@ html, body {
   padding: 20px;
 }
 
-/* SIDEBAR HEADER */
 .sidebar-header {
   display: flex;
   align-items: center;
   padding: 0;
 }
 
-/* LOGO */
 .sidebar-logo {
   width: 80px;
   height: 90px;
@@ -56,17 +64,14 @@ html, body {
   margin: 0;
 }
 
-/* BRAND NAME */
 .brand-name {
   font-family: 'Playfair Display', serif;
   font-size: 28px;
   font-weight: 700;
   color: #4b0018;
   margin: 0;
-  margin-left: -8px; /* removes visual gap */
+  margin-left: -8px;
 }
-
-/* NEW CHAT + BACK BUTTON */
 
 .new-chat-btn,
 .back-btn {
@@ -88,36 +93,26 @@ html, body {
   background: #fff;
 }
 
-/* CHAT HISTORY */
-
 .chat-history {
   flex: 1;
   overflow-y: auto;
   padding-right: 5px;
 }
 
-/* CHAT ITEM */
-
 .chat-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   background: rgba(255,255,255,0.95);
   color: var(--heading-color);
-
   padding: 10px 12px;
   border-radius: 10px;
   margin-bottom: 8px;
-
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-
   transition: all 0.2s ease;
 }
-
-/* TITLE TEXT */
 
 .chat-item span {
   flex: 1;
@@ -125,22 +120,16 @@ html, body {
   font-weight: 600;
 }
 
-/* HOVER */
-
 .chat-item:hover {
   background: white;
   transform: translateX(3px);
 }
-
-/* ACTIVE CHAT */
 
 .chat-item.active {
   background: white;
   border-left: 4px solid var(--heading-color);
   font-weight: 600;
 }
-
-/* DELETE BUTTON */
 
 .delete-chat {
   background: transparent;
@@ -155,8 +144,18 @@ html, body {
   transform: scale(1.2);
 }
 
-/* 6. CHAT SECTION */
+/* PROFILE SUMMARY */
+.profile-summary {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: white;
+  line-height: 1.8;
+}
 
+/* 6. CHAT SECTION */
 .chat-section {
   flex: 1;
   display: flex;
@@ -174,7 +173,6 @@ html, body {
 }
 
 /* 7. MESSAGES */
-
 .messages-container {
   flex: 1;
   padding: 20px 60px;
@@ -195,42 +193,57 @@ html, body {
   word-break: break-word;
 }
 
+/* BOTH BUBBLES SAME WHITE COLOR */
 .user {
   align-self: flex-end;
   background: var(--white);
   border-bottom-right-radius: 4px;
+  color: var(--text-color);
 }
 
 .bot {
   align-self: flex-start;
   background: var(--white);
   border-bottom-left-radius: 4px;
+  color: var(--text-color);
+}
+
+.message.bot p {
+  white-space: pre-line;
+  color: var(--text-color);
+}
+
+.message.user p {
+  white-space: pre-line;
+  color: var(--text-color);
 }
 
 /* IMAGE CARD */
-
 .outfit-card {
   background: white;
   border-radius: 18px;
   padding: 14px;
   margin-top: 12px;
   box-shadow: 0 12px 28px rgba(194, 24, 91, 0.08);
-  max-width: 520px;
+  max-width: 420px;
+  width: 100%;
 }
 
 .outfit-image-wrapper {
   position: relative;
+  width: 100%;
 }
 
 .outfit-image {
   width: 100%;
   height: auto;
+  object-fit: contain;
   border-radius: 14px;
   display: block;
+  cursor: zoom-in;
 }
 
 /* SOURCE BADGE */
-
 .source-badge {
   position: absolute;
   top: 12px;
@@ -245,8 +258,56 @@ html, body {
   backdrop-filter: blur(6px);
 }
 
-/* INPUT AREA */
+/* ── ACTION BUTTONS (SAVE + DOWNLOAD) ── */
+.outfit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #f5e0e6;
+}
 
+.action-btn {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.favourite-btn {
+  background: #fff0f4;
+  color: #c2185b;
+  border: 1.5px solid #f5c0ce;
+}
+
+.favourite-btn:hover {
+  background: #ffe0ea;
+  transform: translateY(-2px);
+}
+
+.favourite-btn.active {
+  background: #fce4ec;
+  border-color: #c2185b;
+  color: #c2185b;
+}
+
+.download-btn {
+  background: #f0f7ff;
+  color: #1565c0;
+  border: 1.5px solid #bbdefb;
+}
+
+.download-btn:hover {
+  background: #e3f2fd;
+  transform: translateY(-2px);
+}
+
+/* INPUT AREA */
 .input-container {
   padding: 20px;
   display: flex;
@@ -273,6 +334,7 @@ html, body {
   max-height: 150px;
   overflow-y: auto;
   font-family: 'Poppins', sans-serif;
+  color: var(--text-color);
 }
 
 .input-wrapper button {
@@ -291,8 +353,7 @@ html, body {
   background: var(--heading-color);
 }
 
-/* FULLSCREEN IMAGE */
-
+/* FULLSCREEN IMAGE MODAL */
 .image-modal {
   position: fixed;
   inset: 0;
@@ -308,25 +369,46 @@ html, body {
   max-width: 90%;
   max-height: 90%;
   border-radius: 16px;
+  object-fit: contain;
 }
 
 /* ANIMATION */
-
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* STYLING TIPS */
+/* LOADING MESSAGE */
+.loading-message p {
+  color: var(--heading-color) !important;
+  font-style: italic;
+}
 
-.message.bot p {
-  white-space: pre-line;
+/* QUICK SUGGESTIONS */
+.quick-suggestions {
+  display: flex;
+  gap: 10px;
+  padding: 10px 60px;
+  flex-wrap: wrap;
+}
+
+.quick-suggestions button {
+  background: white;
+  border: 1px solid #e88ba3;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.quick-suggestions button:hover {
+  background: #e88ba3;
+  color: white;
 }
 
 /* RESPONSIVE */
-
 @media (max-width: 900px) {
-
   .app-container { flex-direction: column; }
 
   .sidebar {
@@ -338,12 +420,11 @@ html, body {
   }
 
   .messages-container { padding: 15px 20px; }
-
   .message { max-width: 80%; }
+  .outfit-card { max-width: 100%; }
 }
 
 @media (max-width: 600px) {
-
   .messages-container { padding: 10px 15px; }
 
   .message {
@@ -352,4 +433,5 @@ html, body {
   }
 
   .input-wrapper { width: 95%; }
+  .outfit-card { max-width: 100%; }
 }

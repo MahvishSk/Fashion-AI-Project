@@ -12,6 +12,7 @@ import Settings from "./components/Settings";
 import UserDetail from "./components/UserDetail";
 import Chatbot from "./components/Chatbot";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SavedLooks from "./components/SavedLooks";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -106,6 +107,7 @@ function App() {
 
           {/* Default Route */}
           <Route path="/" element={<Home />} />
+          <Route path="/saved" element={<SavedLooks />} />
         </Routes>
       )}
     </>
