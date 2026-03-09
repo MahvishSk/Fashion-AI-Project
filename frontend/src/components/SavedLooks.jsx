@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import Header from "./Header";
+import Popup from "./Popup";
 import "../styles/SavedLooks.css";
 
 const SavedLooks = () => {
@@ -12,10 +13,6 @@ const SavedLooks = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-
-  // ─────────────────────────────────────────
-  // FETCH SAVED OUTFITS FROM FIREBASE
-  // ─────────────────────────────────────────
 
   useEffect(() => {
     const fetchSaved = async () => {
@@ -45,25 +42,16 @@ const SavedLooks = () => {
     fetchSaved();
   }, []);
 
-  // ─────────────────────────────────────────
-  // REMOVE FROM SAVED
-  // ─────────────────────────────────────────
-
   const removeFavourite = async (outfitId) => {
     try {
       const user = auth.currentUser;
       if (!user) return;
-
       await deleteDoc(doc(db, "users", user.uid, "favourites", outfitId));
       setSavedOutfits((prev) => prev.filter((o) => o.id !== outfitId));
     } catch (error) {
       console.error("Error removing favourite:", error);
     }
   };
-
-  // ─────────────────────────────────────────
-  // DOWNLOAD IMAGE
-  // ─────────────────────────────────────────
 
   const downloadOutfit = async (imageUrl) => {
     try {
@@ -82,10 +70,6 @@ const SavedLooks = () => {
     }
   };
 
-  // ─────────────────────────────────────────
-  // RENDER
-  // ─────────────────────────────────────────
-
   return (
     <div>
       <div className="home-container">
@@ -97,7 +81,6 @@ const SavedLooks = () => {
         />
 
         <div className="saved-page">
-          {/* PAGE TITLE */}
           <div className="saved-title-section">
             <h1 className="saved-title">❤️ My Saved Looks</h1>
             <p className="saved-subtitle">
@@ -109,14 +92,12 @@ const SavedLooks = () => {
             <span className="divider-icon">✧ ✦ ✧</span>
           </div>
 
-          {/* LOADING */}
           {loading && (
             <div className="saved-empty">
               <p>✨ Loading your saved looks...</p>
             </div>
           )}
 
-          {/* EMPTY STATE */}
           {!loading && savedOutfits.length === 0 && (
             <div className="saved-empty">
               <div className="empty-icon">🤍</div>
@@ -131,7 +112,6 @@ const SavedLooks = () => {
             </div>
           )}
 
-          {/* OUTFITS GRID */}
           {!loading && savedOutfits.length > 0 && (
             <>
               <p className="saved-count">
@@ -142,31 +122,17 @@ const SavedLooks = () => {
               <div className="saved-grid">
                 {savedOutfits.map((outfit) => (
                   <div key={outfit.id} className="saved-card">
-                    {/* IMAGE */}
-                    <div className="saved-image-wrapper">
+                    <div
+                      className="saved-image-wrapper"
+                      onClick={() => setSelectedImage(outfit.imageUrl)}
+                    >
                       <img
                         src={outfit.imageUrl}
                         alt="Saved Outfit"
                         className="saved-image"
-                        onClick={() => setSelectedImage(outfit.imageUrl)}
                       />
-                      <div className="saved-badge">❤️ Saved</div>
                     </div>
 
-                    {/* OUTFIT INFO */}
-                    <div className="saved-info">
-                      {outfit.gender && (
-                        <span className="saved-tag">👤 {outfit.gender}</span>
-                      )}
-                      {outfit.bodyType && (
-                        <span className="saved-tag">📐 {outfit.bodyType}</span>
-                      )}
-                      {outfit.skinTone && (
-                        <span className="saved-tag">🎨 {outfit.skinTone}</span>
-                      )}
-                    </div>
-
-                    {/* ACTION BUTTONS */}
                     <div className="saved-actions">
                       <button
                         className="saved-action-btn download-btn"
@@ -174,7 +140,6 @@ const SavedLooks = () => {
                       >
                         ⬇️ Download
                       </button>
-
                       <button
                         className="saved-action-btn remove-btn"
                         onClick={() => removeFavourite(outfit.id)}
@@ -188,7 +153,6 @@ const SavedLooks = () => {
             </>
           )}
 
-          {/* BACK BUTTON */}
           <div className="saved-back">
             <button className="back-home-btn" onClick={() => navigate("/home")}>
               ← Back to Home
@@ -196,12 +160,20 @@ const SavedLooks = () => {
           </div>
         </div>
 
-        {/* FULLSCREEN IMAGE MODAL */}
+        {/* FULLSCREEN MODAL */}
         {selectedImage && (
           <div className="image-modal" onClick={() => setSelectedImage(null)}>
             <img src={selectedImage} alt="Full View" />
           </div>
         )}
+
+        {/* ── POPUP — fixes hamburger and profile icon ── */}
+        <Popup
+          isMenuOpen={isMenuOpen}
+          setIsMenuOpen={setIsMenuOpen}
+          isProfileOpen={isProfileOpen}
+          setIsProfileOpen={setIsProfileOpen}
+        />
       </div>
     </div>
   );

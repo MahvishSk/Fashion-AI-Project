@@ -118,6 +118,10 @@ html, body {
   flex: 1;
   color: var(--heading-color);
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
 }
 
 .chat-item:hover {
@@ -144,16 +148,7 @@ html, body {
   transform: scale(1.2);
 }
 
-/* PROFILE SUMMARY */
-.profile-summary {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 10px 14px;
-  margin-bottom: 12px;
-  font-size: 13px;
-  color: white;
-  line-height: 1.8;
-}
+/* FIX 2: profile-summary removed from sidebar — no CSS needed */
 
 /* 6. CHAT SECTION */
 .chat-section {
@@ -193,29 +188,38 @@ html, body {
   word-break: break-word;
 }
 
-/* BOTH BUBBLES SAME WHITE COLOR */
+/* FIX 3: User bubble = heading color bg, white text */
 .user {
   align-self: flex-end;
-  background: var(--white);
+  background: var(--heading-color);
   border-bottom-right-radius: 4px;
-  color: var(--text-color);
+  color: var(--white);
 }
 
+/* FIX 3: Bot bubble = white bg, heading color text */
 .bot {
   align-self: flex-start;
   background: var(--white);
   border-bottom-left-radius: 4px;
-  color: var(--text-color);
+  color: var(--heading-color);
 }
 
-.message.bot p {
+/* FIX 5: Remove all indent/padding from message text, align left */
+.msg-text {
   white-space: pre-line;
-  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  text-indent: 0;
+  display: block;
+  text-align: left;
 }
 
-.message.user p {
-  white-space: pre-line;
-  color: var(--text-color);
+.message.bot .msg-text {
+  color: var(--heading-color);
+}
+
+.message.user .msg-text {
+  color: var(--white);
 }
 
 /* IMAGE CARD */
@@ -258,7 +262,7 @@ html, body {
   backdrop-filter: blur(6px);
 }
 
-/* ── ACTION BUTTONS (SAVE + DOWNLOAD) ── */
+/* ACTION BUTTONS */
 .outfit-actions {
   display: flex;
   gap: 10px;
@@ -379,9 +383,12 @@ html, body {
 }
 
 /* LOADING MESSAGE */
+.loading-message .msg-text,
 .loading-message p {
   color: var(--heading-color) !important;
   font-style: italic;
+  margin: 0;
+  padding: 0;
 }
 
 /* QUICK SUGGESTIONS */
@@ -434,4 +441,39 @@ html, body {
 
   .input-wrapper { width: 95%; }
   .outfit-card { max-width: 100%; }
+}
+
+/* ── SHARE TO TRENDING CHECKBOX ── */
+.share-toggle {
+  display: flex;
+  justify-content: center;
+  padding: 10px 14px 4px;
+  border-top: 1px solid #f5e0e6;
+}
+
+.share-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--heading-color);
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(232, 139, 163, 0.1);
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1.5px solid var(--primary-accent);
+  transition: all 0.2s ease;
+}
+
+.share-label:hover {
+  background: rgba(232, 139, 163, 0.2);
+}
+
+.share-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--heading-color);
+  cursor: pointer;
 }

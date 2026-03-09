@@ -13,6 +13,7 @@ import UserDetail from "./components/UserDetail";
 import Chatbot from "./components/Chatbot";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SavedLooks from "./components/SavedLooks";
+import Trends from "./components/Trends";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -108,6 +109,7 @@ function App() {
           {/* Default Route */}
           <Route path="/" element={<Home />} />
           <Route path="/saved" element={<SavedLooks />} />
+          <Route path="/trends" element={<Trends />} />
         </Routes>
       )}
     </>
