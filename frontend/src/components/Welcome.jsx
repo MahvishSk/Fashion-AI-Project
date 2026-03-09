@@ -14,7 +14,7 @@ const Welcome = () => {
       <div className="header-wlc">
         <img src={logo} alt="StyleU Logo" className="welcome-logo" />
         <h2 className="main-heading">Welcome to StyleU</h2>
-        <p className="sub-text">Your Personal AI Fashion Assistant</p>
+        <p className="sub-text">Your Personal AI Fashion Stylist</p>
       </div>
 
       <div className="card">

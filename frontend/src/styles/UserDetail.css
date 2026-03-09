@@ -29,7 +29,7 @@ h2 {
 
 h3 {
   color:var (var(--text-color));
-  font-size: 1.2rem;  /* Adjust size as needed */
+  font-size: 1.5rem;  /* Adjust size as needed */
   font-weight: 400;
   margin-bottom: 30px;
   text-align: center;
