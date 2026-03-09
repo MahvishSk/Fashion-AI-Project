@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
 });
 
 // ─────────────────────────────────────────
-// NEW ROUTE: GET USER PROFILE FROM FIREBASE
+// GET USER PROFILE FROM FIREBASE
 // ─────────────────────────────────────────
 
 app.get("/get-profile/:uid", async (req, res) => {
@@ -74,11 +74,11 @@ app.get("/get-profile/:uid", async (req, res) => {
 });
 
 // ─────────────────────────────────────────
-// NEW ROUTE: CHAT WITH AI STYLIST
+// CHAT WITH AI STYLIST
 // ─────────────────────────────────────────
 
 app.post("/chat", async (req, res) => {
-  const { message, profile, conversationHistory } = req.body;
+  const { message, profile, conversationHistory, isPublic } = req.body;
 
   if (!message || !profile) {
     return res
@@ -87,7 +87,6 @@ app.post("/chat", async (req, res) => {
   }
 
   try {
-    // Build conversation for GPT
     const systemPrompt = `
 You are Style-U, a warm and friendly AI fashion stylist assistant.
 
@@ -128,17 +127,17 @@ Examples of ready occasions: wedding, party, office, casual, college, date night
 
     const reply = completion.choices[0].message.content.trim();
 
-    // Check if GPT detected the occasion and is ready
     try {
       const parsed = JSON.parse(reply);
 
       if (parsed.ready && parsed.occasion) {
-        // Trigger outfit generation
+        // Pass isPublic to generateOutfit
         const outfitResult = await generateOutfit(
           profile.gender,
           profile.bodyType,
           profile.skinTone,
           parsed.occasion,
+          isPublic !== undefined ? isPublic : true, // default true
         );
 
         return res.json({
@@ -150,7 +149,7 @@ Examples of ready occasions: wedding, party, office, casual, college, date night
         });
       }
     } catch (e) {
-      // Not JSON — GPT is still asking questions, return text reply
+      // Not JSON — still chatting
     }
 
     return res.json({
@@ -168,7 +167,13 @@ Examples of ready occasions: wedding, party, office, casual, college, date night
 // HELPER: GENERATE OR FETCH OUTFIT
 // ─────────────────────────────────────────
 
-async function generateOutfit(gender, bodyType, skinTone, occasion) {
+async function generateOutfit(
+  gender,
+  bodyType,
+  skinTone,
+  occasion,
+  isPublic = true,
+) {
   // Check database first
   const snapshot = await db
     .collection("outfits")
@@ -190,7 +195,6 @@ async function generateOutfit(gender, bodyType, skinTone, occasion) {
 
   console.log("🎨 Generating new outfit with AI...");
 
-  // Generate with AI
   const prompt = `
 A full-body fashion photo of a ${gender} model with ${bodyType} body type and ${skinTone} skin tone.
 Wearing a complete ${occasion} outfit from head to toe.
@@ -233,6 +237,7 @@ Sharp focus, high quality.
     occasion,
     imageUrl,
     stylingTips,
+    isPublic: isPublic, // ← NEW: save consent flag
     createdAt: new Date(),
   };
 
@@ -257,7 +262,13 @@ app.post("/recommend-outfit", async (req, res) => {
   }
 
   try {
-    const result = await generateOutfit(gender, bodyType, skinTone, occasion);
+    const result = await generateOutfit(
+      gender,
+      bodyType,
+      skinTone,
+      occasion,
+      true,
+    );
 
     return res.json({
       success: true,
