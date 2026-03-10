@@ -14,10 +14,12 @@ const Chatbot = () => {
   const [currentChatId, setCurrentChatId] = useState(null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [outfitLoading, setOutfitLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [favourites, setFavourites] = useState({});
+  const [isPublic, setIsPublic] = useState(true);
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -26,14 +28,12 @@ const Chatbot = () => {
   const messages = currentChat ? currentChat.messages : [];
 
   // ─────────────────────────────────────────
-  // FETCH USER PROFILE FROM FIREBASE ON LOAD
+  // FETCH USER PROFILE
   // ─────────────────────────────────────────
-
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const user = auth.currentUser;
-
         if (!user) {
           navigate("/login");
           return;
@@ -47,26 +47,43 @@ const Chatbot = () => {
         if (data.success) {
           setUserProfile(data.profile);
 
+          const greeting = {
+            sender: "bot",
+            type: "text",
+            content: `Hi ${data.profile.fullName || "there"}! 👋✨\n\nI'm your personal AI Fashion Stylist.\n\nI already know your style profile!\nJust tell me — what's the occasion today?\n\nTry:\n• Wedding\n• Party\n• Office look\n• Casual college outfit\n• Date night`,
+          };
+
           const saved = localStorage.getItem("styleu_chats");
-          const parsed = saved ? JSON.parse(saved) : [];
+          const previous = saved ? JSON.parse(saved) : [];
+          const lastChat = previous[0];
+          const lastHasMessages =
+            lastChat && lastChat.messages && lastChat.messages.length > 1;
 
-          if (parsed.length > 0) {
-            setChats(parsed);
-            setCurrentChatId(parsed[0].id);
-          } else {
-            const greeting = {
-              sender: "bot",
-              type: "text",
-              content: `Hi ${data.profile.fullName || "there"}! 👋✨\n\nI'm your personal AI Fashion Stylist.\n\nI already know your style profile!\nJust tell me — what's the occasion today?\n\nTry:\n• Wedding\n• Party\n• Office look\n• Casual college outfit\n• Date night`,
-            };
-
+          if (lastHasMessages) {
             const newChat = {
               id: Date.now().toString(),
               title: "New Chat",
               messages: [greeting],
               conversationHistory: [],
             };
-
+            const allChats = [newChat, ...previous].slice(0, MAX_CHATS);
+            setChats(allChats);
+            setCurrentChatId(newChat.id);
+          } else if (previous.length > 0) {
+            previous[0] = {
+              ...previous[0],
+              messages: [greeting],
+              conversationHistory: [],
+            };
+            setChats(previous);
+            setCurrentChatId(previous[0].id);
+          } else {
+            const newChat = {
+              id: Date.now().toString(),
+              title: "New Chat",
+              messages: [greeting],
+              conversationHistory: [],
+            };
             setChats([newChat]);
             setCurrentChatId(newChat.id);
           }
@@ -84,10 +101,6 @@ const Chatbot = () => {
     fetchProfile();
   }, []);
 
-  // ─────────────────────────────────────────
-  // FALLBACK GREETING
-  // ─────────────────────────────────────────
-
   const createNewChatWithDefaultGreeting = () => {
     const defaultGreeting = {
       sender: "bot",
@@ -96,38 +109,44 @@ const Chatbot = () => {
         "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?\n\nTry asking:\n• Party outfit\n• Office outfit\n• Casual college look\n• Wedding guest outfit",
     };
 
+    const saved = localStorage.getItem("styleu_chats");
+    const previous = saved ? JSON.parse(saved) : [];
+    const lastChat = previous[0];
+    const lastHasMessages =
+      lastChat && lastChat.messages && lastChat.messages.length > 1;
+
     const newChat = {
       id: Date.now().toString(),
       title: "New Chat",
       messages: [defaultGreeting],
       conversationHistory: [],
     };
+    const allChats = lastHasMessages
+      ? [newChat, ...previous].slice(0, MAX_CHATS)
+      : [newChat, ...previous.slice(1)].slice(0, MAX_CHATS);
 
-    setChats([newChat]);
+    setChats(allChats);
     setCurrentChatId(newChat.id);
   };
-
-  // ─────────────────────────────────────────
-  // AUTO SCROLL
-  // ─────────────────────────────────────────
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // ─────────────────────────────────────────
-  // SAVE CHATS
-  // ─────────────────────────────────────────
-
   useEffect(() => {
     if (chats.length > 0) {
-      localStorage.setItem("styleu_chats", JSON.stringify(chats));
+      const saved = localStorage.getItem("styleu_chats");
+      const previous = saved ? JSON.parse(saved) : [];
+      const merged = [...chats];
+      previous.forEach((oldChat) => {
+        if (!merged.find((c) => c.id === oldChat.id)) merged.push(oldChat);
+      });
+      localStorage.setItem(
+        "styleu_chats",
+        JSON.stringify(merged.slice(0, MAX_CHATS)),
+      );
     }
   }, [chats]);
-
-  // ─────────────────────────────────────────
-  // CREATE NEW CHAT
-  // ─────────────────────────────────────────
 
   const createNewChat = () => {
     const greeting = userProfile
@@ -148,36 +167,22 @@ const Chatbot = () => {
       messages: [greeting],
       conversationHistory: [],
     };
-
     setChats((prev) => {
       let updated = [newChat, ...prev];
       if (updated.length > MAX_CHATS) updated = updated.slice(0, MAX_CHATS);
       return updated;
     });
-
     setCurrentChatId(newChat.id);
   };
-
-  // ─────────────────────────────────────────
-  // DELETE CHAT
-  // ─────────────────────────────────────────
 
   const deleteChat = (chatId) => {
     const updated = chats.filter((chat) => chat.id !== chatId);
     setChats(updated);
-
     if (chatId === currentChatId) {
-      if (updated.length > 0) {
-        setCurrentChatId(updated[0].id);
-      } else {
-        createNewChat();
-      }
+      if (updated.length > 0) setCurrentChatId(updated[0].id);
+      else createNewChat();
     }
   };
-
-  // ─────────────────────────────────────────
-  // UPDATE MESSAGES
-  // ─────────────────────────────────────────
 
   const updateMessages = (newMessages) => {
     setChats((prev) =>
@@ -197,24 +202,18 @@ const Chatbot = () => {
     );
   };
 
-  // ─────────────────────────────────────────
-  // SAVE FAVOURITE OUTFIT TO FIREBASE
-  // ─────────────────────────────────────────
-
   const toggleFavourite = async (imageUrl, outfitId) => {
     try {
       const user = auth.currentUser;
       if (!user) return;
-
       const favKey = outfitId || imageUrl.slice(-20);
       const favDocRef = doc(db, "users", user.uid, "favourites", favKey);
-
       if (favourites[favKey]) {
         await deleteDoc(favDocRef);
         setFavourites((prev) => {
-          const updated = { ...prev };
-          delete updated[favKey];
-          return updated;
+          const u = { ...prev };
+          delete u[favKey];
+          return u;
         });
         alert("💔 Removed from favourites");
       } else {
@@ -234,10 +233,6 @@ const Chatbot = () => {
       alert("⚠️ Could not save favourite. Try again.");
     }
   };
-
-  // ─────────────────────────────────────────
-  // DOWNLOAD OUTFIT IMAGE
-  // ─────────────────────────────────────────
 
   const downloadOutfit = async (imageUrl) => {
     try {
@@ -259,7 +254,6 @@ const Chatbot = () => {
   // ─────────────────────────────────────────
   // SEND MESSAGE
   // ─────────────────────────────────────────
-
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -296,38 +290,33 @@ const Chatbot = () => {
             age: "",
           },
           conversationHistory: currentHistory,
+          isPublic,
         }),
       });
 
       const data = await response.json();
 
       if (data.type === "outfit") {
+        setLoading(false);
+        setOutfitLoading(true);
+
         const imageMessage = {
           sender: "bot",
           type: "image",
           imageUrl: data.outfit.imageUrl,
           outfitId: data.outfit.id,
           source: data.source || "ai-generated",
+          showShareToggle: true, // ← flag to show checkbox below this image
         };
 
         updatedMessages = [...updatedMessages, imageMessage];
-
-        if (data.outfit.stylingTips?.length > 0) {
-          updatedMessages.push({
-            sender: "bot",
-            type: "text",
-            content:
-              "✨ Styling Tips:\n\n• " + data.outfit.stylingTips.join("\n• "),
-          });
-        }
-
         updateConversationHistory([]);
+        setOutfitLoading(false);
       } else if (data.type === "message") {
         updatedMessages = [
           ...updatedMessages,
           { sender: "bot", type: "text", content: data.reply },
         ];
-
         updateConversationHistory([
           ...currentHistory,
           { role: "user", content: input },
@@ -343,12 +332,12 @@ const Chatbot = () => {
         {
           sender: "bot",
           type: "text",
-          content:
-            "⚠️ Something went wrong while generating your outfit. Please try again.",
+          content: "⚠️ Something went wrong. Please try again.",
         },
       ]);
     } finally {
       setLoading(false);
+      setOutfitLoading(false);
     }
   };
 
@@ -358,10 +347,6 @@ const Chatbot = () => {
       handleSend();
     }
   };
-
-  // ─────────────────────────────────────────
-  // RENDER
-  // ─────────────────────────────────────────
 
   if (profileLoading) {
     return (
@@ -402,15 +387,6 @@ const Chatbot = () => {
           ))}
         </div>
 
-        {userProfile && (
-          <div className="profile-summary">
-            <p>👤 {userProfile.fullName}</p>
-            <p>
-              📐 {userProfile.bodyType} • {userProfile.skinTone}
-            </p>
-          </div>
-        )}
-
         <button className="back-btn" onClick={() => navigate("/home")}>
           ← Back to Home
         </button>
@@ -427,9 +403,7 @@ const Chatbot = () => {
               key={index}
               className={`message ${msg.sender === "user" ? "user" : "bot"}`}
             >
-              {msg.type === "text" && (
-                <p style={{ whiteSpace: "pre-line" }}>{msg.content}</p>
-              )}
+              {msg.type === "text" && <p className="msg-text">{msg.content}</p>}
 
               {msg.type === "image" && (
                 <div className="outfit-card">
@@ -447,14 +421,24 @@ const Chatbot = () => {
                     </div>
                   </div>
 
-                  {/* ── ACTION BUTTONS ── */}
+                  {/* ── SHARE CHECKBOX RIGHT BELOW IMAGE ── */}
+                  {msg.showShareToggle && (
+                    <div className="share-toggle">
+                      <label className="share-label">
+                        <input
+                          type="checkbox"
+                          checked={isPublic}
+                          onChange={(e) => setIsPublic(e.target.checked)}
+                          className="share-checkbox"
+                        />
+                        <span>🌟 Share this look to Trending Community</span>
+                      </label>
+                    </div>
+                  )}
+
                   <div className="outfit-actions">
                     <button
-                      className={`action-btn favourite-btn ${
-                        favourites[msg.outfitId || msg.imageUrl?.slice(-20)]
-                          ? "active"
-                          : ""
-                      }`}
+                      className={`action-btn favourite-btn ${favourites[msg.outfitId || msg.imageUrl?.slice(-20)] ? "active" : ""}`}
                       onClick={() =>
                         toggleFavourite(msg.imageUrl, msg.outfitId)
                       }
@@ -464,7 +448,6 @@ const Chatbot = () => {
                         : "🤍"}{" "}
                       Save
                     </button>
-
                     <button
                       className="action-btn download-btn"
                       onClick={() => downloadOutfit(msg.imageUrl)}
@@ -477,9 +460,17 @@ const Chatbot = () => {
             </div>
           ))}
 
+          {/* Typing indicator for normal messages */}
           {loading && (
             <div className="message bot loading-message">
-              <p>✨ Styling the perfect look for you...</p>
+              <p>💬 Typing...</p>
+            </div>
+          )}
+
+          {/* Outfit generation loader */}
+          {outfitLoading && (
+            <div className="message bot loading-message">
+              <p>✨ Styling your look...</p>
             </div>
           )}
 
@@ -507,7 +498,7 @@ const Chatbot = () => {
               onKeyDown={handleKeyDown}
               className="chat-textarea"
             />
-            <button onClick={handleSend} disabled={loading}>
+            <button onClick={handleSend} disabled={loading || outfitLoading}>
               ➤
             </button>
           </div>

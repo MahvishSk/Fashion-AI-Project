@@ -14,6 +14,7 @@ import UserDetail from "./components/UserDetail";
 import Chatbot from "./components/Chatbot";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SavedLooks from "./components/SavedLooks";
+<<<<<<< HEAD
 =======
 import UserDetail from './components/UserDetail';
 import Chatbot from './components/Chatbot';
@@ -22,6 +23,9 @@ import ProtectedRoute from './components/ProtectedRoute'; // ✅ NEW FILE
 import SavedLooks from './components/SavedLooks';
 import TrendingFashion from './components/TrendingFashion';
 >>>>>>> Stashed changes
+=======
+import Trends from "./components/Trends";
+>>>>>>> f0521c4f81ea313df8d9e9b56cd13790902fd7fb
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -137,10 +141,14 @@ function App() {
           <Route path="/" element={<Home />} />
 <<<<<<< Updated upstream
           <Route path="/saved" element={<SavedLooks />} />
+<<<<<<< HEAD
 =======
           <Route path="/" element={<ExploreStyles savedOutfits={savedOutfits} setSavedOutfits={setSavedOutfits} />} />
           <Route path="/saved" element={<SavedLooks savedOutfits={savedOutfits} setSavedOutfits={setSavedOutfits} />} />
 >>>>>>> Stashed changes
+=======
+          <Route path="/trends" element={<Trends />} />
+>>>>>>> f0521c4f81ea313df8d9e9b56cd13790902fd7fb
         </Routes>
       )}
     </>
