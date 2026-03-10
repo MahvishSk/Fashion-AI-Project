@@ -7,14 +7,8 @@ import '../styles/UserDetail.css';
 const UserDetail = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  
   const [formData, setFormData] = useState({
-    age: '',
-    gender: '',
-    body_type: '',
-    height: '',
-    weight: '',
-    skin_tone: '',
+    age: '', body_type: '', height: '', weight: '', skin_tone: '',
   });
 
   const handleChange = (e) => {
@@ -76,18 +70,7 @@ const UserDetail = () => {
               placeholder="e.g., 24"
               value={formData.age}
               onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Gender</label>
-            <select name="gender" value={formData.gender} onChange={handleChange} required>
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
+              required />
           </div>
 
           <div className="form-group">
@@ -101,6 +84,7 @@ const UserDetail = () => {
               <option value="hourglass">Hourglass</option>
             </select>
           </div>
+          </div>
 
           <div className="form-row">
           <div className="form-group">
@@ -111,8 +95,7 @@ const UserDetail = () => {
               placeholder="e.g., 5.2"
               value={formData.height}
               onChange={handleChange}
-              required
-            />
+              required/>
           </div>
           <div className="form-group">
             <label>Weight (in kg)</label>
@@ -122,8 +105,7 @@ const UserDetail = () => {
               placeholder="e.g., 60"
               value={formData.weight}
               onChange={handleChange}
-              required
-            />
+              required />
           </div>
           </div>
 

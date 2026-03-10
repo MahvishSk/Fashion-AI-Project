@@ -5,32 +5,44 @@
   --main-text: #222222;
 }
 
+/* ── Global Reset ── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ── Form ── */
 .signup-form {
   display: flex;
   flex-direction: column;
   font-family: 'Poppins', sans-serif;
 }
 
-.input-field {
-  padding: 0.75rem;
+.input-field, .password-input {
+  padding: clamp(0.65rem, 2.5vw, 0.75rem);
   margin-bottom: 0.5rem;
   border: 1px solid var(--primary-accent);
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: clamp(0.88rem, 2.5vw, 1rem);
   color: var(--main-text);
   background-color: #FFFFFF;
   transition: box-shadow 0.3s ease;
-  box-sizing: border-box;
   width: 100%;
 }
 
-.input-field:focus {
+.input-field:focus, .password-input:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(232, 139, 163, 0.5);
 }
 
+.password-input {
+  padding: clamp(10px, 3vw, 12px) clamp(10px, 3vw, 42px) clamp(10px, 3vw, 12px) clamp(10px, 3vw, 12px);
+}
+
+/* ── Button ── */
 .submit-btn {
-  padding: 0.75rem;
+  padding: clamp(0.6rem, 2.5vw, 0.75rem);
   background-color: var(--primary-accent);
   color: #FFFFFF;
   border: none;
@@ -40,20 +52,21 @@
   transition: box-shadow 0.3s ease;
   margin-top: 1rem;
   width: 100%;
-  font-size: 1rem;
+  font-size: clamp(0.88rem, 2.5vw, 1rem);
 }
 
 .submit-btn:hover {
   opacity: 0.9;
 }
 
+/* ── Error ── */
 .error {
   color: #FF0000;
-  font-size: 0.875rem;
+  font-size: clamp(0.8rem, 2.5vw, 0.875rem);
   margin-bottom: 0.5rem;
 }
 
-/* Popup / Overlay */
+/* ── Popup / Overlay ── */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -66,7 +79,6 @@
   justify-content: center;
   z-index: 1000;
   padding: 1rem;
-  box-sizing: border-box;
 }
 
 .popup {
@@ -75,49 +87,27 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  padding: 20px 30px;
+  padding: clamp(15px, 5vw, 20px) clamp(18px, 5vw, 30px);
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
   color: green;
   z-index: 999;
   width: 90%;
   max-width: 320px;
   text-align: center;
-  box-sizing: border-box;
 }
 
 .tick {
-  font-size: 3rem;
+  font-size: clamp(2.2rem, 6vw, 3rem);
   color: var(--primary-accent);
   animation: tick 0.5s ease-out;
 }
 
-/* Password field */
-.input-container {
+/* ── Password Field ── */
+.input-container, .password-container {
   position: relative;
   margin-bottom: 0.5rem;
-}
-
-.password-container {
-  position: relative;
-  width: 100%;
-  margin-bottom: 0.5rem;
-  box-sizing: border-box;
-}
-
-.password-input {
-  width: 100%;
-  padding: 12px 42px 12px 12px;
-  border-radius: 6px;
-  border: 1px solid #f2a1b3;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-.password-input:focus {
-  outline: none;
-  box-shadow: 0 0 5px rgba(232, 139, 163, 0.5);
 }
 
 .eye-icon {
@@ -129,16 +119,17 @@
   border: none;
   cursor: pointer;
   color: #888;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 3vw, 1.2rem);
   transition: opacity 0.3s ease;
   padding: 0;
   display: flex;
   align-items: center;
 }
 
-.eye-icon:hover  { opacity: 0.7; }
-.eye-icon:focus  { outline: 2px solid #888; }
+.eye-icon:hover { opacity: 0.7; }
+.eye-icon:focus { outline: 2px solid #888; }
 
+/* ── Animations ── */
 @keyframes scaleIn {
   from { transform: scale(0.8); opacity: 0; }
   to   { transform: scale(1);   opacity: 1; }
@@ -149,38 +140,11 @@
   to   { transform: scale(1); }
 }
 
-/* ── Responsive ── */
+/* ── Responsive (Mobile First) ── */
 @media (max-width: 767px) {
-  .input-field    { font-size: 0.97rem; }
-  .password-input { font-size: 0.97rem; }
-  .submit-btn     { font-size: 0.97rem; }
-  .popup          { padding: 18px 22px; font-size: 1rem; }
-  .tick           { font-size: 2.5rem; }
+  .popup { padding: clamp(15px, 5vw, 18px) clamp(18px, 5vw, 22px); }
 }
 
 @media (max-width: 480px) {
-  .input-field {
-    padding: 0.65rem;
-    font-size: 0.93rem;
-  }
-
-  .password-input {
-    padding: 10px 40px 10px 10px;
-    font-size: 0.93rem;
-  }
-
-  .submit-btn {
-    padding: 0.65rem;
-    font-size: 0.93rem;
-  }
-
-  .error  { font-size: 0.82rem; }
-  .popup  { padding: 15px 18px; font-size: 0.95rem; }
-  .tick   { font-size: 2.2rem; }
-}
-
-@media (max-width: 360px) {
-  .input-field    { padding: 0.6rem; font-size: 0.88rem; }
-  .password-input { padding: 9px 38px 9px 9px; font-size: 0.88rem; }
-  .submit-btn     { padding: 0.6rem; font-size: 0.88rem; }
+  .popup { padding: clamp(12px, 5vw, 15px) clamp(15px, 5vw, 18px); }
 }

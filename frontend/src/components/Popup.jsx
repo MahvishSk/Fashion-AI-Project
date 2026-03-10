@@ -40,7 +40,6 @@ const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) =
     { icon: Bot, label: 'AI Stylist', path: '/chatbot', key: 'chatbot' },
     { icon: TrendingUp, label: 'Trending Fashion', path: '/trending', key: 'trending' },
     { icon: Bookmark, label: 'Saved Looks', path: '/saved', key: 'saved' },
-    { icon: Search, label: 'Explore Styles', path: '/category/all', key: 'explore' },
     { icon: Settings, label: 'Settings', path: '/settings', key: 'settings' },
   ];
 

@@ -78,8 +78,8 @@ const PromoPopup = ({ forceShow = false, allowGuest = false, onClose }) => {
           </h2>
           <p className="promo-popup-message">
             {forceShow 
-              ? "Please login to access this page! Unlock personalized fashion recommendations and save your favorite looks."
-              : "Login now for a personalized fashion experience! Save your favorite looks, get AI styling recommendations, and unlock exclusive features tailored just for you."
+              ? "Please login to access this page!."
+              : "Login now for a personalized fashion experience! Unlock exclusive features tailored just for you."
             }
           </p>
           <div className="promo-popup-buttons">

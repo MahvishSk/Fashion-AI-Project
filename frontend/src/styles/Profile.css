@@ -9,14 +9,15 @@
   --white: #FFFFFF;
 }
 
+/* ── Global Reset ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 /* ── Page ── */
 .profile-page {
   font-family: 'Poppins', sans-serif;
   background-color: var(--background);
   min-height: 100vh;
-  padding-top: 80px;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding: 80px 1rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +28,6 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  font-family: 'Poppins', sans-serif;
   font-size: 1.2rem;
   color: var(--headings);
   background: var(--background);
@@ -37,11 +37,10 @@
 .profile-page-title {
   font-family: 'Playfair Display', serif;
   color: var(--headings);
-  font-size: 2.2rem;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
   margin: -30px 0 20px;
   font-weight: 700;
   text-align: center;
-  cursor: default;
 }
 
 /* ── Card ── */
@@ -49,7 +48,7 @@
   background: var(--white);
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  padding: 30px;
+  padding: clamp(1.5rem, 5vw, 2rem);
   width: 100%;
   max-width: 560px;
   text-align: center;
@@ -62,68 +61,62 @@
 .profile-photo-container {
   position: relative;
   display: inline-block;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .profile-photo {
-  width: 115px !important;
-  height: 115px !important;
+  width: clamp(90px, 20vw, 115px);
+  height: clamp(90px, 20vw, 115px);
   border-radius: 50%;
   border: 2.5px solid #ccc;
   object-fit: cover;
-  max-width: 115px;
-  max-height: 115px;
+}
+
+.camera-icon, .remove-icon {
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+  color: #000;
+  transition: transform 0.3s ease;
 }
 
 .camera-icon {
-  position: absolute;
   bottom: 0; right: 2px;
-  border-radius: 50%;
   width: 26px; height: 26px;
-  display: flex; align-items: center; justify-content: center;
-  background: transparent; /* Changed from var(--primary-accent) to transparent */
-  color: #000; /* Changed from var(--white) to black */
-  cursor: pointer;
-  transition: transform 0.3s ease;
 }
-.camera-icon:hover { transform: scale(1.1); }
 
 .remove-icon {
-  position: absolute;
   top: 0; right: 0;
-  border-radius: 50%;
   width: 22px; height: 22px;
-  display: flex; align-items: center; justify-content: center;
-  background: transparent; /* Changed from #dc3545 to transparent */
-  color: #000; /* Changed from var(--white) to black */
   font-size: 12px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
 }
-.remove-icon:hover { transform: scale(1.1); }
+
+.camera-icon:hover, .remove-icon:hover { transform: scale(1.1); }
 
 .username-display {
   font-family: serif;
   color: var(--main-text);
-  font-size: 1.7rem;
-  cursor: default;
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
   margin: 0;
 }
 
 /* ── Form ── */
 .profile-form { display: flex; flex-direction: column; text-align: left; }
 
-/* Section titles inside form (Basic Info, Body Details) */
 .form-section-title {
   font-family: 'Playfair Display', serif;
   color: var(--headings);
-  font-size: 1.30rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
   font-weight: 700;
-  margin: 20px 0 25px;
+  margin: 20px 0 20px;
   padding-bottom: 9px;
+  margin-top: 1px;
   border-bottom: 2px solid var(--primary-accent);
   text-align: center;
-  cursor: default;
 }
 
 .form-group { margin-bottom: 14px; }
@@ -131,9 +124,8 @@
 .form-group label {
   font-family: 'Playfair Display', serif;
   color: var(--headings);
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   margin-bottom: 5px;
-  cursor: default;
   display: block;
 }
 
@@ -143,32 +135,24 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.95rem;
+  font-size: clamp(0.88rem, 2.5vw, 0.95rem);
   cursor: text;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
   background: var(--white);
   color: var(--main-text);
-  appearance: auto;   /* keeps native select arrow */
 }
-.form-input:focus   { border-color: var(--primary-accent); outline: none; }
-.form-input:disabled { background: #f9f9f9; color: #999; cursor: default; }
 
+.form-input:focus { border-color: var(--primary-accent); outline: none; }
+.form-input:disabled { background: #f9f9f9; color: #999; cursor: default; }
 select.form-input { cursor: pointer; }
 select.form-input:disabled { cursor: default; }
 
 /* Inline rows */
-.form-row        { display: flex; gap: 15px; }
-.form-row .half,
-.form-row .form-group { flex: 1; min-width: 0; }
+.form-row { display: flex; gap: 15px; flex-wrap: wrap; }
+.form-row .half, .form-row .form-group { flex: 1; min-width: 0; }
 
-/* Error text */
-.error {
-  color: #dc3545;
-  font-size: 0.82rem;
-  margin-top: 4px;
-  text-align: left;
-}
+.error { color: #dc3545; font-size: 0.82rem; margin-top: 4px; text-align: left; }
 
 /* ── Buttons ── */
 .button-group {
@@ -176,7 +160,7 @@ select.form-input:disabled { cursor: default; }
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
-  margin-top: 22px;
+  margin-top: 10px;
 }
 
 .save-btn, .edit-btn, .change-password-btn, .cancel-btn, .logout-btn {
@@ -184,24 +168,28 @@ select.form-input:disabled { cursor: default; }
   border: none;
   border-radius: 20px;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
   cursor: pointer;
-  width: 175px;
+  width: clamp(140px, 40vw, 175px);
   transition: background 0.3s ease, transform 0.2s ease;
 }
+
 .save-btn, .edit-btn, .change-password-btn {
   background: var(--primary-accent);
   color: var(--white);
 }
+
 .save-btn:hover, .edit-btn:hover, .change-password-btn:hover {
   background: var(--secondary-accent);
 }
-.cancel-btn          { background: #7c8790; color: var(--white); }
-.cancel-btn:hover    { background: #5a6268; }
-.logout-btn          { background: #dc3545; color: var(--white); }
-.logout-btn:hover    { background: #c82334; }
 
-/* ── Change Password Popup Overlay ── */
+.cancel-btn { background: #7c8790; color: var(--white); }
+.cancel-btn:hover { background: #5a6268; }
+
+.logout-btn { background: #dc3545; color: var(--white); }
+.logout-btn:hover { background: #c82334; }
+
+/* ── Change Password Popup ── */
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -217,7 +205,7 @@ select.form-input:disabled { cursor: default; }
   background: var(--white);
   border-radius: 15px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  padding: 24px 20px;
+  padding: clamp(1.2rem, 5vw, 1.5rem);
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -227,7 +215,7 @@ select.form-input:disabled { cursor: default; }
 .popup-title {
   font-family: 'Playfair Display', serif;
   color: var(--headings);
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
   margin-bottom: 15px;
 }
 
@@ -242,13 +230,14 @@ select.form-input:disabled { cursor: default; }
   margin: 18px auto 0;
   padding: 10px 0;
   font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 3vw, 1rem);
   width: 100%;
   max-width: 200px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
-.submit-btn:hover    { background: var(--secondary-accent); }
+
+.submit-btn:hover { background: var(--secondary-accent); }
 .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
 .close-btn {
@@ -259,47 +248,26 @@ select.form-input:disabled { cursor: default; }
   border-radius: 24px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
   margin-top: 14px;
   transition: background 0.3s ease;
 }
+
 .close-btn:hover { background: var(--secondary-accent); }
 
-/* ═══════════════ RESPONSIVE ═══════════════ */
-
-/* Tablets */
+/* ── Responsive (Mobile First) ── */
 @media (max-width: 768px) {
-  .profile-page       { padding-top: 65px; padding-left: 1rem; padding-right: 1rem; }
-  .profile-page-title { font-size: 1.8rem; }
-  .profile-card       { padding: 22px 18px; max-width: 100%; }
-  .save-btn, .edit-btn, .change-password-btn, .cancel-btn, .logout-btn { width: 155px; font-size: 0.9rem; }
-}
-
-/* Large phones */
-@media (max-width: 600px) {
-  .profile-page-title { font-size: 1.5rem; margin: -10px 0 15px; }
-  .profile-card       { padding: 16px 12px; }
-  .username-display   { font-size: 1.3rem; }
-  .form-group label   { font-size: 0.92rem; }
-  .form-row           { flex-direction: column; gap: 0; }
-  .button-group       { flex-direction: column; align-items: center; }
+  .profile-page { padding-top: 65px; }
+  .profile-card { padding: 1.5rem; }
+  .button-group { flex-direction: column; align-items: center; }
   .save-btn, .edit-btn, .change-password-btn, .cancel-btn, .logout-btn { width: 100%; max-width: 300px; }
-  .form-section-title { font-size: 1.05rem; }
+  .form-row { flex-direction: column; gap: 0; }
 }
 
-/* Small phones */
-@media (max-width: 400px) {
-  .profile-photo      { width: 90px !important; height: 90px !important; max-width: 90px; max-height: 90px; }
-  .profile-page-title { font-size: 1.3rem; }
-  .username-display   { font-size: 1.1rem; }
-  .popup-title        { font-size: 1.2rem; }
-  .change-password-popup { padding: 18px 14px; }
-  .submit-btn         { max-width: 100%; }
-}
-
-/* Very small phones */
-@media (max-width: 360px) {
-  .profile-card       { padding: 14px 10px; }
-  .form-input         { padding: 8px 10px; font-size: 0.88rem; }
-  .form-group label   { font-size: 0.88rem; }
+@media (max-width: 480px) {
+  .profile-photo { width: 90px; height: 90px; }
+  .profile-page-title { font-size: 1.5rem; }
+  .username-display { font-size: 1.3rem; }
+  .popup-title { font-size: 1.3rem; }
+  .change-password-popup { padding: 1.2rem; }
 }

@@ -17,18 +17,9 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState('');
   const [loading, setLoading] = useState(true);
   const [passwordErrors, setPasswordErrors] = useState({});
-
-  // ✅ UPDATED: Added new fields to formData
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    phone: '',
-    age: '',
-    gender: '',
-    body_type: '',
-    height: '',
-    weight: '',
-    skin_tone: ''
+    username: '', email: '', phone: '',
+    age: '', body_type: '', height: '', weight: '', skin_tone: ''
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -38,11 +29,8 @@ const Profile = () => {
   });
   
   const [isEditing, setIsEditing] = useState(false);
-
-  // Default grey placeholder
   const defaultPlaceholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDUiIGN5PSI0NSIgcj0iNDUiIGZpbGw9IiNjY2MiLz4KPHBhdGggZD0iTTQ1IDIwQzM3LjI3IDE5Ljc1IDMwLjI1QzM3LjI3IDMwLjI1IDMwLjI1IDMwLjI1IDMwLjI1IDM3LjI1QzMwLjI1IDM3LjI1IDMwLjI1IDQ1IDMwLjI1IDQ1QzMwLjI1IDQ1IDMwLjI1IDUyLjUgMzAuMjUgNTIuNUMzMC4yNSA1Mi41IDMwLjI1IDYwIDMwLjI1IDYwQzMwLjI1IDYwIDM3LjI1IDYwIDM3LjI1IDYwQzM3LjI1IDYwIDQ1IDYwIDQ1IDYwQzQ1IDYwIDUyLjUgNjAgNTIuNSA2MEM1Mi41IDYwIDUyLjUgNTIuNSA1Mi41IDUyLjVDNTIuNSA1Mi41IDUyLjUgNDUgNTIuNSA0NUM1Mi41IDQ1IDUyLjUgMzcuMjUgNTIuNSAzNy4yNUM1Mi41IDM3LjI1IDQ1IDM3LjI1IDQ1IDIwWiIgZmlsbD0iIzk5OSI+PC9wYXRoPgo8L3N2Zz4=';
 
-  // Load user data from Firebase
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -50,13 +38,11 @@ const Profile = () => {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           if (userDoc.exists()) {
             const data = userDoc.data();
-            // ✅ UPDATED: Fetching new fields
             const userData = {
               username: data.fullName || 'User',
               email: data.email || user.email,
               phone: data.phone || '',
               age: data.age || '',
-              gender: data.gender || '',
               body_type: data.body_type || '',
               height: data.height || '',
               weight: data.weight || '',
@@ -79,7 +65,6 @@ const Profile = () => {
     return () => unsubscribe();
   }, [navigate]);
 
-  // Listen for localStorage changes
   useEffect(() => {
     const handleStorageChange = () => {
       const updatedImage = localStorage.getItem('profileImage') || defaultPlaceholder;
@@ -113,7 +98,6 @@ const Profile = () => {
     setPasswordErrors(newErrors);
   };
 
-  // ✅ UPDATED: Save function includes new fields
   const handleSave = async () => {
     const user = auth.currentUser;
     if (user) {
@@ -122,9 +106,7 @@ const Profile = () => {
           fullName: formData.username,
           email: formData.email,
           phone: formData.phone,
-          // Saving new fields
           age: formData.age,
-          gender: formData.gender,
           body_type: formData.body_type,
           height: formData.height,
           weight: formData.weight,
@@ -182,8 +164,7 @@ const Profile = () => {
         const imageData = reader.result;
         setProfileImage(imageData);
         localStorage.setItem('profileImage', imageData);
-         // ✅ ADD THIS LINE - Notify popup to update immediately
-      window.dispatchEvent(new Event('profileImageUpdated'));
+        window.dispatchEvent(new Event('profileImageUpdated'));
       };
       reader.readAsDataURL(file);
     } else {
@@ -196,8 +177,7 @@ const Profile = () => {
   const removePhoto = () => {
     setProfileImage(defaultPlaceholder);
     localStorage.removeItem('profileImage');
-    // ✅ ADD THIS LINE - Notify popup to update immediately
-  window.dispatchEvent(new Event('profileImageUpdated'));
+    window.dispatchEvent(new Event('profileImageUpdated'));
   };
 
   const handleLogout = () => {
@@ -206,11 +186,10 @@ const Profile = () => {
     navigate('/welcome');
   };
 
-  if (loading) return <div className="loading-screen">Loading...</div>;
+  if (loading) return <div className="loading-screen">Preparing your personal details...</div>;
 
   return (
     <div className="profile-page">
-      {/* App Bar */}
       <header className="app-bar">
         <div className="hamburger" onClick={() => setIsMenuOpen(true)}>☰</div>
         <div className="logo-H-container">
@@ -223,65 +202,48 @@ const Profile = () => {
       <h1 className="profile-page-title">My Profile</h1>
 
       <div className="profile-card">
-        {/* Profile Photo Section */}
         <div className="profile-photo-section">
           <div className="profile-photo-container">
             <img src={profileImage} alt="Profile" className="profile-photo" />
-            {/* Only show camera/remove icons when editing */}
-           {isEditing && (
-  <>
-    <div className="camera-icon" onClick={triggerFileInput}>
-      <Camera size={15} color="#000" strokeWidth={2.5} />
-    </div>
-    <div className="remove-icon" onClick={removePhoto}>
-      <X size={13} color="#000" strokeWidth={2.5} />
-    </div>
-  </>
-)}
+            {isEditing && (
+              <>
+                <div className="camera-icon" onClick={triggerFileInput}>
+                  <Camera size={15} color="#000" strokeWidth={2.5} />
+                </div>
+                <div className="remove-icon" onClick={removePhoto}>
+                  <X size={13} color="#000" strokeWidth={2.5} />
+                </div>
+              </>
+            )}
           </div>
           <p className="username-display">{formData.username}</p>
         </div>
 
-        {/* Form Section */}
         <form className="profile-form" onSubmit={(e) => e.preventDefault()}>
           
-          {/* Basic Info */}
           <div className="form-section-title">Basic Information</div>
           <div className="form-row">
-          <div className="form-group">
-            <label>Username</label>
-            <input type="text" name="username" value={formData.username} onChange={handleChange} disabled={!isEditing} className="form-input" />
-          </div>
-           <div className="form-group">
-            <label>Phone</label>
-            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} disabled={!isEditing} className="form-input" />
-          </div>
+            <div className="form-group">
+              <label>Username</label>
+              <input type="text" name="username" value={formData.username} onChange={handleChange} disabled={!isEditing} className="form-input" />
+            </div>
+            <div className="form-group">
+              <label>Phone</label>
+              <input type="tel" name="phone" value={formData.phone} onChange={handleChange} disabled={!isEditing} className="form-input" />
+            </div>
           </div>
           <div className="form-group">
             <label>Email</label>
             <input type="email" name="email" value={formData.email} onChange={handleChange} disabled={!isEditing} className="form-input" />
           </div>
          
-          {/* Body Details - NEW SECTION */}
           <div className="form-section-title">Body Details</div>
-          
+            
           <div className="form-row">
             <div className="form-group half">
               <label>Age</label>
               <input type="number" name="age" value={formData.age} onChange={handleChange} disabled={!isEditing} className="form-input" placeholder="e.g. 24" />
             </div>
-            <div className="form-group half">
-              <label>Gender</label>
-              <select name="gender" value={formData.gender} onChange={handleChange} disabled={!isEditing} className="form-input">
-                <option value="">Select</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="form-row">
             <div className="form-group half">
               <label>Height (ft)</label>
               <input type="text" name="height" value={formData.height} onChange={handleChange} disabled={!isEditing} className="form-input" placeholder="e.g. 5.2" />
@@ -293,29 +255,28 @@ const Profile = () => {
           </div>
 
           <div className="form-row">
-          <div className="form-group">
-            <label>Body Type</label>
-            <select name="body_type" value={formData.body_type} onChange={handleChange} disabled={!isEditing} className="form-input">
-              <option value="">Select Body Type</option>
-              <option value="slim">Slim</option>
-              <option value="apple">Apple</option>
-              <option value="pear">Pear</option>
-              <option value="curvy">Curvy</option>
-              <option value="hourglass">Hourglass</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Skin Tone</label>
-            <select name="skin_tone" value={formData.skin_tone} onChange={handleChange} disabled={!isEditing} className="form-input">
-              <option value="">Select Skin Tone</option>
-              <option value="fair">Fair / Light</option>
-              <option value="wheatish">Wheatish / Medium</option>
-              <option value="dusky">Dusky / Dark</option>
-            </select>
-          </div>
+            <div className="form-group">
+              <label>Body Type</label>
+              <select name="body_type" value={formData.body_type} onChange={handleChange} disabled={!isEditing} className="form-input">
+                <option value="">Select Body Type</option>
+                <option value="slim">Slim</option>
+                <option value="apple">Apple</option>
+                <option value="pear">Pear</option>
+                <option value="curvy">Curvy</option>
+                <option value="hourglass">Hourglass</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Skin Tone</label>
+              <select name="skin_tone" value={formData.skin_tone} onChange={handleChange} disabled={!isEditing} className="form-input">
+                <option value="">Select Skin Tone</option>
+                <option value="fair">Fair / Light</option>
+                <option value="wheatish">Wheatish / Medium</option>
+                <option value="dusky">Dusky / Dark</option>
+              </select>
+            </div>
           </div>
 
-          {/* Buttons */}
           <div className="button-group">
             {isEditing ? (
               <>
@@ -341,7 +302,6 @@ const Profile = () => {
         </form>
       </div>
 
-      {/* Change Password Popup */}
       {isChangePasswordOpen && (
         <div className="popup-overlay" onClick={() => setIsChangePasswordOpen(false)}>
           <div className="change-password-popup" onClick={(e) => e.stopPropagation()}>
@@ -371,10 +331,8 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Hidden file input */}
       <input type="file" id="profile-file-input" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
 
-      {/* Popup for Menu and Profile */}
       <Popup isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} isProfileOpen={isProfileOpen} setIsProfileOpen={setIsProfileOpen} />
     </div>
   );

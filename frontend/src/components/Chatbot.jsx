@@ -351,7 +351,7 @@ const Chatbot = () => {
   if (profileLoading) {
     return (
       <div className="app-container loading-screen">
-        <p>✨ Loading your style profile...</p>
+        <p>✨ Loading your AI fashion stylist...</p>
       </div>
     );
   }

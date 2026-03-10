@@ -1,34 +1,52 @@
-/* App Bar Styles */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap');
+
+:root {
+  --primary-accent: #E88BA3;
+  --secondary-accent: #D7A9A0;
+  --headings: #B7688A;
+  --white: #FFFFFF;
+}
+
+/* ── Global Reset ── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ── App Bar ── */
 .app-bar {
   position: relative;
-  top: -70px;
-  left: 0.4rem;
-  width: 99%;
-  height: 60px;
-  border-radius: 25px;
+  top: clamp(-70px, -15vw, -55px);
+  left: clamp(0.3rem, 1vw, 0.4rem);
+  width: clamp(95.5%, 99%, 99%);
+  height: clamp(44px, 10vh, 60px);
+  border-radius: clamp(14px, 4vw, 25px);
   background: rgba(251, 231, 229, 0.9);
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1rem;
+  padding: 0 clamp(0.6rem, 2vw, 1rem);
   z-index: 10;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   cursor: default;
 }
 
+/* ── Hamburger ── */
 .hamburger {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
   cursor: pointer;
   border-radius: 50%;
-  padding: 0.5rem;
+  padding: clamp(0.35rem, 1vw, 0.5rem);
   transition: background 0.3s ease;
   flex-shrink: 0;
 }
 
 .hamburger:hover { transform: scale(1.2); }
 
+/* ── Logo Container ── */
 .logo-H-container {
   display: flex;
   align-items: center;
@@ -42,10 +60,10 @@
 }
 
 .logo-H {
-  font-size: 2rem;
-  width: 5.5rem;
-  height: 3.7rem;
-  margin-left: -2rem;
+  font-size: clamp(1.15rem, 4vw, 2rem);
+  width: clamp(3rem, 10vw, 5.5rem);
+  height: clamp(2rem, 6vw, 3.7rem);
+  margin-left: clamp(-1rem, -3vw, -2rem);
   background: transparent !important;
   border: none;
   animation: logoZoomThenSlide 4s ease-in-out forwards;
@@ -56,18 +74,19 @@
 .logo-H-text {
   position: relative;
   font-family: 'Playfair Display', serif;
-  font-size: 2rem;
+  font-size: clamp(1.15rem, 4vw, 2rem);
   color: var(--headings);
-  margin-left: -0.9rem;
+  margin-left: clamp(-0.5rem, -2vw, -0.9rem);
   opacity: 0;
   animation: textReveal 4s ease-out 1.5s forwards;
   animation-delay: 3s;
   white-space: nowrap;
 }
 
+/* ── Profile Icon ── */
 .profile-icon {
-  width: 40px;
-  height: 40px;
+  width: clamp(28px, 8vw, 40px);
+  height: clamp(28px, 8vw, 40px);
   border-radius: 50%;
   background: var(--primary-accent);
   display: flex;
@@ -80,23 +99,23 @@
 
 .profile-icon:hover { transform: scale(1.1); }
 
-/* Header Right Section Container */
+/* ── Header Right Section ── */
 .header-right-section {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: clamp(0.5rem, 2vw, 0.8rem);
   flex-shrink: 0;
 }
 
-/* Login Button in Header */
+/* ── Login Button ── */
 .login-header-btn {
   background: var(--primary-accent, #E88BA3);
   color: var(--white, #FFFFFF);
   border: none;
-  padding: 0.5rem 1.2rem;
+  padding: clamp(0.3rem, 1.5vw, 0.75rem) clamp(0.8rem, 2.5vw, 1.2rem);
   border-radius: 20px;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
   cursor: pointer;
   transition: transform 0.3s ease, background 0.3s ease;
   white-space: nowrap;
@@ -107,34 +126,7 @@
   background: var(--secondary-accent, #D7A9A0);
 }
 
-/* Responsive for login button */
-@media (max-width: 767px) {
-  .login-header-btn {
-    padding: 0.4rem 1rem;
-    font-size: 0.85rem;
-  }
-  .header-right-section {
-    gap: 0.6rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .login-header-btn {
-    padding: 0.35rem 0.9rem;
-    font-size: 0.8rem;
-  }
-  .header-right-section {
-    gap: 0.5rem;
-  }
-}
-
-@media (max-width: 360px) {
-  .login-header-btn {
-    padding: 0.3rem 0.8rem;
-    font-size: 0.75rem;
-  }
-}
-
+/* ── Animations ── */
 @keyframes logoZoomThenSlide {
   0%   { transform: scale(0.2) translateX(40px); }
   60%  { transform: scale(1)   translateX(70px); }
@@ -146,62 +138,16 @@
   100% { opacity: 1; transform: translateX(0);    }
 }
 
-/* ── Responsive ── */
-@media (max-width: 991px) {
-  .app-bar {
-    top: -65px;
-    height: 56px;
-  }
-
-  .logo-H      { width: 4.8rem; height: 3.2rem; }
-  .logo-H-text { font-size: 1.75rem; }
-}
-
+/* ── Responsive (Mobile First) ── */
 @media (max-width: 767px) {
   .app-bar {
-    top: -60px;
-    height: 52px;
-    border-radius: 20px;
-    left: 0.3rem;
-    width: 96%;
+    top: clamp(-60px, -12vw, -55px);
+    height: clamp(52px, 11vh, 60px);
   }
-
-  .hamburger { font-size: 1.3rem; padding: 0.4rem; }
-
-  .logo-H      { width: 4rem; height: 2.8rem; margin-left: -1.5rem; }
-  .logo-H-text { font-size: 1.5rem; margin-left: -0.7rem; }
-
-  .profile-icon { width: 36px; height: 36px; }
 }
 
 @media (max-width: 480px) {
   .app-bar {
-    top: -55px;
-    height: 48px;
-    border-radius: 18px;
-    padding: 0 0.75rem;
-    left: 0.3rem;
-    width: 95.5%;
+    padding: 0 clamp(0.6rem, 2vw, 0.75rem);
   }
-
-  .hamburger { font-size: 1.2rem; padding: 0.35rem; }
-
-  .logo-H      { width: 3.5rem; height: 2.4rem; margin-left: -1.2rem; }
-  .logo-H-text { font-size: 1.3rem; margin-left: -0.6rem; }
-
-  .profile-icon { width: 32px; height: 32px; }
-}
-
-@media (max-width: 360px) {
-  .app-bar {
-    height: 44px;
-    border-radius: 14px;
-    padding: 0 0.6rem;
-  }
-
-  .logo-H      { width: 3rem; height: 2rem; margin-left: -1rem; }
-  .logo-H-text { font-size: 1.15rem; margin-left: -0.5rem; }
-
-  .profile-icon { width: 28px; height: 28px; }
-  .hamburger    { font-size: 1.1rem; }
 }

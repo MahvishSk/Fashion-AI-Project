@@ -6,6 +6,14 @@
   --headings: #B7688A;
 }
 
+/* ── Global Reset ── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ── Splash Screen ── */
 .splash-screen {
   position: fixed;
   top: 0;
@@ -26,24 +34,24 @@
   align-items: center;
   height: 100vh;
   width: 100%;
-  background: #FBE7E5;
-  padding: 1rem;
+  background: var(--background);
+  padding: clamp(1rem, 3vw, 1.5rem);
   box-sizing: border-box;
 }
 
 .logo {
   width: auto;
   height: auto;
-  max-width: 50%;
-  max-height: 30vh;
+  max-width: clamp(35%, 50%, 78%);
+  max-height: clamp(35vh, 40vh, 45vh);
   object-fit: contain;
   animation: zoom 2s ease-in-out infinite;
 }
 
 .particle {
   position: absolute;
-  width: 18px;
-  height: 18px;
+  width: clamp(9px, 2.5vw, 18px);
+  height: clamp(9px, 2.5vw, 18px);
   background: linear-gradient(45deg, #fff, var(--primary-accent), #fff);
   clip-path: polygon(
     50% 0%,
@@ -56,7 +64,7 @@
     40% 40%
   );
   animation: sparkle 5s infinite ease-in-out;
-  opacity: 2;
+  opacity: 0.8;
   filter: drop-shadow(0 0 6px var(--primary-accent));
 }
 
@@ -86,44 +94,17 @@
   }
 }
 
-/* ── Responsive ── */
-@media (max-width: 991px) {
-  .logo {
-    max-width: 55%;
-    max-height: 45vh;
-  }
-
-  .particle { width: 15px; height: 15px; }
-}
-
+/* ── Responsive (Mobile First) ── */
 @media (max-width: 767px) {
-  .logo {
-    max-width: 65%;
-    max-height: 40vh;
-  }
-
-  .particle { width: 13px; height: 13px; }
+  .logo-container { padding: clamp(1rem, 3vw, 1.5rem); }
+  .logo { max-width: clamp(40%, 55%, 72%); max-height: clamp(35vh, 40vh, 45vh); }
 }
 
 @media (max-width: 480px) {
-  .logo {
-    max-width: 72%;
-    max-height: 38vh;
-  }
-
-  .particle { width: 11px; height: 11px; }
+  .logo { max-width: clamp(45%, 60%, 78%); max-height: clamp(30vh, 38vh, 45vh); }
 }
 
-@media (max-width: 360px) {
-  .logo {
-    max-width: 78%;
-    max-height: 35vh;
-  }
-
-  .particle { width: 9px; height: 9px; }
-}
-
-/* Landscape phones — keep logo from being too tall */
+/* Landscape phones */
 @media (max-height: 500px) and (orientation: landscape) {
   .logo {
     max-width: 35%;

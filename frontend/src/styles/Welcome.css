@@ -12,7 +12,7 @@ body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
 .welcome-container {
@@ -21,19 +21,19 @@ body, html {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 1rem 1rem 1.5rem;
-  background: #FBE7E5;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  background: var(--background);
   box-sizing: border-box;
 }
 
 .header-wlc {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
 }
 
 .welcome-logo {
-  width: 140px;
-  height: 100px;
+  width: clamp(75px, 15vw, 140px);
+  height: auto;
   margin-bottom: -0.8rem;
   animation: none;
   max-width: 100%;
@@ -42,14 +42,14 @@ body, html {
 
 .main-heading {
   font-family: "Playfair Display", serif;
-  font-size: 2.2rem;
-  color: #B7688A;
+  font-size: clamp(1.3rem, 4vw, 2.2rem);
+  color: var(--headings);
   margin: 0.5rem;
   letter-spacing: 1px;
 }
 
 .sub-text {
-  font-size: 1.9rem;
+  font-size: clamp(0.9rem, 3vw, 1.9rem);
   color: var(--main-text);
   margin: 0;
   font-family: serif;
@@ -59,7 +59,7 @@ body, html {
   background-color: #FFFFFF;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+  padding: clamp(1.2rem, 4vw, 2rem);
   width: 100%;
   max-width: 400px;
   animation: fadeUp 0.5s ease-out;
@@ -69,7 +69,7 @@ body, html {
 .toggle-tabs {
   display: flex;
   position: relative;
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
   border-radius: 30px;
   overflow: hidden;
   border: 1px solid var(--primary-accent);
@@ -77,11 +77,11 @@ body, html {
 
 .tab {
   flex: 1;
-  padding: 0.9rem;
+  padding: clamp(0.6rem, 2vw, 0.9rem);
   background-color: transparent;
   color: var(--primary-accent);
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: clamp(0.88rem, 2.5vw, 1.1rem);
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 2;
@@ -108,10 +108,10 @@ body, html {
 
 .card-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
+  font-size: clamp(1.1rem, 3.5vw, 1.6rem);
   color: var(--headings);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: clamp(0.8rem, 2.5vw, 1rem);
   letter-spacing: 1px;
 }
 
@@ -120,75 +120,21 @@ body, html {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Responsive ── */
-@media (max-width: 991px) {
-  .main-heading { font-size: 2rem; }
-  .sub-text      { font-size: 1.3rem; }
-  .card          { max-width: 380px; }
-}
-
+/* ── Responsive (Mobile First) ── */
 @media (max-width: 767px) {
   .welcome-container {
-    padding: 1.5rem 1rem;
+    padding-top: clamp(2rem, 5vw, 2.5rem);
     justify-content: flex-start;
-    padding-top: 2.5rem;
   }
-
-  .welcome-logo {
-    width: 110px;
-    height: auto;
-  }
-
-  .main-heading {
-    font-size: 1.75rem;
-    letter-spacing: 0.5px;
-  }
-
-  .sub-text { font-size: 1.1rem; }
 
   .card {
-    padding: 1.5rem;
     max-width: 100%;
     border-radius: 10px;
   }
-
-  .tab { font-size: 1rem; padding: 0.75rem; }
-
-  .card-title { font-size: 1.4rem; }
 }
 
 @media (max-width: 480px) {
-  .welcome-container { padding-top: 2rem; }
-
-  .welcome-logo {
-    width: 90px;
-    margin-bottom: -0.4rem;
-  }
-
-  .main-heading { font-size: 1.5rem; }
-  .sub-text      { font-size: 1rem; }
-
-  .card {
-    padding: 1.2rem;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  }
-
-  .tab        { font-size: 0.95rem; padding: 0.65rem; }
-  .card-title { font-size: 1.25rem; }
-
-  .header-wlc { margin-bottom: 1.2rem; }
-}
-
-@media (max-width: 360px) {
-  .main-heading { font-size: 1.3rem; }
-  .sub-text      { font-size: 0.9rem; }
-  .welcome-logo  { width: 75px; }
-
-  .card {
-    padding: 1rem;
-    border-radius: 8px;
-  }
-
-  .tab        { font-size: 0.88rem; padding: 0.6rem; }
-  .card-title { font-size: 1.1rem; }
+  .welcome-logo { width: 90px; margin-bottom: -0.4rem; }
+  .card { padding: clamp(1rem, 3vw, 1.2rem); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); }
+  .header-wlc { margin-bottom: clamp(1rem, 3vw, 1.2rem); }
 }
