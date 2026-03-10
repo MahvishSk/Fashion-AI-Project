@@ -23,12 +23,12 @@ const OCCASIONS = [
 ];
 
 const occasionMeta = {
-  casual: { emoji: "👗", label: "Casual" },
-  party: { emoji: "🎉", label: "Party" },
-  office: { emoji: "💼", label: "Office" },
-  wedding: { emoji: "👰", label: "Wedding" },
-  festival: { emoji: "🎪", label: "Festival" },
-  "date night": { emoji: "✨", label: "Date Night" },
+  casual: { label: "Casual" },
+  party: { label: "Party" },
+  office: { label: "Office" },
+  wedding: { label: "Wedding" },
+  festival: { label: "Festival" },
+  "date night": { label: "Date Night" },
 };
 
 const Trends = () => {
