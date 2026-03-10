@@ -9,29 +9,16 @@ import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
-<<<<<<< Updated upstream
 import UserDetail from "./components/UserDetail";
 import Chatbot from "./components/Chatbot";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SavedLooks from "./components/SavedLooks";
-<<<<<<< HEAD
-=======
-import UserDetail from './components/UserDetail';
-import Chatbot from './components/Chatbot';
-import ExploreStyles from './components/ExploreStyles';
-import ProtectedRoute from './components/ProtectedRoute'; // ✅ NEW FILE
-import SavedLooks from './components/SavedLooks';
-import TrendingFashion from './components/TrendingFashion';
->>>>>>> Stashed changes
-=======
 import Trends from "./components/Trends";
->>>>>>> f0521c4f81ea313df8d9e9b56cd13790902fd7fb
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const [savedOutfits, setSavedOutfits] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -77,7 +64,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-<<<<<<< Updated upstream
 
           {/* Home */}
           <Route path="/home" element={<Home />} />
@@ -119,36 +105,11 @@ function App() {
               </ProtectedRoute>
             }
           />
-=======
-          <Route path="/category/:category" element={<ExploreStyles />} />
-          <Route path="/category/all" element={<ProtectedRoute><ExploreStyles /></ProtectedRoute> } />
-
-         
-          {/* Home - Public but shows popup after 10s */}
-          <Route path="/home" element={<Home />} />
-
-          {/* Protected Routes - Login required */}
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/chatbot" element={<ProtectedRoute><Chatbot /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-          <Route path="/user-detail" element={<ProtectedRoute><UserDetail /></ProtectedRoute>} />
-          <Route path="/explore" element={<ProtectedRoute><ExploreStyles /></ProtectedRoute>} />
-          <Route path="/trending" element={<ProtectedRoute><TrendingFashion /></ProtectedRoute>} />
-          <Route path="/saved-looks" element={<ProtectedRoute><SavedLooks /></ProtectedRoute>} />
->>>>>>> Stashed changes
 
           {/* Default Route */}
           <Route path="/" element={<Home />} />
-<<<<<<< Updated upstream
           <Route path="/saved" element={<SavedLooks />} />
-<<<<<<< HEAD
-=======
-          <Route path="/" element={<ExploreStyles savedOutfits={savedOutfits} setSavedOutfits={setSavedOutfits} />} />
-          <Route path="/saved" element={<SavedLooks savedOutfits={savedOutfits} setSavedOutfits={setSavedOutfits} />} />
->>>>>>> Stashed changes
-=======
           <Route path="/trends" element={<Trends />} />
->>>>>>> f0521c4f81ea313df8d9e9b56cd13790902fd7fb
         </Routes>
       )}
     </>

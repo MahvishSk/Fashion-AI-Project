@@ -5,19 +5,12 @@ import logo from "../assets/logo1.png";
 import icon1 from "../assets/dress.png";
 import icon2 from "../assets/trending.png";
 import icon3 from "../assets/saved.png";
-
-import casualImg from "../assets/casual.jpg";
-import partyImg from "../assets/party.jpg";
-import officeImg from "../assets/office.jpg";
-import traditionalImg from "../assets/traditional.jpg";
-
 import fashion1 from "../assets/Fashionimg1.jpg";
 import fashion2 from "../assets/Fashionimg2.jpg";
 import fashion3 from "../assets/Fashionimg3.jpg";
 import fashion4 from "../assets/Fashionimg4.jpg";
 import fashion5 from "../assets/Fashionimg5.jpg";
 import fashion6 from "../assets/Fashionimg6.jpg";
-
 import "../styles/Home.css";
 import Popup from "./Popup";
 import Header from "../components/Header";
@@ -30,11 +23,28 @@ const Home = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  
+  // ✅ ADDED: Login Popup State
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
     if (storedName) {
       setUsername(storedName);
+    }
+  }, []);
+
+  // ✅ ADDED: Show login popup after 10 seconds if not logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+    
+    if (!token || !username) {
+      const timer = setTimeout(() => {
+        setShowLoginPopup(true);
+      }, 10000); // 10 seconds
+      
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -88,10 +98,9 @@ const Home = () => {
               <p>Your Personal AI Fashion Stylist</p>
 
               <button
-                className="suggestions-btn"
-                onClick={() => navigate("/chatbot")}
-              >
-                Suggestions
+                className="stylist-btn"
+                onClick={() => navigate("/chatbot")}>
+                Your Stylist
               </button>
             </div>
           </div>
@@ -131,12 +140,73 @@ const Home = () => {
           </div>
         </section>
 
+        {/* Footer */}
+        <footer className="footer">
+          <div className="footer-content">
+            <div className="footer-logo">
+              <h3>StyleU</h3>
+              <p>Your Personal AI Fashion Stylist</p>
+            </div>
+
+            <div className="footer-links">
+              <h4>Quick Links</h4>
+              <ul>
+                <li onClick={() => navigate("/")}>Home</li>
+                <li onClick={() => navigate("/chatbot")}>Chatbot</li>
+                <li onClick={() => navigate("/profile")}>Profile</li>
+                <li onClick={() => navigate("/saved")}>Saved Looks</li>
+              </ul>
+            </div>
+
+            <div className="footer-support">
+              <h4>Support</h4>
+              <ul>
+                <li>Help</li>
+                <li>Feedback</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="footer-bottom">
+            <p>© 2026 StyleU. All rights reserved.</p>
+          </div>
+        </footer>
+
+        {/* Popup */}
         <Popup
           isMenuOpen={isMenuOpen}
           setIsMenuOpen={setIsMenuOpen}
           isProfileOpen={isProfileOpen}
           setIsProfileOpen={setIsProfileOpen}
         />
+
+        {/* ✅ Login Popup - Shows after 10 seconds */}
+        {showLoginPopup && (
+          <div className="login-popup-overlay" onClick={() => setShowLoginPopup(false)}>
+            <div className="login-popup-card" onClick={(e) => e.stopPropagation()}>
+              <h2>Welcome to StyleU!</h2>
+              <p>Login for a better personalized experience</p>
+              <div className="login-popup-buttons">
+                <button 
+                  className="login-popup-cancel"
+                  onClick={() => setShowLoginPopup(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="login-popup-login"
+                  onClick={() => {
+                    setShowLoginPopup(false);
+                    navigate('/welcome');
+                  }}
+                >
+                  Login
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

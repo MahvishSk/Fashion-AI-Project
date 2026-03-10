@@ -5,9 +5,7 @@ import '../styles/Welcome.css';
 import logo from "../assets/logo1.png";
 
 const Welcome = () => {
-  // ✅ AUTO-OPEN SIGN UP
-  // true = LEFT side active (Sign Up)
-  const [isLogin, setIsLogin] = useState(true);
+const [isLogin, setIsLogin] = useState(true);
 
   return (
     <div className="welcome-container">
@@ -20,19 +18,15 @@ const Welcome = () => {
       <div className="card">
         <div className="toggle-tabs">
 
-          {/* LEFT SIDE → SIGN UP */}
           <button
             className={`tab ${isLogin ? 'active' : ''}`}
-            onClick={() => setIsLogin(true)}
-          >
+            onClick={() => setIsLogin(true)}>
             Sign Up
           </button>
 
-          {/* RIGHT SIDE → LOGIN */}
           <button
             className={`tab ${!isLogin ? 'active' : ''}`}
-            onClick={() => setIsLogin(false)}
-          >
+            onClick={() => setIsLogin(false)}>
             Login
           </button>
 
@@ -50,5 +44,4 @@ const Welcome = () => {
     </div>
   );
 };
-
 export default Welcome;
