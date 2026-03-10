@@ -1,0 +1,397 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
+
+:root {
+  --bg: #FBE7E5;
+  --primary: #E88BA3;
+  --secondary: #D7A9A0;
+  --heading: #B7688A;
+  --text: #222222;
+  --white: #FFFFFF;
+}
+
+/* ── Page Wrapper ── */
+.contact-page {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+.contact-container {
+  padding: clamp(1rem, 3vw, 2rem) 1rem clamp(2rem, 5vw, 3rem);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── Title Section ── */
+.contact-title-section {
+  text-align: center;
+  padding: 0.1rem 0;
+  animation: fadeUp 0.8s ease-out;
+}
+
+.contact-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  color: var(--heading);
+  margin-bottom: 0.5rem;
+  margin-top: -2rem;
+  cursor: default;
+}
+
+.contact-subtitle {
+  font-size: clamp(1.3rem, 3.3vw, 1.6rem);
+  font-family: serif;
+  color: var(--text);
+  opacity: 0.8;
+  cursor: default;
+}
+
+/* ── Divider ── */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--primary), transparent);
+}
+
+.divider-icon {
+  margin: 0 15px;
+  color: var(--primary);
+  font-size: 18px;
+}
+
+/* ── Grid Layout ── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* ── Contact Card ── */
+.contact-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: clamp(0.5rem, 2vw, 1rem);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 2px solid var(--primary);
+}
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 3.5vw, 1.6rem);
+  color: var(--heading);
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+  padding-left: 0.5rem;
+  cursor: default;
+}
+
+/* ── Contact Field ── */
+.contact-field {
+  margin-bottom: 1.5rem;
+}
+
+.contact-field label {
+  display: block;
+  font-family: serif;
+  font-size: 1.2rem;
+  color: var(--heading);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* ── Dropdown Wrapper ── */
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-btn {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  border: 2px solid var(--secondary);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+.dropdown-btn:hover {
+  border-color: var(--primary);
+}
+
+.dropdown-text {
+  flex: 1;
+  text-align: left;
+}
+
+.dropdown-arrow {
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.rotate {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  font-family: 'Poppins';
+  gap: 10px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.dropdown-item small {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* ── Form ── */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.form-group label {
+  font-size: 1.1rem;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 1rem;
+  border: 2px solid var(--secondary);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 5px rgba(232, 139, 163, 0.3);
+}
+
+.submit-btn {
+  padding: 0.7rem 1rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--white);
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+  margin-bottom: 0.5rem;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(232, 139, 163, 0.4);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ── Success Message ── */
+.success-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(28, 206, 28, 0.1);
+  color: #1cca1c;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  animation: fadeUp 0.5s ease-out;
+}
+
+/* ── Help Bar ── */
+.help-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--white);
+  border-radius: 16px;
+  border: 2px solid var(--primary);
+  gap: 1rem;
+}
+
+.help-bar p {
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  color: var(--heading);
+  font-weight: 600;
+  cursor: default;
+}
+
+.help-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--white);
+  border: none;
+  border-radius: 25px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.help-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(232, 139, 163, 0.4);
+}
+
+/* ── Call Button ── */
+.call-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.call-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(232, 139, 163, 0.4);
+}
+
+/* ── Success Message ── */
+.success-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(28, 206, 28, 0.1);
+  color: #1cca1c;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  animation: fadeUp 0.5s ease-out;
+}
+
+/* ── Animation ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive (Mobile First) ── */
+@media (max-width: 991px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .help-bar {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-container {
+    padding: 1rem 1rem 2rem;
+  }
+  
+  .contact-card {
+    padding: 1.2rem;
+  }
+  
+  .dropdown-btn {
+    padding: 0.9rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    padding: 0.9rem;
+    font-size: 0.95rem;
+  }
+  
+  .submit-btn {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .help-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

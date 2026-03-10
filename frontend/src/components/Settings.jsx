@@ -27,12 +27,12 @@ const Settings = () => {
     return saved !== null ? JSON.parse(saved) : true;
   });
 
-  // Modal states - keep them always rendered but hidden
+  // Modal states
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
-  // Feedback form - keep state even when modal is closed
+  // Feedback form
   const [feedbackRating, setFeedbackRating] = useState(0);
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
@@ -63,7 +63,7 @@ const Settings = () => {
   };
 
   const handleFeedbackSubmit = (e) => {
-    e.preventDefault(); // Prevent any default behavior
+    e.preventDefault();
     alert(`Feedback Submitted!\nRating: ${feedbackRating} ⭐\nMessage: ${feedbackMessage}`);
     setFeedbackModalOpen(false);
     setFeedbackRating(0);
@@ -88,7 +88,7 @@ const Settings = () => {
         size={size}
         className={star <= count ? 'star-filled' : 'star-empty'}
         fill={star <= count ? '#E88BA3' : 'none'}
-        onClick={() => {}} // Empty onClick to prevent issues
+        onClick={() => {}}
       />
     ));
 
@@ -171,7 +171,7 @@ const Settings = () => {
               </label>
             </div>
 
-            {/* Ratings - Fixed click handler */}
+            {/* Ratings */}
             <div className="settings-row clickable" onClick={() => setRatingsOpen(!ratingsOpen)}>
               <div className="row-left">
                 <Star className="row-icon" size={20} />
@@ -216,14 +216,14 @@ const Settings = () => {
         <div className="settings-section">
           <h2 className="section-title">Support</h2>
           <div className="settings-card">
-            <div className="settings-row clickable">
+            <div className="settings-row clickable" onClick={() => navigate('/help')}>
               <div className="row-left">
                 <HelpCircle className="row-icon" size={20} />
                 <span>Help Center</span>
               </div>
               <ChevronRight className="row-arrow" size={20} />
             </div>
-            <div className="settings-row clickable">
+            <div className="settings-row clickable" onClick={() => navigate('/contact')}>
               <div className="row-left">
                 <Phone className="row-icon" size={20} />
                 <span>Contact Us</span>
@@ -261,8 +261,8 @@ const Settings = () => {
         isProfileOpen={isProfileOpen} setIsProfileOpen={setIsProfileOpen}
       />
 
-      {/* Feedback Modal - Always rendered, shown/hidden with CSS */}
-      <div className={`modal-overlay ${feedbackModalOpen ? '' : 'hidden'}`} onClick={() => setFeedbackModalOpen(false)}>
+      {/* Feedback Modal */}
+      <div className={`modal-overlay ${feedbackModalOpen ? 'show' : 'hidden'}`} onClick={() => setFeedbackModalOpen(false)}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h3>Feedback</h3>
@@ -300,8 +300,8 @@ const Settings = () => {
         </div>
       </div>
 
-      {/* Delete Modal - Always rendered */}
-      <div className={`modal-overlay ${deleteModalOpen ? '' : 'hidden'}`} onClick={() => setDeleteModalOpen(false)}>
+      {/* Delete Modal */}
+      <div className={`modal-overlay ${deleteModalOpen ? 'show' : 'hidden'}`} onClick={() => setDeleteModalOpen(false)}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h3>Delete Account</h3>
@@ -317,8 +317,8 @@ const Settings = () => {
         </div>
       </div>
 
-      {/* Logout Modal - Always rendered */}
-      <div className={`modal-overlay ${logoutModalOpen ? '' : 'hidden'}`} onClick={() => setLogoutModalOpen(false)}>
+      {/* Logout Modal */}
+      <div className={`modal-overlay ${logoutModalOpen ? 'show' : 'hidden'}`} onClick={() => setLogoutModalOpen(false)}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h3>Logout</h3>

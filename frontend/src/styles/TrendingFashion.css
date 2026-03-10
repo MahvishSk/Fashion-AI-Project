@@ -9,14 +9,15 @@
   --white: #FFFFFF;
 }
 
+/* ── Page Wrapper ── */
 .trends-page {
   font-family: 'Poppins', sans-serif;
-  padding: 10px 2rem 3rem;
+  padding: clamp(10px, 3vw, 2rem) 1rem clamp(2rem, 5vw, 3rem);
   min-height: 100vh;
   background: var(--bg);
 }
 
-/* ── TITLE ── */
+/* ── Title ── */
 .trends-title-section {
   text-align: center;
   padding: 0.5rem 0;
@@ -33,19 +34,20 @@
 
 .trends-title {
   font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
   color: var(--heading);
-  margin: 0;
+  margin-top: -2rem;
 }
 
 .trends-subtitle {
   font-family: serif;
-  font-size: 1.1rem;
+  font-size: clamp(1.2rem, 3.5vw, 1.5rem);
   color: var(--text);
   opacity: 0.7;
+  margin-bottom: 0.5rem;
 }
 
-/* ── DIVIDER ── */
+/* ── Divider ── */
 .divider {
   display: flex;
   align-items: center;
@@ -66,22 +68,23 @@
   font-size: 20px;
 }
 
-/* ── FILTER TABS ── */
+/* ── Filter Tabs ── */
 .filter-tabs {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
 .filter-tab {
-  padding: 8px 18px;
+  padding: clamp(6px, 2vw, 8px) clamp(12px, 3vw, 18px);
   border-radius: 20px;
   border: 1.5px solid var(--primary);
   background: white;
   color: var(--heading);
-  font-size: 14px;
+  font-size: clamp(12px, 2.5vw, 14px);
   font-weight: 600;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
@@ -99,16 +102,17 @@
   border-color: var(--heading);
 }
 
-/* ── COUNT ── */
+/* ── Count ── */
 .trends-count {
   text-align: center;
-  font-size: 0.95rem;
+  font-size: clamp(1.1rem, 3.5vw, 1.3rem);
   color: var(--heading);
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-weight: 500;
+  margin-top: 1.7rem;
+  margin-bottom: 1.7rem;
 }
 
-/* ── GRID ── */
+/* ── Grid ── */
 .trends-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -118,7 +122,7 @@
   padding-bottom: 2rem;
 }
 
-/* ── CARD ── */
+/* ── Card ── */
 .trend-card {
   background: #fbf9f8;
   border-radius: 22px;
@@ -136,7 +140,7 @@
 .trend-image-wrapper {
   position: relative;
   width: 100%;
-  height: 320px;
+  height: clamp(320px, 35vh, 350px);
   overflow: hidden;
   cursor: zoom-in;
 }
@@ -196,7 +200,7 @@
   transform: translateY(-2px);
 }
 
-/* ── EMPTY STATE ── */
+/* ── Empty State ── */
 .trends-empty {
   text-align: center;
   padding: 4rem 2rem;
@@ -210,13 +214,13 @@
 
 .trends-empty h3 {
   font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
+  font-size: clamp(1.5rem, 4vw, 1.8rem);
   color: var(--heading);
   margin-bottom: 0.5rem;
 }
 
 .trends-empty p {
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
   color: var(--text);
   opacity: 0.7;
   margin-bottom: 1.5rem;
@@ -231,7 +235,7 @@
   border: none;
   padding: 0.8rem 2rem;
   border-radius: 25px;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
@@ -240,7 +244,7 @@
 
 .go-chatbot-btn:hover { transform: scale(1.05); }
 
-/* ── BACK BUTTON ── */
+/* ── Back Button ── */
 .trends-back {
   text-align: center;
   margin-top: 2rem;
@@ -255,7 +259,7 @@
   border: 2px solid var(--primary);
   padding: 0.7rem 2rem;
   border-radius: 20px;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
   font-weight: 600;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
@@ -268,7 +272,7 @@
   transform: translateY(-2px);
 }
 
-/* ── MODAL ── */
+/* ── Modal ── */
 .image-modal {
   position: fixed;
   inset: 0;
@@ -307,13 +311,13 @@
   background: rgba(255,255,255,0.3);
 }
 
-/* ── ANIMATION ── */
+/* ── Animation ── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── RESPONSIVE ── */
+/* ── Responsive (Mobile First) ── */
 @media (max-width: 991px) {
   .trends-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -322,7 +326,7 @@
   .trends-page { padding: 10px 1rem 2rem; }
   .trends-title { font-size: 1.8rem; }
   .trends-grid { grid-template-columns: 1fr; max-width: 400px; }
-  .trend-image-wrapper { height: 260px; }
+  .trend-image-wrapper { height: 350px; }
   .filter-tabs { gap: 6px; }
   .filter-tab { padding: 6px 12px; font-size: 12px; }
 }

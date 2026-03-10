@@ -64,8 +64,8 @@
   color: var(--white);
   border: none;
   padding: 0.9rem 2rem;
-  border-radius: 25px;
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  border-radius: 30px;
+  font-size: clamp(1.2rem, 2.5vw, 1.1rem);
   cursor: pointer;
   animation: fadeUp 2s ease-out;
   transition: transform 0.3s;

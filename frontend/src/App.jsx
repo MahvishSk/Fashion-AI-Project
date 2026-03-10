@@ -13,8 +13,9 @@ import UserDetail from "./components/UserDetail";
 import Chatbot from "./components/Chatbot";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SavedLooks from "./components/SavedLooks";
-import Trends from "./components/Trends";
-import TrendingFashion from './components/TrendingFashion';
+import TrendingFashion from "./components/TrendingFashion";
+import HelpCenter from './components/HelpCenter';
+import ContactUs from './components/ContactUs';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -62,73 +63,22 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/help" element={<HelpCenter />} />
+          <Route path="/contact" element={<ContactUs />} />
 
           {/* Home */}
           <Route path="/home" element={<Home />} />
 
-          {/* Chatbot - Guest allowed */}
-          <Route
-            path="/chatbot"
-            element={
-              <ProtectedRoute allowGuest={true}>
-                <Chatbot />
-              </ProtectedRoute>
-            }
-          />
-
           {/* Protected Routes */}
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <Settings />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/user-detail"
-            element={
-              <ProtectedRoute>
-                <UserDetail />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Default Route */}
+          <Route path="/profile"  element={ <ProtectedRoute><Profile /></ProtectedRoute> }/>
+          <Route path="/chatbot" element={ <ProtectedRoute><Chatbot /></ProtectedRoute> }/>
+          <Route path="/settings" element={ <ProtectedRoute><Settings /></ProtectedRoute>  }/>
+          <Route path="/user-detail"  element={ <ProtectedRoute><UserDetail /></ProtectedRoute>  }/>
+          <Route path="/saved" element={ <ProtectedRoute><SavedLooks /></ProtectedRoute>} />
+          <Route path="/trending" element={ <ProtectedRoute><TrendingFashion /></ProtectedRoute>} />
+            
+            {/* Default Route */}
           <Route path="/" element={<Home />} />
-          <Route path="/saved" element={<SavedLooks />} />
-          <Route path="/trends" element={<Trends />} />
-          <Route path="/saved" element={<SavedLooks />} />
-          {/*<Route path="/category/:category" element={<ExploreStyles />} />
-          <Route path="/category/all" element={<ProtectedRoute><ExploreStyles /></ProtectedRoute> } />
-
-         
-          {/* Home - Public but shows popup after 10s */}
-          <Route path="/home" element={<Home />} />
-
-          {/* Protected Routes - Login required */}
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/chatbot" element={<ProtectedRoute><Chatbot /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-          <Route path="/user-detail" element={<ProtectedRoute><UserDetail /></ProtectedRoute>} />
-          {/*<Route path="/explore" element={<ProtectedRoute><ExploreStyles /></ProtectedRoute>} />*/}
-          <Route path="/trending" element={<ProtectedRoute><TrendingFashion /></ProtectedRoute>} />
-          <Route path="/saved-looks" element={<ProtectedRoute><SavedLooks /></ProtectedRoute>} />
-
-          {/* Default Route */}
-          <Route path="/" element={<Home />} />
-          {/*<Route path="/" element={<ExploreStyles savedOutfits={savedOutfits} setSavedOutfits={setSavedOutfits} />} />*/}
-          <Route path="/saved" element={<SavedLooks savedOutfits={savedOutfits} setSavedOutfits={setSavedOutfits} />} />
         </Routes>
       )}
     </>

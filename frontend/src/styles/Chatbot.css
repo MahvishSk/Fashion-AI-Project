@@ -1,7 +1,5 @@
-/* 1. IMPORT FONTS */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap');
 
-/* 2. CSS VARIABLES */
 :root {
   --bg-color: #FBE7E5;
   --primary-accent: #E88BA3;
@@ -12,7 +10,7 @@
   --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* 3. GLOBAL RESET */
+/* ── Global Reset ── */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
@@ -22,7 +20,7 @@ html, body {
   background-color: var(--bg-color);
 }
 
-/* 4. MAIN LAYOUT */
+/* ── Main Layout ── */
 .app-container {
   display: flex;
   height: 100vh;
@@ -30,25 +28,25 @@ html, body {
   overflow: hidden;
 }
 
-/* LOADING SCREEN */
+/* ── Loading Screen ── */
 .loading-screen {
   justify-content: center;
   align-items: center;
   background: var(--bg-color);
-  font-size: 18px;
+  font-size: clamp(16px, 4vw, 18px);
   color: var(--heading-color);
   font-family: 'Poppins', sans-serif;
 }
 
-/* 5. SIDEBAR */
+/* ── Sidebar ── */
 .sidebar {
-  width: 260px;
+  width: clamp(260px, 25vw, 280px);
   min-width: 260px;
   background: linear-gradient(135deg, var(--secondary-accent), var(--primary-accent));
   color: var(--white);
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: clamp(15px, 4vw, 20px);
 }
 
 .sidebar-header {
@@ -58,30 +56,30 @@ html, body {
 }
 
 .sidebar-logo {
-  width: 80px;
-  height: 90px;
+  width: clamp(60px, 15vw, 80px);
+  height: clamp(68px, 18vw, 90px);
   object-fit: contain;
   margin: 0;
 }
 
 .brand-name {
   font-family: 'Playfair Display', serif;
-  font-size: 28px;
+  font-size: clamp(20px, 5vw, 28px);
   font-weight: 700;
   color: #4b0018;
   margin: 0;
-  margin-left: -8px;
+  margin-left: clamp(-8px, -2vw, -8px);
 }
 
 .new-chat-btn,
 .back-btn {
   width: 100%;
-  padding: 12px;
+  padding: clamp(10px, 3vw, 12px);
   background: var(--white);
   color: var(--heading-color);
   border: none;
-  border-radius: 10px;
-  font-weight: 600;
+  border-radius: 24px;
+  font-weight: 700;
   cursor: pointer;
   transition: 0.25s;
   margin-bottom: 20px;
@@ -105,11 +103,11 @@ html, body {
   align-items: center;
   background: rgba(255,255,255,0.95);
   color: var(--heading-color);
-  padding: 10px 12px;
+  padding: clamp(8px, 2.5vw, 10px) clamp(10px, 3vw, 12px);
   border-radius: 10px;
   margin-bottom: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: clamp(12px, 3vw, 14px);
   font-weight: 500;
   transition: all 0.2s ease;
 }
@@ -139,7 +137,7 @@ html, body {
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: clamp(12px, 3vw, 14px);
   margin-left: 8px;
   transition: 0.2s;
 }
@@ -148,9 +146,7 @@ html, body {
   transform: scale(1.2);
 }
 
-/* FIX 2: profile-summary removed from sidebar — no CSS needed */
-
-/* 6. CHAT SECTION */
+/* ── Chat Section ── */
 .chat-section {
   flex: 1;
   display: flex;
@@ -161,16 +157,16 @@ html, body {
 .main-title {
   text-align: center;
   font-family: 'Playfair Display', serif;
-  font-size: 24px;
+  font-size: clamp(18px, 4vw, 24px);
   color: var(--heading-color);
-  padding: 20px;
+  padding: clamp(15px, 4vw, 20px);
   font-weight: 700;
 }
 
-/* 7. MESSAGES */
+/* ── Messages ── */
 .messages-container {
   flex: 1;
-  padding: 20px 60px;
+  padding: clamp(15px, 4vw, 20px) clamp(40px, 8vw, 60px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -180,15 +176,14 @@ html, body {
 .message {
   max-width: 65%;
   width: fit-content;
-  padding: 14px 18px;
+  padding: clamp(12px, 3vw, 14px) clamp(16px, 4vw, 18px);
   border-radius: 18px;
-  font-size: 15px;
+  font-size: clamp(14px, 3vw, 15px);
   line-height: 1.6;
   animation: fadeIn 0.3s ease;
   word-break: break-word;
 }
 
-/* FIX 3: User bubble = heading color bg, white text */
 .user {
   align-self: flex-end;
   background: var(--heading-color);
@@ -196,7 +191,6 @@ html, body {
   color: var(--white);
 }
 
-/* FIX 3: Bot bubble = white bg, heading color text */
 .bot {
   align-self: flex-start;
   background: var(--white);
@@ -204,7 +198,6 @@ html, body {
   color: var(--heading-color);
 }
 
-/* FIX 5: Remove all indent/padding from message text, align left */
 .msg-text {
   white-space: pre-line;
   margin: 0;
@@ -222,11 +215,11 @@ html, body {
   color: var(--white);
 }
 
-/* IMAGE CARD */
+/* ── Image Card ── */
 .outfit-card {
   background: white;
   border-radius: 18px;
-  padding: 14px;
+  padding: clamp(12px, 3vw, 14px);
   margin-top: 12px;
   box-shadow: 0 12px 28px rgba(194, 24, 91, 0.08);
   max-width: 420px;
@@ -247,13 +240,13 @@ html, body {
   cursor: zoom-in;
 }
 
-/* SOURCE BADGE */
+/* ── Source Badge ── */
 .source-badge {
   position: absolute;
   top: 12px;
   left: 12px;
-  padding: 6px 12px;
-  font-size: 12px;
+  padding: clamp(5px, 1.5vw, 6px) clamp(10px, 2.5vw, 12px);
+  font-size: clamp(10px, 2.5vw, 12px);
   border-radius: 20px;
   font-weight: 500;
   background: rgba(255, 255, 255, 0.85);
@@ -262,7 +255,7 @@ html, body {
   backdrop-filter: blur(6px);
 }
 
-/* ACTION BUTTONS */
+/* ── Action Buttons ── */
 .outfit-actions {
   display: flex;
   gap: 10px;
@@ -273,10 +266,10 @@ html, body {
 
 .action-btn {
   flex: 1;
-  padding: 10px 14px;
+  padding: clamp(8px, 2.5vw, 10px) clamp(12px, 3vw, 14px);
   border-radius: 12px;
   border: none;
-  font-size: 14px;
+  font-size: clamp(12px, 2.5vw, 14px);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -311,9 +304,9 @@ html, body {
   transform: translateY(-2px);
 }
 
-/* INPUT AREA */
+/* ── Input Area ── */
 .input-container {
-  padding: 20px;
+  padding: clamp(15px, 4vw, 20px);
   display: flex;
   justify-content: center;
 }
@@ -324,7 +317,7 @@ html, body {
   display: flex;
   align-items: center;
   background: var(--white);
-  padding: 12px 20px;
+  padding: clamp(10px, 3vw, 12px) clamp(16px, 4vw, 20px);
   border-radius: 25px;
   box-shadow: var(--shadow);
 }
@@ -333,7 +326,7 @@ html, body {
   flex: 1;
   border: none;
   outline: none;
-  font-size: 15px;
+  font-size: clamp(14px, 3vw, 15px);
   resize: none;
   max-height: 150px;
   overflow-y: auto;
@@ -345,7 +338,7 @@ html, body {
   background: var(--primary-accent);
   color: var(--white);
   border: none;
-  padding: 10px 20px;
+  padding: clamp(8px, 2.5vw, 10px) clamp(16px, 4vw, 20px);
   border-radius: 20px;
   cursor: pointer;
   font-weight: 600;
@@ -357,7 +350,7 @@ html, body {
   background: var(--heading-color);
 }
 
-/* FULLSCREEN IMAGE MODAL */
+/* ── Image Modal ── */
 .image-modal {
   position: fixed;
   inset: 0;
@@ -376,13 +369,13 @@ html, body {
   object-fit: contain;
 }
 
-/* ANIMATION */
+/* ── Animation ── */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* LOADING MESSAGE */
+/* ── Loading Message ── */
 .loading-message .msg-text,
 .loading-message p {
   color: var(--heading-color) !important;
@@ -391,30 +384,42 @@ html, body {
   padding: 0;
 }
 
-/* QUICK SUGGESTIONS */
-.quick-suggestions {
+/* ── Share Toggle ── */
+.share-toggle {
   display: flex;
-  gap: 10px;
-  padding: 10px 60px;
-  flex-wrap: wrap;
+  justify-content: center;
+  padding: 10px 14px 4px;
+  border-top: 1px solid #f5e0e6;
 }
 
-.quick-suggestions button {
-  background: white;
-  border: 1px solid #e88ba3;
-  padding: 8px 14px;
-  border-radius: 20px;
+.share-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
-  font-size: 14px;
-  transition: 0.2s;
+  font-size: clamp(12px, 2.5vw, 14px);
+  color: var(--heading-color);
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(232, 139, 163, 0.1);
+  padding: clamp(6px, 2vw, 8px) clamp(14px, 3vw, 18px);
+  border-radius: 20px;
+  border: 1.5px solid var(--primary-accent);
+  transition: all 0.2s ease;
 }
 
-.quick-suggestions button:hover {
-  background: #e88ba3;
-  color: white;
+.share-label:hover {
+  background: rgba(232, 139, 163, 0.2);
 }
 
-/* RESPONSIVE */
+.share-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--heading-color);
+  cursor: pointer;
+}
+
+/* ── Responsive (Mobile First) ── */
 @media (max-width: 900px) {
   .app-container { flex-direction: column; }
 

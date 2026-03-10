@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { Trash, Download } from 'lucide-react';
 import Header from "./Header";
 import Popup from "./Popup";
 import "../styles/SavedLooks.css";
@@ -82,7 +83,7 @@ const SavedLooks = () => {
 
         <div className="saved-page">
           <div className="saved-title-section">
-            <h1 className="saved-title">❤️ My Saved Looks</h1>
+            <h1 className="saved-title">My Saved Looks</h1>
             <p className="saved-subtitle">
               Your personal collection of AI styled outfits
             </p>
@@ -115,8 +116,8 @@ const SavedLooks = () => {
           {!loading && savedOutfits.length > 0 && (
             <>
               <p className="saved-count">
-                {savedOutfits.length} outfit{savedOutfits.length > 1 ? "s" : ""}{" "}
-                saved
+                {savedOutfits.length} Outfit{savedOutfits.length > 1 ? "s" : ""}{" "}
+                Saved
               </p>
 
               <div className="saved-grid">
@@ -138,13 +139,13 @@ const SavedLooks = () => {
                         className="saved-action-btn download-btn"
                         onClick={() => downloadOutfit(outfit.imageUrl)}
                       >
-                        ⬇️ Download
+                       <Download size={16} /> Download
                       </button>
                       <button
                         className="saved-action-btn remove-btn"
                         onClick={() => removeFavourite(outfit.id)}
                       >
-                        🗑 Remove
+                         <Trash size={16} color="#dc3545" /> Remove
                       </button>
                     </div>
                   </div>

@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  collection,
-  query,
-  where,
-  onSnapshot,
-  orderBy,
-} from "firebase/firestore";
+import { collection, query, where, onSnapshot, orderBy, } from "firebase/firestore";
 import { db } from "../firebase";
-import { TrendingUp, Sparkles, ArrowLeft, X } from "lucide-react";
+import { Sparkles, ArrowLeft, X } from "lucide-react";
 import Header from "./Header";
 import Popup from "./Popup";
-import "../styles/Trends.css";
+import "../styles/TrendingFashion.css";
 
 const OCCASIONS = [
   "casual",
@@ -81,7 +75,6 @@ const Trends = () => {
         {/* PAGE TITLE */}
         <div className="trends-title-section">
           <div className="trends-title-row">
-            <TrendingUp size={32} color="#B7688A" />
             <h1 className="trends-title">Trending Fashion</h1>
           </div>
           <p className="trends-subtitle">
@@ -138,9 +131,7 @@ const Trends = () => {
         {!loading && filtered.length > 0 && (
           <>
             <p className="trends-count">
-              {filtered.length} look{filtered.length > 1 ? "s" : ""} shared by
-              the community
-            </p>
+              {filtered.length} Trending{filtered.length > 1 ? "s" : ""} Looks from the Community</p>
 
             <div className="trends-grid">
               {filtered.map((outfit) => (

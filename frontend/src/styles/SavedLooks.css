@@ -28,14 +28,17 @@
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   color: var(--heading);
-  margin-bottom: 0.3rem;
+  margin-top: -1rem;
+  margin-bottom: 0.7rem;
 }
 
 .saved-subtitle {
   font-family: serif;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  text-align: center;
   color: var(--text);
   opacity: 0.7;
+  margin-bottom: 0.8rem;
 }
 
 /* ── DIVIDER ── */
@@ -62,10 +65,11 @@
 /* ── SAVED COUNT ── */
 .saved-count {
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: var(--heading);
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-weight: 500;
+  margin-top: 1.5rem;
+  margin-bottom: 1.7rem;
 }
 
 /* ── OUTFITS GRID ── */
@@ -121,6 +125,10 @@
 }
 
 .saved-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;  /* Space between icon and text */
   flex: 1;
   padding: 10px 12px;
   border-radius: 12px;
@@ -134,7 +142,7 @@
 
 /* DOWNLOAD — PINK THEME */
 .download-btn {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: linear-gradient(135deg, var(--primary), var(--secondary));  
   color: white;
   border: none;
 }
