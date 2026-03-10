@@ -477,3 +477,24 @@ html, body {
   accent-color: var(--heading-color);
   cursor: pointer;
 }
+
+/* ── STYLING TIPS INSIDE OUTFIT CARD ── */
+.styling-tips {
+  padding: 12px 14px 8px;
+  border-top: 1px solid #f5e0e6;
+}
+
+.tips-title {
+  font-weight: 700;
+  color: var(--heading-color);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.tip-item {
+  font-size: 13px;
+  color: var(--text-color);
+  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+}
