@@ -49,7 +49,7 @@ const FAQS = [
     ],
   },
   {
-    category: "Explore & Trending Styles",
+    category: "Trending Fashion",
     questions: [
       {
         q: "What are Trending Looks?",

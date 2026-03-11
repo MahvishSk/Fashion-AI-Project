@@ -139,13 +139,13 @@ const SavedLooks = () => {
                         className="saved-action-btn download-btn"
                         onClick={() => downloadOutfit(outfit.imageUrl)}
                       >
-                       <Download size={16} /> Download
+                        ⬇️ Download
                       </button>
                       <button
                         className="saved-action-btn remove-btn"
                         onClick={() => removeFavourite(outfit.id)}
                       >
-                         <Trash size={16} color="#dc3545" /> Remove
+                          🗑 Remove
                       </button>
                     </div>
                   </div>

@@ -4,7 +4,7 @@ import Signup from './Signup';
 import '../styles/Welcome.css';
 import logo from "../assets/logo1.png";
 
-const Welcome = () => {
+const Welcome = ({ onLoginSuccess }) => {
 const [isLogin, setIsLogin] = useState(true);
 
   return (
@@ -39,7 +39,7 @@ const [isLogin, setIsLogin] = useState(true);
         </h3>
 
         {/* COMPONENTS */}
-        {isLogin ? <Signup /> : <Login />}
+        {isLogin ? <Signup onLoginSuccess={onLoginSuccess} /> : <Login onLoginSuccess={onLoginSuccess} />}
       </div>
     </div>
   );

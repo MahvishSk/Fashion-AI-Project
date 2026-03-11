@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
-import { Trash, Download } from 'lucide-react';
 import "../styles/Chatbot.css";
 import logo from "../assets/logo1.png";
 
@@ -465,7 +464,7 @@ const Chatbot = () => {
                 className="delete-chat"
                 onClick={() => deleteChat(chat.id)}
               >
-                <Trash size={16} color="#dc3545" />
+                🗑
               </button>
             </div>
           ))}
@@ -548,7 +547,7 @@ const Chatbot = () => {
                       className="action-btn download-btn"
                       onClick={() => downloadOutfit(msg.imageUrl)}
                     >
-                      <Download size={16} /> Download
+                      ⬇️ Download
                     </button>
                   </div>
                 </div>

@@ -42,7 +42,7 @@ const fashionTips = [
   "A red lip or bold earrings can turn a simple outfit into a statement.",
 ];
 
-const Home = () => {
+const Home = ({ onLogout }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User");
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -163,7 +163,7 @@ const Home = () => {
         {/* Fashion Tip — random on every load */}
         <section className="tips-section">
           <div className="tip-card">
-            <h3>Fashion Tip of the Day :</h3>
+            <h3>Fashion Tip for You :</h3>
             <p>{todayTip}</p>
           </div>
         </section>
@@ -189,8 +189,8 @@ const Home = () => {
             <div className="footer-support">
               <h4>Support</h4>
               <ul>
-                <li>Help</li>
-                <li>Feedback</li>
+                 <li onClick={() => navigate("/help")}>Help</li>
+                 <li onClick={() => navigate("/contact")}>Contact Us</li>
               </ul>
             </div>
           </div>

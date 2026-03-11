@@ -37,7 +37,7 @@ body.theme-dark {
    ═══════════════════════════════════════ */
 
 /* Page containers */
-body.theme-dark .home-container,
+body.theme-dark .home-container { color: var(--primary); }
 body.theme-dark .profile-page,
 body.theme-dark .settings-page {
   background-color: var(--bg);

@@ -6,7 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import ForgotPassword from "./ForgotPassword";
 import "../styles/Login.css";
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [showForgot, setShowForgot] = useState(false);
@@ -25,16 +25,24 @@ const Login = () => {
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);
-       const name = userCredential.user.displayName || formData.password.split(/[@#$*&]/)[0]; // Fallback to email prefix
-        localStorage.setItem('username', name); // Store username
+         const name = userCredential.user.displayName || formData.password.split(/[@#$*&]/)[0]; // Fallback to email prefix
+         localStorage.setItem('username', name); // Store username
          // ✅ Store BOTH username AND token
       localStorage.setItem('username', name);
-      localStorage.setItem('token', userCredential.user.accessToken || 'firebase-token'); // ADD THIS LINE
-      
-      // Dispatch event
-      window.dispatchEvent(new Event('userLoggedIn'));
-      
-        navigate('/home'); // Navigate to home
+     // localStorage.setItem('token', userCredential.user.accessToken || 'firebase-token');  ADD THIS LINE
+        const userData = {
+          username: name,
+          token: userCredential.user.accessToken || 'firebase-token'
+        };
+
+        if (onLoginSuccess) {
+          onLoginSuccess(userData);
+        } else {
+          localStorage.setItem('username', userData.username);
+          localStorage.setItem('token', userData.token);
+          window.dispatchEvent(new Event('userLoggedIn'));
+          navigate('/home');
+        }
       }, 1000);
     } catch (err) {
       setError("Invalid credentials");

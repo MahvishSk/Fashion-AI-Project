@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getStorage } from 'firebase/storage';
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBiLXgrGx2vCUZTkoK1yAMMox9HwyGz9Yk",
@@ -14,6 +14,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+// ✅ Enable persistent auth (saves login across reloads)
+const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence)
+  .then(() => console.log("Auth persistence enabled"))
+  .catch((error) => console.error("Auth persistence error:", error));
+
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export { app, auth };

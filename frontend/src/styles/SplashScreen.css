@@ -26,6 +26,8 @@
   justify-content: center;
   overflow: hidden;
   font-family: 'Poppins', sans-serif;
+  z-index: 9999; /* ✅ CRITICAL: Ensures splash shows FIRST */
+  animation: fadeIn 0.3s ease-out; /* ✅ CRITICAL: Smooth entry */
 }
 
 .logo-container {
@@ -34,7 +36,7 @@
   align-items: center;
   height: 100vh;
   width: 100%;
-  background: var(--background);
+  /* ✅ REMOVED: background: var(--background); (Redundant) */
   padding: clamp(1rem, 3vw, 1.5rem);
   box-sizing: border-box;
 }
@@ -92,6 +94,12 @@
     transform: scale(0.3) rotate(360deg);
     opacity: 0.2;
   }
+}
+
+/* ✅ ADDED: FadeIn Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ── Responsive (Mobile First) ── */

@@ -87,7 +87,7 @@ const PromoPopup = ({ forceShow = false, allowGuest = false, onClose }) => {
               Cancel
             </button>
             <button className="promo-popup-btn promo-popup-login" onClick={handleLogin}>
-              Login
+              Signup/Login
             </button>
           </div>
         </div>

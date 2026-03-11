@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // ADD THIS
 import logo from "../assets/logo1.png";
 import '../styles//Header.css';
 
 const Header = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) => {
+  const navigate = useNavigate(); // ADD THIS
+  
   // Check for BOTH token AND username
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return !!(localStorage.getItem("token") && localStorage.getItem("username"));
@@ -16,16 +19,18 @@ const Header = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) 
 
     checkLoginStatus();
     window.addEventListener('userLoggedIn', checkLoginStatus);
+    window.addEventListener('userLoggedOut', checkLoginStatus);
     window.addEventListener('storage', checkLoginStatus);
 
     return () => {
       window.removeEventListener('userLoggedIn', checkLoginStatus);
+      window.removeEventListener('userLoggedOut', checkLoginStatus);
       window.removeEventListener('storage', checkLoginStatus);
     };
   }, []);
 
   const handleLoginClick = () => {
-    window.location.href = '/welcome';
+    navigate('/welcome'); // CHANGE THIS - use navigate instead of window.location
   };
 
   return (

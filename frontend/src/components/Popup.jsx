@@ -38,7 +38,7 @@ const Popup = ({ isMenuOpen, setIsMenuOpen, isProfileOpen, setIsProfileOpen }) =
     { icon: Home, label: 'Home', path: '/home', key: 'home' },
     { icon: User, label: 'Profile', path: '/profile', key: 'profile' },
     { icon: Bot, label: 'AI Stylist', path: '/chatbot', key: 'chatbot' },
-    { icon: TrendingUp, label: 'Trending Fashion', path: '/trending', key: 'trending' },
+    { icon: TrendingUp, label: 'Trending Fashion', path: '/trends', key: 'trends' },
     { icon: Bookmark, label: 'Saved Looks', path: '/saved', key: 'saved' },
     { icon: Settings, label: 'Settings', path: '/settings', key: 'settings' },
   ];

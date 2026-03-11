@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  User, Sun, Moon, Bell, Star, MessageSquare,
+  User, Sun, Moon, Star, MessageSquare,
   HelpCircle, Phone, Trash2, LogOut, ChevronRight, X
 } from 'lucide-react';
 import Header from './Header';
@@ -20,12 +20,6 @@ const Settings = () => {
   // Dropdown open/close
   const [personalDetailsOpen, setPersonalDetailsOpen] = useState(false);
   const [ratingsOpen, setRatingsOpen] = useState(false);
-
-  // NOTIFICATIONS STATE
-  const [notifications, setNotifications] = useState(() => {
-    const saved = localStorage.getItem('notifications');
-    return saved !== null ? JSON.parse(saved) : true;
-  });
 
   // Modal states
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
@@ -50,12 +44,7 @@ const Settings = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  const handleNotificationToggle = () => {
-    const newValue = !notifications;
-    setNotifications(newValue);
-    localStorage.setItem('notifications', JSON.stringify(newValue));
-    alert(newValue ? 'Notifications enabled!' : 'Notifications disabled!');
-  };
+  // ✅ REMOVED: Notification toggle (no longer needed)
 
   const handleRatingSelect = (rating) => {
     setSelectedRating(rating);
@@ -64,10 +53,31 @@ const Settings = () => {
 
   const handleFeedbackSubmit = (e) => {
     e.preventDefault();
-    alert(`Feedback Submitted!\nRating: ${feedbackRating} ⭐\nMessage: ${feedbackMessage}`);
+
+    // ✅ Send email to admin
+    const adminEmail = "aymankhann777@gmail.com";
+    const subject = `Feedback from ${username}`;
+    const body = `Name: ${username}\nRating: ${feedbackRating} ⭐\nMessage:\n${feedbackMessage}`;
+    const mailtoLink = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    window.location.href = mailtoLink;
+
     setFeedbackModalOpen(false);
     setFeedbackRating(0);
     setFeedbackMessage('');
+  };
+
+  const handleRatingSubmit = (rating) => {
+    // ✅ Send email to admin
+    const adminEmail = "aymankhann777@gmail.com";
+    const subject = `Rating from ${username}`;
+    const body = `Name: ${username}\nRating: ${rating} ⭐`;
+    const mailtoLink = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    window.location.href = mailtoLink;
+
+    setSelectedRating(rating);
+    setRatingsOpen(false);
   };
 
   const handleDeleteAccount = () => {
@@ -155,22 +165,6 @@ const Settings = () => {
               </div>
             </div>
 
-            {/* Notifications Toggle */}
-            <div className="settings-row">
-              <div className="row-left">
-                <Bell className="row-icon" size={20} />
-                <span>Notifications</span>
-              </div>
-              <label className="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={notifications}
-                  onChange={handleNotificationToggle}
-                />
-                <span className="toggle-slider" />
-              </label>
-            </div>
-
             {/* Ratings */}
             <div className="settings-row clickable" onClick={() => setRatingsOpen(!ratingsOpen)}>
               <div className="row-left">
@@ -190,7 +184,7 @@ const Settings = () => {
                     className="dropdown-item rating-item" 
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleRatingSelect(rating);
+                      handleRatingSubmit(rating); // ✅ Changed to send email
                     }}
                   >
                     {renderStars(rating, 16)}
