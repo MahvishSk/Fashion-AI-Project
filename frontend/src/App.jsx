@@ -14,7 +14,7 @@ import Chatbot from "./components/Chatbot";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SavedLooks from "./components/SavedLooks";
 import Trends from "./components/Trends";
-import HelpCenter from "./components/HelpCenter"; 
+import HelpCenter from "./components/HelpCenter";
 import ContactUs from "./components/ContactUs";
 
 function App() {
@@ -25,7 +25,9 @@ function App() {
 
   // Check if user is logged in
   const isAuthenticated = () => {
-    return !!(localStorage.getItem("token") && localStorage.getItem("username"));
+    return !!(
+      localStorage.getItem("token") && localStorage.getItem("username")
+    );
   };
 
   useEffect(() => {
@@ -46,7 +48,7 @@ function App() {
     const currentPath = location.pathname;
 
     // Don't redirect if already on auth pages
-    const authPages = ['/welcome', '/login', '/signup', '/forgot-password'];
+    const authPages = ["/welcome", "/login", "/signup", "/forgot-password"];
     const isOnAuthPage = authPages.includes(currentPath);
 
     if (auth) {
@@ -85,9 +87,18 @@ function App() {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/welcome" element={<Welcome onLoginSuccess={handleLoginSuccess} />}/>
-      <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
-      <Route path="/signup" element={<Signup onLoginSuccess={handleLoginSuccess} />} />
+      <Route
+        path="/welcome"
+        element={<Welcome onLoginSuccess={handleLoginSuccess} />}
+      />
+      <Route
+        path="/login"
+        element={<Login onLoginSuccess={handleLoginSuccess} />}
+      />
+      <Route
+        path="/signup"
+        element={<Signup onLoginSuccess={handleLoginSuccess} />}
+      />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/help" element={<HelpCenter />} />
       <Route path="/contact" element={<ContactUs />} />
@@ -96,17 +107,59 @@ function App() {
       <Route path="/home" element={<Home onLogout={handleLogout} />} />
       <Route path="/" element={<Home onLogout={handleLogout} />} />
 
-          {/* Protected Routes */}
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/chatbot" element={<ProtectedRoute><Chatbot /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-          <Route path="/user-detail" element={<ProtectedRoute><UserDetail /></ProtectedRoute>} />
-          <Route path="/saved" element={<ProtectedRoute><SavedLooks /></ProtectedRoute>} />
-          <Route path="/trending" element={<ProtectedRoute><Trends /></ProtectedRoute>} />
+      {/* Protected Routes */}
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/chatbot"
+        element={
+          <ProtectedRoute>
+            <Chatbot />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user-detail"
+        element={
+          <ProtectedRoute>
+            <UserDetail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/saved"
+        element={
+          <ProtectedRoute>
+            <SavedLooks />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/trends"
+        element={
+          <ProtectedRoute>
+            <Trends />
+          </ProtectedRoute>
+        }
+      />
 
-          {/* Default Route */}
-          <Route path="/" element={<SplashScreen />} />
-        </Routes>
+      {/* Default Route */}
+      <Route path="/" element={<SplashScreen />} />
+    </Routes>
   );
 }
 

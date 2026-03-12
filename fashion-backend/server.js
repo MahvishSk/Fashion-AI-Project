@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/.env" });
 
 const express = require("express");
 const cors = require("cors");
@@ -7,7 +7,7 @@ const OpenAI = require("openai");
 const cloudinary = require("./cloudinary");
 const { db } = require("./firebaseAdmin");
 
-console.log("Loaded Key:", process.env.OPENAI_API_KEY);
+console.log("OpenAI API key loaded:", !!process.env.OPENAI_API_KEY);
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
