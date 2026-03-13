@@ -1,6 +1,6 @@
 {
   "name": "StyleU",
-  "short_name": "SU",
+  "short_name": "StyleU",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#d7a9a",
-  "background_color": "#d7a9a",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "display": "standalone"
 }

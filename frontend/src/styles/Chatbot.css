@@ -40,31 +40,35 @@ html, body {
 
 /* ── Sidebar ── */
 .sidebar {
-  width: clamp(260px, 25vw, 280px);
-  min-width: 260px;
+  width: clamp(220px, 25vw, 280px);
+  min-width: 220px;
   background: linear-gradient(135deg, var(--secondary-accent), var(--primary-accent));
   color: var(--white);
   display: flex;
   flex-direction: column;
   padding: clamp(15px, 4vw, 20px);
+  transition: transform 0.3s ease;
+  z-index: 100;
+  overflow-y: auto;
 }
 
 .sidebar-header {
   display: flex;
   align-items: center;
   padding: 0;
+  margin-bottom: 12px;
 }
 
 .sidebar-logo {
-  width: clamp(60px, 15vw, 80px);
-  height: clamp(68px, 18vw, 90px);
+  width: clamp(50px, 12vw, 80px);
+  height: clamp(56px, 14vw, 90px);
   object-fit: contain;
   margin: 0;
 }
 
 .brand-name {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(20px, 5vw, 28px);
+  font-size: clamp(18px, 4vw, 28px);
   font-weight: 700;
   color: #4b0018;
   margin: 0;
@@ -82,7 +86,7 @@ html, body {
   font-weight: 700;
   cursor: pointer;
   transition: 0.25s;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .new-chat-btn:hover,
@@ -152,21 +156,22 @@ html, body {
   display: flex;
   flex-direction: column;
   background: var(--bg-color);
+  min-width: 0;
 }
 
 .main-title {
   text-align: center;
   font-family: 'Playfair Display', serif;
-  font-size: clamp(18px, 4vw, 24px);
+  font-size: clamp(16px, 3.5vw, 24px);
   color: var(--heading-color);
-  padding: clamp(15px, 4vw, 20px);
+  padding: clamp(12px, 3vw, 20px);
   font-weight: 700;
 }
 
 /* ── Messages ── */
 .messages-container {
   flex: 1;
-  padding: clamp(15px, 4vw, 20px) clamp(40px, 8vw, 60px);
+  padding: clamp(15px, 4vw, 20px) clamp(20px, 6vw, 60px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -207,13 +212,8 @@ html, body {
   text-align: left;
 }
 
-.message.bot .msg-text {
-  color: var(--heading-color);
-}
-
-.message.user .msg-text {
-  color: var(--white);
-}
+.message.bot .msg-text { color: var(--heading-color); }
+.message.user .msg-text { color: var(--white); }
 
 /* ── Image Card ── */
 .outfit-card {
@@ -282,10 +282,7 @@ html, body {
   border: 1.5px solid #f5c0ce;
 }
 
-.favourite-btn:hover {
-  background: #ffe0ea;
-  transform: translateY(-2px);
-}
+.favourite-btn:hover { background: #ffe0ea; transform: translateY(-2px); }
 
 .favourite-btn.active {
   background: #fce4ec;
@@ -299,14 +296,11 @@ html, body {
   border: 1.5px solid #bbdefb;
 }
 
-.download-btn:hover {
-  background: #e3f2fd;
-  transform: translateY(-2px);
-}
+.download-btn:hover { background: #e3f2fd; transform: translateY(-2px); }
 
 /* ── Input Area ── */
 .input-container {
-  padding: clamp(15px, 4vw, 20px);
+  padding: clamp(12px, 3vw, 20px);
   display: flex;
   justify-content: center;
 }
@@ -344,11 +338,10 @@ html, body {
   font-weight: 600;
   margin-left: 10px;
   transition: 0.25s;
+  white-space: nowrap;
 }
 
-.input-wrapper button:hover {
-  background: var(--heading-color);
-}
+.input-wrapper button:hover { background: var(--heading-color); }
 
 /* ── Image Modal ── */
 .image-modal {
@@ -372,7 +365,7 @@ html, body {
 /* ── Animation ── */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Loading Message ── */
@@ -408,9 +401,7 @@ html, body {
   transition: all 0.2s ease;
 }
 
-.share-label:hover {
-  background: rgba(232, 139, 163, 0.2);
-}
+.share-label:hover { background: rgba(232, 139, 163, 0.2); }
 
 .share-checkbox {
   width: 16px;
@@ -419,71 +410,7 @@ html, body {
   cursor: pointer;
 }
 
-/* ── Responsive (Mobile First) ── */
-@media (max-width: 900px) {
-  .app-container { flex-direction: column; }
-
-  .sidebar {
-    width: 100%;
-    min-width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .messages-container { padding: 15px 20px; }
-  .message { max-width: 80%; }
-  .outfit-card { max-width: 100%; }
-}
-
-@media (max-width: 600px) {
-  .messages-container { padding: 10px 15px; }
-
-  .message {
-    max-width: 85%;
-    font-size: 14px;
-  }
-
-  .input-wrapper { width: 95%; }
-  .outfit-card { max-width: 100%; }
-}
-
-/* ── SHARE TO TRENDING CHECKBOX ── */
-.share-toggle {
-  display: flex;
-  justify-content: center;
-  padding: 10px 14px 4px;
-  border-top: 1px solid #f5e0e6;
-}
-
-.share-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--heading-color);
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  background: rgba(232, 139, 163, 0.1);
-  padding: 8px 18px;
-  border-radius: 20px;
-  border: 1.5px solid var(--primary-accent);
-  transition: all 0.2s ease;
-}
-
-.share-label:hover {
-  background: rgba(232, 139, 163, 0.2);
-}
-
-.share-checkbox {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--heading-color);
-  cursor: pointer;
-}
-
-/* ── STYLING TIPS INSIDE OUTFIT CARD ── */
+/* ── Styling Tips ── */
 .styling-tips {
   padding: 12px 14px 8px;
   border-top: 1px solid #f5e0e6;
@@ -502,4 +429,153 @@ html, body {
   line-height: 1.7;
   margin: 0;
   padding: 0;
+}
+
+/* ── Hamburger Button (mobile only) ── */
+.sidebar-toggle {
+  display: none;
+  background: transparent;
+  color: var(--heading-color);
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* ── Mobile top bar (hamburger + title) ── */
+.mobile-topbar {
+  display: none;
+}
+
+/* ── Sidebar overlay (mobile) ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 99;
+}
+
+.sidebar-overlay.open { display: block; }
+
+/* ════════════════════════════════════════
+   TABLET  (≤ 900px)
+════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+  }
+
+  .messages-container {
+    padding: 15px 20px;
+  }
+
+  .message { max-width: 75%; }
+  .outfit-card { max-width: 100%; }
+}
+
+/* ════════════════════════════════════════
+   MOBILE  (≤ 640px)
+════════════════════════════════════════ */
+@media (max-width: 640px) {
+
+  /* Sidebar becomes off-canvas drawer */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 78vw;
+    max-width: 300px;
+    min-width: unset;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    flex-direction: column;   /* restore column layout */
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Show mobile topbar */
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--bg-color);
+    border-bottom: 1px solid rgba(183, 104, 138, 0.15);
+    flex-shrink: 0;
+  }
+
+  .sidebar-toggle { display: block; }
+
+  .chat-section {
+    width: 100%;
+    padding-top: 0;
+  }
+
+  /* Hide standalone title — it lives in topbar on mobile */
+  .main-title { display: none; }
+
+  /* Title inside topbar */
+  .mobile-topbar .main-title {
+    display: block;
+    font-size: 14px;
+    padding: 0;
+    text-align: left;
+    flex: 1;
+  }
+
+  .messages-container {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .message {
+    max-width: 88%;
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  /* Outfit card full width */
+  .outfit-card {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  /* Action buttons stack on very small screens */
+  .outfit-actions {
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    min-width: 120px;
+  }
+
+  /* Input area */
+  .input-container { padding: 8px 10px; }
+  .input-wrapper {
+    width: 100%;
+    padding: 8px 12px;
+  }
+
+  /* Modal full screen */
+  .image-modal img {
+    max-width: 95vw;
+    max-height: 85vh;
+  }
+}
+
+/* ════════════════════════════════════════
+   VERY SMALL  (≤ 380px)
+════════════════════════════════════════ */
+@media (max-width: 380px) {
+  .message { max-width: 95%; }
+  .outfit-actions { flex-direction: column; }
+  .action-btn { width: 100%; }
 }

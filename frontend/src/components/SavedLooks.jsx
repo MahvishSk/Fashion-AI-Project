@@ -7,6 +7,7 @@ import Header from "./Header";
 import Popup from "./Popup";
 import "../styles/SavedLooks.css";
 
+
 const SavedLooks = () => {
   const navigate = useNavigate();
   const [savedOutfits, setSavedOutfits] = useState([]);
@@ -139,13 +140,13 @@ const SavedLooks = () => {
                         className="saved-action-btn download-btn"
                         onClick={() => downloadOutfit(outfit.imageUrl)}
                       >
-                        ⬇️ Download
+                        <Download size={16} /> Download
                       </button>
                       <button
                         className="saved-action-btn remove-btn"
                         onClick={() => removeFavourite(outfit.id)}
                       >
-                          🗑 Remove
+                        <Trash size={16} color="#dc3545" /> Remove
                       </button>
                     </div>
                   </div>

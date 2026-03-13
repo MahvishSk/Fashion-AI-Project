@@ -4,6 +4,7 @@ import { auth, db } from "../firebase";
 import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import "../styles/Chatbot.css";
 import logo from "../assets/logo1.png";
+import { Trash, Download } from 'lucide-react';
 
 const MAX_CHATS = 9;
 
@@ -112,12 +113,13 @@ const Chatbot = () => {
   const [chats, setChats] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
   const [input, setInput] = useState("");
-  const [loadingState, setLoadingState] = useState("idle"); // ← single state, no conflicts
+  const [loadingState, setLoadingState] = useState("idle");
   const [selectedImage, setSelectedImage] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [favourites, setFavourites] = useState({});
   const [isPublic, setIsPublic] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // ← NEW
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -349,7 +351,6 @@ const Chatbot = () => {
     updateMessages(updatedMessages);
     setInput("");
 
-    // default loader for normal chat
     setLoadingState("typing");
 
     try {
@@ -375,7 +376,6 @@ const Chatbot = () => {
 
       const data = await response.json();
 
-      // switch loader if outfit generation starts
       if (data.type === "outfit") {
         setLoadingState("outfit");
 
@@ -441,13 +441,24 @@ const Chatbot = () => {
 
   return (
     <div className="app-container">
-      <div className="sidebar">
+
+      {/* ── Overlay — closes sidebar when tapped outside ── */}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? "open" : ""}`}
+        onClick={() => setSidebarOpen(false)}
+      />
+
+      {/* ── Sidebar ── */}
+      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <img src={logo} alt="StyleU Logo" className="sidebar-logo" />
           <h2 className="brand-name">StyleU</h2>
         </div>
 
-        <button className="new-chat-btn" onClick={createNewChat}>
+        <button
+          className="new-chat-btn"
+          onClick={() => { createNewChat(); setSidebarOpen(false); }}
+        >
           + New Chat
         </button>
 
@@ -457,14 +468,14 @@ const Chatbot = () => {
               key={chat.id}
               className={`chat-item ${chat.id === currentChatId ? "active" : ""}`}
             >
-              <span onClick={() => setCurrentChatId(chat.id)}>
+              <span onClick={() => { setCurrentChatId(chat.id); setSidebarOpen(false); }}>
                 {chat.title}
               </span>
               <button
                 className="delete-chat"
                 onClick={() => deleteChat(chat.id)}
               >
-                🗑
+                 <Trash size={16} color="#dc3545" />
               </button>
             </div>
           ))}
@@ -475,7 +486,18 @@ const Chatbot = () => {
         </button>
       </div>
 
+      {/* ── Chat Section ── */}
       <div className="chat-section">
+
+        {/* Mobile: hamburger + title in one bar */}
+        <div className="mobile-topbar">
+          <button className="sidebar-toggle" onClick={() => setSidebarOpen(true)}>
+            ☰
+          </button>
+          <div className="main-title">StyleU – Your Personal AI Fashion Stylist</div>
+        </div>
+
+        {/* Desktop: title only */}
         <div className="main-title">
           StyleU – Your Personal AI Fashion Stylist
         </div>
@@ -547,7 +569,7 @@ const Chatbot = () => {
                       className="action-btn download-btn"
                       onClick={() => downloadOutfit(msg.imageUrl)}
                     >
-                      ⬇️ Download
+                      <Download size={16} /> Download
                     </button>
                   </div>
                 </div>
