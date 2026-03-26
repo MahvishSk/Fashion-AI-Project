@@ -146,9 +146,7 @@ html, body {
   transition: 0.2s;
 }
 
-.delete-chat:hover {
-  transform: scale(1.2);
-}
+.delete-chat:hover { transform: scale(1.2); }
 
 /* ── Chat Section ── */
 .chat-section {
@@ -294,6 +292,10 @@ html, body {
   background: #f0f7ff;
   color: #1565c0;
   border: 1.5px solid #bbdefb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .download-btn:hover { background: #e3f2fd; transform: translateY(-2px); }
@@ -362,20 +364,63 @@ html, body {
   object-fit: contain;
 }
 
-/* ── Animation ── */
+/* ── Animations ── */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Loading Message ── */
-.loading-message .msg-text,
-.loading-message p {
-  color: var(--heading-color) !important;
-  font-style: italic;
-  margin: 0;
-  padding: 0;
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
 }
+
+@keyframes fadePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ─────────────────────────────────────────
+   TYPING / LOADING BUBBLE
+───────────────────────────────────────── */
+.loading-message {
+  padding: 14px 18px !important;
+  min-width: 200px;
+}
+
+.loading-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loading-text {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--heading-color);
+  font-family: 'Poppins', sans-serif;
+  animation: fadePulse 1.5s infinite ease-in-out;
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 0;
+}
+
+.typing-indicator span {
+  width: 7px;
+  height: 7px;
+  background: var(--primary-accent);
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 1.2s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: 0s; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
 /* ── Share Toggle ── */
 .share-toggle {
@@ -444,10 +489,8 @@ html, body {
   flex-shrink: 0;
 }
 
-/* ── Mobile top bar (hamburger + title) ── */
-.mobile-topbar {
-  display: none;
-}
+/* ── Mobile top bar ── */
+.mobile-topbar { display: none; }
 
 /* ── Sidebar overlay (mobile) ── */
 .sidebar-overlay {
@@ -464,15 +507,8 @@ html, body {
    TABLET  (≤ 900px)
 ════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .sidebar {
-    width: 240px;
-    min-width: 240px;
-  }
-
-  .messages-container {
-    padding: 15px 20px;
-  }
-
+  .sidebar { width: 240px; min-width: 240px; }
+  .messages-container { padding: 15px 20px; }
   .message { max-width: 75%; }
   .outfit-card { max-width: 100%; }
 }
@@ -482,11 +518,9 @@ html, body {
 ════════════════════════════════════════ */
 @media (max-width: 640px) {
 
-  /* Sidebar becomes off-canvas drawer */
   .sidebar {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     height: 100vh;
     width: 78vw;
     max-width: 300px;
@@ -494,14 +528,11 @@ html, body {
     transform: translateX(-100%);
     box-shadow: 4px 0 20px rgba(0,0,0,0.2);
     overflow-y: auto;
-    flex-direction: column;   /* restore column layout */
+    flex-direction: column;
   }
 
-  .sidebar.open {
-    transform: translateX(0);
-  }
+  .sidebar.open { transform: translateX(0); }
 
-  /* Show mobile topbar */
   .mobile-topbar {
     display: flex;
     align-items: center;
@@ -513,16 +544,9 @@ html, body {
   }
 
   .sidebar-toggle { display: block; }
-
-  .chat-section {
-    width: 100%;
-    padding-top: 0;
-  }
-
-  /* Hide standalone title — it lives in topbar on mobile */
+  .chat-section { width: 100%; padding-top: 0; }
   .main-title { display: none; }
 
-  /* Title inside topbar */
   .mobile-topbar .main-title {
     display: block;
     font-size: 14px;
@@ -531,10 +555,7 @@ html, body {
     flex: 1;
   }
 
-  .messages-container {
-    padding: 10px 12px;
-    gap: 10px;
-  }
+  .messages-container { padding: 10px 12px; gap: 10px; }
 
   .message {
     max-width: 88%;
@@ -542,33 +563,14 @@ html, body {
     padding: 10px 14px;
   }
 
-  /* Outfit card full width */
-  .outfit-card {
-    max-width: 100%;
-    padding: 10px;
-  }
-
-  /* Action buttons stack on very small screens */
-  .outfit-actions {
-    flex-wrap: wrap;
-  }
-
-  .action-btn {
-    min-width: 120px;
-  }
-
-  /* Input area */
+  .outfit-card { max-width: 100%; padding: 10px; }
+  .outfit-actions { flex-wrap: wrap; }
+  .action-btn { min-width: 120px; }
   .input-container { padding: 8px 10px; }
-  .input-wrapper {
-    width: 100%;
-    padding: 8px 12px;
-  }
+  .input-wrapper { width: 100%; padding: 8px 12px; }
 
-  /* Modal full screen */
-  .image-modal img {
-    max-width: 95vw;
-    max-height: 85vh;
-  }
+  .image-modal img { max-width: 95vw; max-height: 85vh; }
+  .loading-message { min-width: 160px; }
 }
 
 /* ════════════════════════════════════════

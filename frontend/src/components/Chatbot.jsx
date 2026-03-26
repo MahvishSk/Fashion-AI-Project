@@ -103,8 +103,39 @@ const getTipsForOccasion = (occasion) => {
 };
 
 // ─────────────────────────────────────────
-// LOADING STATE — single string to avoid conflicts
-// "idle" | "typing" | "outfit"
+// GREETING DETECTION — handle casual msgs
+// ─────────────────────────────────────────
+const greetingPatterns = [
+  /^(hi+|hey+|hello+|hlo+|helo+|hii+|hiiii*|heyyy*)\s*[!.]*$/i,
+  /^(good\s*(morning|evening|afternoon|night))\s*[!.]*$/i,
+  /^(how\s*(are|r)\s*(you|u|ya))\s*[?!.]*$/i,
+  /^(what'?s\s*up|wassup|sup|wsp)\s*[?!.]*$/i,
+  /^(yo|hiya|howdy|greetings)\s*[!.]*$/i,
+  /^(namaste|namaskar|salam|salaam)\s*[!.]*$/i,
+];
+
+const getGreetingReply = (name) => {
+  const replies = [
+    `Hey ${name}! 👋✨ So glad you're here!\n\nI'm StyleU — your personal AI fashion stylist. Ready to find you the perfect outfit?\n\nJust tell me the occasion:\n• Wedding 💍\n• Party 🎉\n• College 🎒\n• Office 💼\n• Date night 🌙`,
+    `Hello ${name}! 💕 Welcome to StyleU!\n\nI'm here to help you dress your best for any occasion!\n\nWhat are we styling today?\n• Casual look\n• Formal outfit\n• Festive wear\n• Beach outfit`,
+    `Hi ${name}! 🌸 Great to see you!\n\nYour personal stylist is ready! Tell me — what's the occasion and I'll find the perfect look for you! ✨`,
+  ];
+  return replies[Math.floor(Math.random() * replies.length)];
+};
+
+const getHowAreYouReply = (name) => {
+  const replies = [
+    `I'm doing amazing, ${name}! 💫 Ready to style you up!\n\nWhat occasion are we dressing for today? 👗`,
+    `Feeling fabulous and ready to help you look fabulous too, ${name}! ✨\n\nTell me — what outfit do you need today?`,
+  ];
+  return replies[Math.floor(Math.random() * replies.length)];
+};
+
+const isGreeting = (msg) => greetingPatterns.slice(0, 2).some(p => p.test(msg.trim()));
+const isHowAreYou = (msg) => greetingPatterns.slice(2).some(p => p.test(msg.trim()));
+
+// ─────────────────────────────────────────
+// LOADING STATE: "idle" | "typing" | "outfit"
 // ─────────────────────────────────────────
 
 const Chatbot = () => {
@@ -119,7 +150,7 @@ const Chatbot = () => {
   const [profileLoading, setProfileLoading] = useState(true);
   const [favourites, setFavourites] = useState({});
   const [isPublic, setIsPublic] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(false); // ← NEW
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -349,10 +380,48 @@ const Chatbot = () => {
     }
 
     updateMessages(updatedMessages);
+    const sentInput = input;
     setInput("");
-
     setLoadingState("typing");
 
+    // ── Handle greetings & casual msgs on the frontend ──
+    const name = userProfile?.fullName || "there";
+
+    if (isGreeting(sentInput)) {
+      await new Promise((r) => setTimeout(r, 700)); // small delay feels natural
+      const reply = getGreetingReply(name);
+      updatedMessages = [
+        ...updatedMessages,
+        { sender: "bot", type: "text", content: reply },
+      ];
+      updateMessages(updatedMessages);
+      updateConversationHistory([
+        ...(currentChat?.conversationHistory || []),
+        { role: "user", content: sentInput },
+        { role: "assistant", content: reply },
+      ]);
+      setLoadingState("idle");
+      return;
+    }
+
+    if (isHowAreYou(sentInput)) {
+      await new Promise((r) => setTimeout(r, 700));
+      const reply = getHowAreYouReply(name);
+      updatedMessages = [
+        ...updatedMessages,
+        { sender: "bot", type: "text", content: reply },
+      ];
+      updateMessages(updatedMessages);
+      updateConversationHistory([
+        ...(currentChat?.conversationHistory || []),
+        { role: "user", content: sentInput },
+        { role: "assistant", content: reply },
+      ]);
+      setLoadingState("idle");
+      return;
+    }
+
+    // ── Normal flow — send to backend ──
     try {
       const currentHistory = currentChat?.conversationHistory || [];
 
@@ -360,7 +429,7 @@ const Chatbot = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: input,
+          message: sentInput,
           profile: userProfile || {
             fullName: "there",
             gender: "female",
@@ -402,7 +471,7 @@ const Chatbot = () => {
 
         updateConversationHistory([
           ...currentHistory,
-          { role: "user", content: input },
+          { role: "user", content: sentInput },
           { role: "assistant", content: data.reply },
         ]);
       }
@@ -410,7 +479,6 @@ const Chatbot = () => {
       updateMessages(updatedMessages);
     } catch (error) {
       console.error("Chat error:", error);
-
       updateMessages([
         ...updatedMessages,
         {
@@ -475,7 +543,7 @@ const Chatbot = () => {
                 className="delete-chat"
                 onClick={() => deleteChat(chat.id)}
               >
-                 <Trash size={16} color="#dc3545" />
+                <Trash size={16} color="#dc3545" />
               </button>
             </div>
           ))}
@@ -556,9 +624,7 @@ const Chatbot = () => {
                   <div className="outfit-actions">
                     <button
                       className={`action-btn favourite-btn ${favourites[msg.outfitId || msg.imageUrl?.slice(-20)] ? "active" : ""}`}
-                      onClick={() =>
-                        toggleFavourite(msg.imageUrl, msg.outfitId)
-                      }
+                      onClick={() => toggleFavourite(msg.imageUrl, msg.outfitId)}
                     >
                       {favourites[msg.outfitId || msg.imageUrl?.slice(-20)]
                         ? "❤️"
@@ -577,12 +643,20 @@ const Chatbot = () => {
             </div>
           ))}
 
+          {/* ── Loading bubble ── */}
           {loadingState !== "idle" && (
             <div className="message bot loading-message">
-              <div className="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
+              <div className="loading-bubble">
+                <p className="loading-text">
+                  {loadingState === "outfit"
+                    ? "✨ Your stylist is curating the perfect look..."
+                    : "💬 StyleU is thinking..."}
+                </p>
+                <div className="typing-indicator">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
               </div>
             </div>
           )}
