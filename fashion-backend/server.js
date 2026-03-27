@@ -16,6 +16,53 @@ app.use(cors());
 app.use(express.json());
 
 // ─────────────────────────────────────────
+// OCCASION NORMALIZER
+// ─────────────────────────────────────────
+const occasionNormalizer = {
+  // casual
+  casual: "casual", hangout: "casual", outing: "casual", trip: "casual",
+  picnic: "casual", everyday: "casual", normal: "casual", regular: "casual",
+  college: "casual", school: "casual", university: "casual", class: "casual",
+  campus: "casual", study: "casual",
+
+  // party
+  party: "party", birthday: "party", celebration: "party", anniversary: "party",
+  engagement: "party", reception: "party", prom: "party", concert: "party",
+  club: "party", "night out": "party",
+
+  // office
+  office: "office", work: "office", meeting: "office", interview: "office",
+  formal: "office", business: "office", corporate: "office", professional: "office",
+  conference: "office",
+
+  // wedding
+  wedding: "wedding", bridal: "wedding", "wedding guest": "wedding",
+  nikah: "wedding", shaadi: "wedding",
+
+  // festival
+  festival: "festival", ethnic: "festival", traditional: "festival",
+  diwali: "festival", eid: "festival", holi: "festival", navratri: "festival",
+  puja: "festival", kurta: "festival", saree: "festival", lehenga: "festival",
+  "indo-western": "festival",
+
+  // date night
+  "date night": "date night", date: "date night", dinner: "date night",
+  romantic: "date night", brunch: "date night",
+};
+
+function normalizeOccasion(raw) {
+  if (!raw) return "casual";
+  const lower = raw.toLowerCase().trim();
+  // exact match first
+  if (occasionNormalizer[lower]) return occasionNormalizer[lower];
+  // partial match
+  for (const [key, value] of Object.entries(occasionNormalizer)) {
+    if (lower.includes(key)) return value;
+  }
+  return "casual"; // fallback
+}
+
+// ─────────────────────────────────────────
 // TEST ROUTES
 // ─────────────────────────────────────────
 app.get("/test-firebase", async (req, res) => {
@@ -37,9 +84,7 @@ app.get("/get-profile/:uid", async (req, res) => {
   try {
     const userDoc = await db.collection("users").doc(uid).get();
     if (!userDoc.exists)
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
 
     const userData = userDoc.data();
     return res.json({
@@ -61,15 +106,54 @@ app.get("/get-profile/:uid", async (req, res) => {
 });
 
 // ─────────────────────────────────────────
+// SAVE TO TRENDING (called from frontend)
+// ─────────────────────────────────────────
+app.post("/save-to-trending", async (req, res) => {
+  const { outfitId, imageUrl, occasion, gender, bodyType, skinTone } = req.body;
+
+  if (!outfitId && !imageUrl) {
+    return res.status(400).json({ success: false, message: "outfitId or imageUrl required" });
+  }
+
+  try {
+    const normalizedOccasion = normalizeOccasion(occasion);
+
+    if (outfitId) {
+      // Update existing outfit doc to be public
+      await db.collection("outfits").doc(outfitId).update({
+        isPublic: true,
+        occasion: normalizedOccasion,
+      });
+    } else {
+      // Fallback: save new doc if no outfitId
+      await db.collection("outfits").add({
+        imageUrl,
+        occasion: normalizedOccasion,
+        gender: gender || "",
+        bodyType: bodyType || "",
+        skinTone: skinTone || "",
+        isPublic: true,
+        createdAt: new Date(),
+      });
+    }
+
+    console.log(`✅ Outfit shared to trending as occasion: ${normalizedOccasion}`);
+    return res.json({ success: true, occasion: normalizedOccasion });
+  } catch (error) {
+    console.error("❌ Save to trending error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ─────────────────────────────────────────
 // CHAT WITH AI STYLIST
 // ─────────────────────────────────────────
 app.post("/chat", async (req, res) => {
-  const { message, profile, conversationHistory, isPublic } = req.body;
+  const { message, profile, conversationHistory } = req.body;
+  // NOTE: isPublic removed from here — we handle it separately now
 
   if (!message || !profile) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Message and profile are required." });
+    return res.status(400).json({ success: false, message: "Message and profile are required." });
   }
 
   try {
@@ -110,7 +194,7 @@ CRITICAL RULES:
 
 9. If user asks something completely unrelated to fashion (e.g. math, news, coding, science, sports scores),
    reply warmly but redirect. Example:
-   "Haha I wish I could help with that!😄 But I'm StyleU — your personal fashion stylist!👗✨ I'm only good at making you look amazing. What occasion are you dressing for today?"
+   "Haha I can't understand you!😄 I'm StyleU — your personal fashion stylist!👗✨ I'm only good at making you look amazing. What occasion are you dressing for today?"
 
 10. If user says thank you, nice, great, awesome, or gives any compliment — respond warmly and prompt next look.
     Example: "So glad you loved it!💕✨ Ready to style your next look? Just tell me the occasion!"
@@ -133,7 +217,6 @@ CRITICAL RULES:
 
     const reply = completion.choices[0].message.content.trim();
 
-    // Extract JSON even if GPT adds text around it
     const jsonMatch = reply.match(/\{[\s\S]*"ready"\s*:\s*true[\s\S]*\}/);
     if (jsonMatch) {
       try {
@@ -143,19 +226,20 @@ CRITICAL RULES:
             parsed.specificDescription &&
             parsed.specificDescription.trim().length > 0;
 
+          const normalizedOccasion = normalizeOccasion(parsed.occasion);
+
           const outfitResult = await generateOutfit(
             profile.gender,
             profile.bodyType,
             profile.skinTone,
-            parsed.occasion,
-            isPublic !== undefined ? isPublic : true,
+            normalizedOccasion,
             hasSpecificDescription ? parsed.specificDescription : null,
           );
 
           return res.json({
             success: true,
             type: "outfit",
-            occasion: parsed.occasion,
+            occasion: normalizedOccasion,   // always send normalized
             outfit: outfitResult.outfit,
             source: outfitResult.source,
           });
@@ -163,7 +247,6 @@ CRITICAL RULES:
       } catch (e) {}
     }
 
-    // Clean reply — remove any leaked JSON
     const cleanReply = reply.replace(/\{[\s\S]*?\}/g, "").trim();
 
     return res.json({
@@ -181,16 +264,16 @@ CRITICAL RULES:
 
 // ─────────────────────────────────────────
 // HELPER: GENERATE OR FETCH OUTFIT
+// isPublic is always FALSE now — sharing is done separately
 // ─────────────────────────────────────────
 async function generateOutfit(
   gender,
   bodyType,
   skinTone,
   occasion,
-  isPublic = true,
   specificDescription = null,
 ) {
-  // Only check DB for generic requests (no specific description)
+  // Only check DB for generic requests
   if (!specificDescription) {
     const snapshot = await db
       .collection("outfits")
@@ -211,32 +294,17 @@ async function generateOutfit(
     }
   }
 
-  console.log(
-    "🎨 Generating new outfit with AI...",
-    specificDescription ? "(custom description)" : "",
-  );
+  console.log("🎨 Generating new outfit with AI...");
 
-  // Build prompt — use user's specific description if provided
   const prompt = specificDescription
-    ? `
-A full-body professional fashion photo of a ${gender} model with ${bodyType} body type and ${skinTone} skin tone.
+    ? `A full-body professional fashion photo of a ${gender} model with ${bodyType} body type and ${skinTone} skin tone.
 The model is wearing exactly: ${specificDescription}.
-Full body visible from head to toe — head, torso, legs, and feet all in frame.
-No cropping. Entire body shown.
-Standing straight, centered in frame.
-Clean white studio background.
-Professional fashion photography, sharp focus, high quality.
-`
-    : `
-A full-body fashion photo of a ${gender} model with ${bodyType} body type and ${skinTone} skin tone.
+Full body visible from head to toe. No cropping. Standing straight, centered in frame.
+Clean white studio background. Professional fashion photography, sharp focus, high quality.`
+    : `A full-body fashion photo of a ${gender} model with ${bodyType} body type and ${skinTone} skin tone.
 Wearing a complete ${occasion} outfit from head to toe.
-Full body visible: head, torso, legs, and feet all in frame.
-No cropping. Entire body shown.
-Standing straight, centered in frame.
-Clean white studio background.
-Professional fashion photography.
-Sharp focus, high quality.
-`;
+Full body visible. No cropping. Standing straight, centered in frame.
+Clean white studio background. Professional fashion photography. Sharp focus, high quality.`;
 
   const result = await openai.images.generate({
     model: "gpt-image-1-mini",
@@ -254,31 +322,22 @@ Sharp focus, high quality.
 
   const imageUrl = uploadResult.secure_url;
 
-  const stylingTips = [
-    "Choose comfortable breathable fabrics.",
-    "Match colors according to your skin tone.",
-    "Keep accessories minimal for balance.",
-    "Wear well-fitted clothing for better proportions.",
-  ];
-
   const newOutfit = {
     gender,
     bodyType,
     skinTone,
     occasion,
     imageUrl,
-    stylingTips,
-    isPublic,
+    isPublic: false,   // ← NEVER auto-public, user decides
     createdAt: new Date(),
   };
 
-  // Save ALL outfits to DB — including custom descriptions for Trending
   const docRef = await db.collection("outfits").add({
     ...newOutfit,
     ...(specificDescription && { customDescription: specificDescription }),
   });
 
-  console.log("💾 Outfit saved with ID:", docRef.id);
+  console.log("💾 Outfit saved (private) with ID:", docRef.id);
   return { source: "ai-generated", outfit: { id: docRef.id, ...newOutfit } };
 }
 
@@ -296,13 +355,7 @@ app.post("/recommend-outfit", async (req, res) => {
   }
 
   try {
-    const result = await generateOutfit(
-      gender,
-      bodyType,
-      skinTone,
-      occasion,
-      true,
-    );
+    const result = await generateOutfit(gender, bodyType, skinTone, occasion, null);
     return res.json({
       success: true,
       source: result.source,

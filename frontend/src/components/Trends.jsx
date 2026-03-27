@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, query, where, onSnapshot, orderBy, } from "firebase/firestore";
+import { collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import { Sparkles, ArrowLeft, X } from "lucide-react";
 import Header from "./Header";
@@ -25,6 +25,22 @@ const occasionMeta = {
   "date night": { label: "Date Night" },
 };
 
+// 🔥 FRONTEND NORMALIZER (MAIN FIX)
+const normalizeOccasion = (val) => {
+  if (!val) return "casual";
+
+  const lower = val.toLowerCase().trim();
+
+  if (lower.includes("casual") || lower.includes("college")) return "casual";
+  if (lower.includes("party") || lower.includes("birthday")) return "party";
+  if (lower.includes("office") || lower.includes("meeting") || lower.includes("work")) return "office";
+  if (lower.includes("wedding")) return "wedding";
+  if (lower.includes("festival") || lower.includes("traditional")) return "festival";
+  if (lower.includes("date")) return "date night";
+
+  return "casual";
+};
+
 const Trends = () => {
   const navigate = useNavigate();
   const [outfits, setOutfits] = useState([]);
@@ -34,9 +50,7 @@ const Trends = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  // ─────────────────────────────────────────
-  // REAL-TIME FIREBASE LISTENER
-  // ─────────────────────────────────────────
+  // 🔥 FIREBASE LISTENER
   useEffect(() => {
     const outfitsRef = collection(db, "outfits");
     const q = query(
@@ -57,10 +71,15 @@ const Trends = () => {
     return () => unsubscribe();
   }, []);
 
+  // 🔥 FIXED FILTER
   const filtered =
     selectedOccasion === "all"
       ? outfits
-      : outfits.filter((o) => o.occasion?.toLowerCase() === selectedOccasion);
+      : outfits.filter(
+          (o) =>
+            normalizeOccasion(o.occasion) ===
+            normalizeOccasion(selectedOccasion)
+        );
 
   return (
     <div className="home-container">
@@ -72,7 +91,8 @@ const Trends = () => {
       />
 
       <div className="trends-page">
-        {/* PAGE TITLE */}
+
+        {/* TITLE */}
         <div className="trends-title-section">
           <div className="trends-title-row">
             <h1 className="trends-title">Trending Fashion</h1>
@@ -86,7 +106,7 @@ const Trends = () => {
           <span className="divider-icon">✧ ✦ ✧</span>
         </div>
 
-        {/* OCCASION FILTER TABS */}
+        {/* FILTER BUTTONS */}
         <div className="filter-tabs">
           <button
             className={`filter-tab ${selectedOccasion === "all" ? "active" : ""}`}
@@ -94,13 +114,14 @@ const Trends = () => {
           >
             All
           </button>
+
           {OCCASIONS.map((occ) => (
             <button
               key={occ}
               className={`filter-tab ${selectedOccasion === occ ? "active" : ""}`}
               onClick={() => setSelectedOccasion(occ)}
             >
-              {/*{occasionMeta[occ]?.emoji}*/} {occasionMeta[occ]?.label}
+              {occasionMeta[occ]?.label}
             </button>
           ))}
         </div>
@@ -112,7 +133,7 @@ const Trends = () => {
           </div>
         )}
 
-        {/* EMPTY STATE */}
+        {/* EMPTY */}
         {!loading && filtered.length === 0 && (
           <div className="trends-empty">
             <div className="empty-icon">👗</div>
@@ -127,39 +148,42 @@ const Trends = () => {
           </div>
         )}
 
-        {/* OUTFITS GRID */}
+        {/* GRID */}
         {!loading && filtered.length > 0 && (
           <>
             <p className="trends-count">
-              {filtered.length} Trending{filtered.length > 1 ? "s" : ""} Looks from the Community</p>
+              {filtered.length} Trending{filtered.length > 1 ? "s" : ""} Looks from the Community
+            </p>
 
             <div className="trends-grid">
-              {filtered.map((outfit) => (
-                <div key={outfit.id} className="trend-card">
-                  <div
-                    className="trend-image-wrapper"
-                    onClick={() => setSelectedImage(outfit.imageUrl)}
-                  >
-                    <img
-                      src={outfit.imageUrl}
-                      alt="Trending Outfit"
-                      className="trend-image"
-                    />
-                    <div className="trend-badge">
-                      {occasionMeta[outfit.occasion?.toLowerCase()]?.emoji ||
-                        "✨"}{" "}
-                      {occasionMeta[outfit.occasion?.toLowerCase()]?.label ||
-                        outfit.occasion}
+              {filtered.map((outfit) => {
+                const normalized = normalizeOccasion(outfit.occasion);
+
+                return (
+                  <div key={outfit.id} className="trend-card">
+                    <div
+                      className="trend-image-wrapper"
+                      onClick={() => setSelectedImage(outfit.imageUrl)}
+                    >
+                      <img
+                        src={outfit.imageUrl}
+                        alt="Trending Outfit"
+                        className="trend-image"
+                      />
+
+                      {/* 🔥 FIXED BADGE */}
+                      <div className="trend-badge">
+                        {occasionMeta[normalized]?.label || normalized}
+                      </div>
                     </div>
                   </div>
-                  {/* Try This Look button removed */}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </>
         )}
 
-        {/* BACK BUTTON */}
+        {/* BACK */}
         <div className="trends-back">
           <button className="back-home-btn" onClick={() => navigate("/home")}>
             <ArrowLeft size={16} /> Back to Home
@@ -167,7 +191,7 @@ const Trends = () => {
         </div>
       </div>
 
-      {/* FULLSCREEN MODAL */}
+      {/* MODAL */}
       {selectedImage && (
         <div className="image-modal" onClick={() => setSelectedImage(null)}>
           <button

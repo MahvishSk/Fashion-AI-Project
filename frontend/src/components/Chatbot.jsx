@@ -103,7 +103,7 @@ const getTipsForOccasion = (occasion) => {
 };
 
 // ─────────────────────────────────────────
-// GREETING DETECTION — handle casual msgs
+// GREETING DETECTION
 // ─────────────────────────────────────────
 const greetingPatterns = [
   /^(hi+|hey+|hello+|hlo+|helo+|hii+|hiiii*|heyyy*)\s*[!.]*$/i,
@@ -116,8 +116,8 @@ const greetingPatterns = [
 
 const getGreetingReply = (name) => {
   const replies = [
-    `Hey ${name}! 👋✨ So glad you're here!\n\nI'm StyleU — your personal AI fashion stylist. Ready to find you the perfect outfit?\n\nJust tell me the occasion:\n• Wedding 💍\n• Party 🎉\n• College 🎒\n• Office 💼\n• Date night 🌙`,
-    `Hello ${name}! 💕 Welcome to StyleU!\n\nI'm here to help you dress your best for any occasion!\n\nWhat are we styling today?\n• Casual look\n• Formal outfit\n• Festive wear\n• Beach outfit`,
+    `Hey ${name}!👋✨So glad you're here!\n\nI'm StyleU — your personal AI fashion stylist. Ready to find you the perfect outfit?\n\nJust tell me the occasion:\n• Wedding 💍\n• Party 🎉\n• College 🎒\n• Office 💼\n• Date night 🌙`,
+    `Hello ${name}!💕Welcome to StyleU!\n\nI'm here to help you dress your best for any occasion!\n\nWhat are we styling today?\n• Casual look\n• Formal outfit\n• Festive wear\n• Beach outfit`,
     `Hi ${name}! 🌸 Great to see you!\n\nYour personal stylist is ready! Tell me — what's the occasion and I'll find the perfect look for you! ✨`,
   ];
   return replies[Math.floor(Math.random() * replies.length)];
@@ -135,9 +135,8 @@ const isGreeting = (msg) => greetingPatterns.slice(0, 2).some(p => p.test(msg.tr
 const isHowAreYou = (msg) => greetingPatterns.slice(2).some(p => p.test(msg.trim()));
 
 // ─────────────────────────────────────────
-// LOADING STATE: "idle" | "typing" | "outfit"
+// MAIN COMPONENT
 // ─────────────────────────────────────────
-
 const Chatbot = () => {
   const navigate = useNavigate();
 
@@ -149,8 +148,8 @@ const Chatbot = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [favourites, setFavourites] = useState({});
-  const [isPublic, setIsPublic] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  // ← isPublic global state REMOVED
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -179,7 +178,7 @@ const Chatbot = () => {
 
         const greetingContent = data.success
           ? `Hi ${data.profile.fullName || "there"}! 👋✨\n\nI'm your personal AI Fashion Stylist.\n\nI already know your style profile!\nJust tell me — what's the occasion today?\n\nTry:\n• Wedding\n• Party\n• Office look\n• Casual college outfit\n• Date night`
-          : "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?\n\nTry asking:\n• Party outfit\n• Office outfit\n• Casual college look\n• Wedding guest outfit";
+          : "Hi! I am your personal AI Fashion Stylist👗✨\nWhat kind of outfit are you looking for today?\n\nTry asking:\n• Party outfit\n• Office outfit\n• Casual college look\n• Wedding guest outfit";
 
         if (data.success) setUserProfile(data.profile);
 
@@ -225,7 +224,7 @@ const Chatbot = () => {
           sender: "bot",
           type: "text",
           content:
-            "Hi! I am your personal AI Fashion Stylist 👗✨\nWhat kind of outfit are you looking for today?",
+            "Hi! I am your personal AI Fashion Stylist👗✨\nWhat kind of outfit are you looking for today?",
         };
         const newChat = {
           id: Date.now().toString(),
@@ -360,6 +359,38 @@ const Chatbot = () => {
   };
 
   // ─────────────────────────────────────────
+  // HANDLE SHARE CHECKBOX TOGGLE (per card)
+  // ─────────────────────────────────────────
+  const handleShareToggle = async (index, msg, checked) => {
+    // Update this card's isPublic in messages
+    const updatedMessages = messages.map((m, i) =>
+      i === index ? { ...m, isPublic: checked } : m
+    );
+    updateMessages(updatedMessages);
+
+    if (checked) {
+      // User checked ON → save to trending
+      try {
+        await fetch("http://localhost:5000/save-to-trending", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            outfitId: msg.outfitId,
+            imageUrl: msg.imageUrl,
+            occasion: msg.occasion,
+            gender: userProfile?.gender || "",
+            bodyType: userProfile?.bodyType || "",
+            skinTone: userProfile?.skinTone || "",
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to share to trending:", err);
+      }
+    }
+    // If unchecked → do nothing (outfit stays private in Firebase)
+  };
+
+  // ─────────────────────────────────────────
   // SEND MESSAGE
   // ─────────────────────────────────────────
   const handleSend = async () => {
@@ -384,11 +415,10 @@ const Chatbot = () => {
     setInput("");
     setLoadingState("typing");
 
-    // ── Handle greetings & casual msgs on the frontend ──
     const name = userProfile?.fullName || "there";
 
     if (isGreeting(sentInput)) {
-      await new Promise((r) => setTimeout(r, 700)); // small delay feels natural
+      await new Promise((r) => setTimeout(r, 700));
       const reply = getGreetingReply(name);
       updatedMessages = [
         ...updatedMessages,
@@ -439,7 +469,7 @@ const Chatbot = () => {
             age: "",
           },
           conversationHistory: currentHistory,
-          isPublic,
+          // isPublic removed — handled per card now
         }),
       });
 
@@ -459,6 +489,7 @@ const Chatbot = () => {
           showShareToggle: true,
           occasion: data.occasion,
           stylingTips: tips,
+          isPublic: true, // ← default checkbox ON per card
         };
 
         updatedMessages = [...updatedMessages, imageMessage];
@@ -510,7 +541,6 @@ const Chatbot = () => {
   return (
     <div className="app-container">
 
-      {/* ── Overlay — closes sidebar when tapped outside ── */}
       <div
         className={`sidebar-overlay ${sidebarOpen ? "open" : ""}`}
         onClick={() => setSidebarOpen(false)}
@@ -557,7 +587,6 @@ const Chatbot = () => {
       {/* ── Chat Section ── */}
       <div className="chat-section">
 
-        {/* Mobile: hamburger + title in one bar */}
         <div className="mobile-topbar">
           <button className="sidebar-toggle" onClick={() => setSidebarOpen(true)}>
             ☰
@@ -565,7 +594,6 @@ const Chatbot = () => {
           <div className="main-title">StyleU – Your Personal AI Fashion Stylist</div>
         </div>
 
-        {/* Desktop: title only */}
         <div className="main-title">
           StyleU – Your Personal AI Fashion Stylist
         </div>
@@ -606,17 +634,19 @@ const Chatbot = () => {
                     </div>
                   )}
 
-                  {/* SHARE CHECKBOX */}
+                  {/* SHARE CHECKBOX — per card, uses msg.isPublic */}
                   {msg.showShareToggle && (
                     <div className="share-toggle">
                       <label className="share-label">
                         <input
                           type="checkbox"
-                          checked={isPublic}
-                          onChange={(e) => setIsPublic(e.target.checked)}
+                          checked={msg.isPublic !== false}
+                          onChange={(e) =>
+                            handleShareToggle(index, msg, e.target.checked)
+                          }
                           className="share-checkbox"
                         />
-                        <span>🌟 Share this look to Trending Community</span>
+                        <span>🌟Share this look to Trending Community</span>
                       </label>
                     </div>
                   )}
@@ -643,14 +673,13 @@ const Chatbot = () => {
             </div>
           ))}
 
-          {/* ── Loading bubble ── */}
           {loadingState !== "idle" && (
             <div className="message bot loading-message">
               <div className="loading-bubble">
                 <p className="loading-text">
                   {loadingState === "outfit"
-                    ? "✨ Your stylist is curating the perfect look..."
-                    : "💬 StyleU is thinking..."}
+                    ? "✨Your stylist is curating the perfect look..."
+                    : "💬StyleU is thinking..."}
                 </p>
                 <div className="typing-indicator">
                   <span></span>
