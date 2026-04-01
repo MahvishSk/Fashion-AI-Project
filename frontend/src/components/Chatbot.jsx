@@ -149,7 +149,6 @@ const Chatbot = () => {
   const [profileLoading, setProfileLoading] = useState(true);
   const [favourites, setFavourites] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  // ← isPublic global state REMOVED
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -387,7 +386,7 @@ const Chatbot = () => {
         console.error("Failed to share to trending:", err);
       }
     }
-    // If unchecked → do nothing (outfit stays private in Firebase)
+    // If unchecked → outfit stays private in Firebase
   };
 
   // ─────────────────────────────────────────
@@ -469,7 +468,6 @@ const Chatbot = () => {
             age: "",
           },
           conversationHistory: currentHistory,
-          // isPublic removed — handled per card now
         }),
       });
 
@@ -489,7 +487,7 @@ const Chatbot = () => {
           showShareToggle: true,
           occasion: data.occasion,
           stylingTips: tips,
-          isPublic: true, // ← default checkbox ON per card
+          isPublic: false, // ✅ DEFAULT UNCHECKED — user must manually share
         };
 
         updatedMessages = [...updatedMessages, imageMessage];
@@ -640,7 +638,7 @@ const Chatbot = () => {
                       <label className="share-label">
                         <input
                           type="checkbox"
-                          checked={msg.isPublic !== false}
+                          checked={msg.isPublic === true}
                           onChange={(e) =>
                             handleShareToggle(index, msg, e.target.checked)
                           }
