@@ -45,15 +45,6 @@ Used to generate personalized fashion recommendations based on user inputs.
 
 4. User can view and select styles based on preferences
 
-## 📸 Screenshots
-
-**💻Desktop and📱Mobile View**
-
-<div style="text-align: center;">
-  <img src="https://github.com/user-attachments/assets/26071a96-00af-4a72-bdff-2d1f57f31d00" width="50%" />
-  <img src="https://github.com/user-attachments/assets/341b9e5e-ab35-4ace-94b0-89285cd4ecfd" width="20%" />
-</div>
-
 ## 📂 Guidelines
 
 # Install dependencies: 
