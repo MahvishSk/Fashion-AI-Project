@@ -143,12 +143,33 @@ const Home = ({ onLogout }) => {
         {/* Footer */}
         <footer className="footer">
           <div className="footer-content">
-            <div>
+            <div className="footer-logo">
               <h3>StyleU</h3>
               <p>Your Personal AI Fashion Stylist</p>
             </div>
+
+            <div className="footer-links">
+              <h4>Quick Links</h4>
+              <ul>
+                <li onClick={() => navigate("/")}>Home</li>
+                <li onClick={() => navigate("/chatbot")}>Chatbot</li>
+                <li onClick={() => navigate("/profile")}>Profile</li>
+                <li onClick={() => navigate("/saved")}>Saved Looks</li>
+              </ul>
+            </div>
+
+            <div className="footer-support">
+              <h4>Support</h4>
+              <ul>
+                 <li onClick={() => navigate("/help")}>Help</li>
+                 <li onClick={() => navigate("/contact")}>Contact Us</li>
+              </ul>
+            </div>
           </div>
-          <p>© 2026 StyleU. All rights reserved.</p>
+
+          <div className="footer-bottom">
+            <p>© 2026 StyleU. All rights reserved.</p>
+          </div>
         </footer>
 
         <Popup

@@ -81,7 +81,7 @@
 .divider {
   display: flex;
   align-items: center;
-  margin: 0.7rem 2rem 2rem;
+  margin: 1rem 2rem 2rem;
   opacity: 0;
   animation: fadeIn 7s ease forwards;
 }
